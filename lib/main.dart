@@ -1,4 +1,4 @@
-import 'package:budget_bud/pages/welcome_page.dart';
+import 'package:budget_bud/pages/run.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'BudgetBud',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.red,
         ),
-        home: const WelcomePage());
+        home: Run());
   }
 }
