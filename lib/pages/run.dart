@@ -11,7 +11,7 @@ class Run extends StatefulWidget {
   State<Run> createState() => _RunState();
 }
 
-int _currentIndex = 0;
+// int _currentIndex = 0;
 
 //===================
 class _RunState extends State<Run> {
