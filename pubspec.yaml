@@ -42,11 +42,13 @@ dependencies:
   google_sign_in: ^6.0.2
   salomon_bottom_bar: ^3.3.1
   dot_navigation_bar: ^1.0.1+4
+  google_fonts: ^4.0.3
+  provider: ^6.0.5 #can be removed
+  font_awesome: ^5.10.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  google_fonts: ^4.0.3
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -82,10 +84,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Montserrat
-      fonts:
-        - asset: fonts/Montserrat-Regular.ttf
+  # fonts:
+  #   - family: Montserrat
+  #     fonts:
+  #       - asset: fonts/Montserrat-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
