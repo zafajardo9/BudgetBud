@@ -9,7 +9,19 @@ final ButtonStyle buttonPrimary = ElevatedButton.styleFrom(
 );
 
 final ButtonStyle buttonOutlined = OutlinedButton.styleFrom(
-  minimumSize: Size(327, 50),
+    minimumSize: Size(327, 50),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(50)),
+    ));
+
+final ButtonStyle welcomeScreenBtnOne = ElevatedButton.styleFrom(
+  elevation: 0,
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(50)),
+  ),
+);
+
+final ButtonStyle welcomeScreenBtnTwo = OutlinedButton.styleFrom(
   shape: const RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(50)),
   ),

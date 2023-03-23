@@ -6,22 +6,22 @@ import '../components/my_textfield.dart';
 import '../components/squred_tiles.dart';
 import '../services/auth_service.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
 
-  LoginPage({super.key, required this.onTap});
+  RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
-
+  final confirmPwdController = TextEditingController();
   final pwdController = TextEditingController();
 
   //Login user
-  void signUserIn() async {
+  void signUserUp() async {
     showDialog(
       context: context,
       builder: (context) {
@@ -49,10 +49,17 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: pwdController.text,
-      );
+      //check if password and confirm password is same
+      if (pwdController.text == confirmPwdController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: pwdController.text,
+        );
+      } else {
+        //error if not the same
+        showErrorMessage("Password don't match");
+      }
+
       //pop Loading Circle
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -83,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                 //text welcome
                 SizedBox(height: 50),
                 Text(
-                  'Welcome back!',
+                  'Make account',
                   style: TextStyle(color: Colors.black87, fontSize: 18),
                 ),
 
@@ -102,16 +109,20 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Password',
                   obscureText: true,
                 ),
-                SizedBox(height: 25),
+                SizedBox(height: 15),
 
-                //forgot password
-                Text('Forgot Password'),
-                SizedBox(height: 20),
+                //textfield password
+                MyTextField(
+                  controller: confirmPwdController,
+                  hintText: 'Confirm Password',
+                  obscureText: true,
+                ),
+                SizedBox(height: 25),
 
                 //sign in btn
                 MyButton(
-                  btn: "Sign In",
-                  onTap: signUserIn,
+                  btn: "Create Account",
+                  onTap: signUserUp,
                 ),
 
                 // other ways
@@ -170,11 +181,11 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Not a member yet? '),
+                    Text('Have a account? '),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: Text(
-                        'Register Here',
+                        'Sign in Here',
                         style: TextStyle(
                             color: Colors.red.shade900,
                             fontWeight: FontWeight.bold),

@@ -1,9 +1,16 @@
-import 'package:budget_bud/pages/run.dart';
 import 'package:budget_bud/theme/darkAndLightManager.dart';
 import 'package:budget_bud/theme/darkAndLightMode.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+// ignore: unused_import
+import 'firebase_options.dart';
+import 'pages/auth_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
@@ -22,6 +29,6 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: _themeManager.themeMode,
-        home: Run());
+        home: AuthPage());
   }
 }

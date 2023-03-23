@@ -6,8 +6,8 @@ Widget addVerticalSpace(double height) {
   );
 }
 
-Widget addHorizontalSpace(double height) {
+Widget addHorizontalSpace(double width) {
   return SizedBox(
-    width: height,
+    width: width,
   );
 }

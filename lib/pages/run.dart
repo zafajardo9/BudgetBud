@@ -1,4 +1,3 @@
-import 'package:budget_bud/pages/login_page.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +22,7 @@ class _RunState extends State<Run> {
     });
   }
 
-  final navigation = [HomePage(), LoginPage()];
+  final navigation = [HomePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +30,7 @@ class _RunState extends State<Run> {
       extendBody: true,
       body: navigation[_selectedTab.index],
       bottomNavigationBar: DotNavigationBar(
+        paddingR: EdgeInsets.all(15),
         backgroundColor: Colors.redAccent.shade200,
         margin: EdgeInsets.only(bottom: 10),
         dotIndicatorColor: Colors.black,
