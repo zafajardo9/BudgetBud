@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../components/my_button.dart';
 import '../components/squred_tiles.dart';
+import '../misc/colors.dart';
+import '../misc/txtStyles.dart';
 import '../services/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -86,101 +88,156 @@ class _RegisterPageState extends State<RegisterPage> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.grey.shade200,
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //Logo
-                Icon(
-                  Icons.coffee_maker_rounded,
-                  size: size.height * 0.2,
+        backgroundColor: AppColors.backgroundWhite,
+        body: Container(
+          width: double.infinity,
+          color: AppColors.mainColorOne,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              //Logo
+              Container(
+                width: double.infinity,
+                color: AppColors.mainColorOne,
+                child: Image.asset(
+                  'assets/bbLogo.png',
+                  height: size.height * 0.15,
                 ),
-                //text welcome
-                addVerticalSpace(15),
-                Text(
-                  'Make account',
-                  style: TextStyle(color: Colors.black87, fontSize: 18),
-                ),
+              ),
 
-                //textfield email
-                addVerticalSpace(15),
+              //textfield email
 
-                Padding(
-                  padding: const EdgeInsets.all(
-                    20,
-                  ),
-                  child: Form(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 20.0,
-                      ),
+              Expanded(
+                child: Form(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadiusDirectional.only(
+                          topStart: Radius.circular(25),
+                          topEnd: Radius.circular(25),
+                        )),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 20.0,
+                    ),
+                    child: SingleChildScrollView(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          //text welcome
+                          addVerticalSpace(25),
+                          Text(
+                            'Welcome Back',
+                            style: ThemeText.headerAuth,
+                          ),
+                          Text(
+                            'Enter your details',
+                            style: ThemeText.subAuth,
+                          ),
+
+                          addVerticalSpace(20),
                           //FORM AREA =======================
-                          TextFormField(
-                            controller: emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.email),
-                                labelText: 'Email',
-                                hintText: 'Email',
-                                border: OutlineInputBorder()),
-                          ),
-                          addVerticalSpace(15),
-                          //textfield password
-                          TextFormField(
-                            controller: pwdController,
-                            obscureText: showPassword,
-                            decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.lock),
-                                labelText: 'Password',
-                                hintText: 'Password',
-                                border: OutlineInputBorder(),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    togglevisibility();
-                                  }, //add FUNCTIONALITY
-                                  icon: Icon(
-                                    showPassword
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  controller: emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons
+                                        .email), // kulang sa focus border color
+                                    hintText: 'Email',
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        borderSide: BorderSide(
+                                            color: AppColors.mainColorOne)),
                                   ),
-                                )),
-                            keyboardType: TextInputType.visiblePassword,
-                            textInputAction: TextInputAction.done,
+                                ),
+
+                                addVerticalSpace(15),
+                                //textfield password
+                                TextFormField(
+                                  controller: pwdController,
+                                  obscureText: showPassword,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.lock),
+                                    hintText: 'Password',
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        borderSide: BorderSide(
+                                            color: AppColors.mainColorOne)),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        togglevisibility();
+                                      }, //add FUNCTIONALITY
+                                      icon: Icon(
+                                        showPassword
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                      ),
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.visiblePassword,
+                                  textInputAction: TextInputAction.done,
+                                ),
+                                addVerticalSpace(15),
+                                TextFormField(
+                                  controller: pwdController,
+                                  obscureText: showPassword,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Icon(Icons.lock),
+                                    hintText: 'Repeat Password',
+                                    border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                        borderSide: BorderSide(
+                                            color: AppColors.mainColorOne)),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        togglevisibility();
+                                      }, //add FUNCTIONALITY
+                                      icon: Icon(
+                                        showPassword
+                                            ? Icons.visibility
+                                            : Icons.visibility_off,
+                                      ),
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.visiblePassword,
+                                  textInputAction: TextInputAction.done,
+                                ),
+                              ],
+                            ),
                           ),
+
                           addVerticalSpace(15),
+                          //forgot password
+                          GestureDetector(
+                            onTap: () {}, //function
+                            child: Text(
+                              'Forgot Password',
+                              style: TextStyle(
+                                  color: Colors.black45,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
 
                           //textfield password
-                          TextFormField(
-                            controller: confirmPwdController,
-                            obscureText: showPassword,
-                            decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.lock),
-                                labelText: 'Repeat Password',
-                                hintText: 'Repeat Password',
-                                border: OutlineInputBorder(),
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    togglevisibility();
-                                  }, //add FUNCTIONALITY
-                                  icon: Icon(
-                                    showPassword
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                )),
-                            keyboardType: TextInputType.visiblePassword,
-                            textInputAction: TextInputAction.done,
-                          ),
-                          SizedBox(height: 20),
+
+                          addVerticalSpace(15),
 
                           //sign in btn
                           MyButton(
-                            btn: "Create Account",
+                            btn: "Sign Up",
                             onTap: signUserUp,
                           ),
 
@@ -201,7 +258,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   child: Text(
-                                    'Or with',
+                                    'or Sign in with',
                                     style: TextStyle(
                                       color: Colors.grey.shade600,
                                     ),
@@ -223,16 +280,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               SquaredTiles(
                                 onTap: () => AuthService().signInWithGoogle(),
                                 imageLocation: 'images/google.png',
+                                btnName: ' Google',
                               ),
-                              SizedBox(width: 20),
+                              addHorizontalSpace(20),
                               SquaredTiles(
                                 onTap: () {},
                                 imageLocation: 'images/apple.png',
-                              ),
-                              SizedBox(width: 20),
-                              SquaredTiles(
-                                onTap: () {},
-                                imageLocation: 'images/github.png',
+                                btnName: ' Apple',
                               ),
                             ],
                           ),
@@ -241,11 +295,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Have a account? '),
+                              Text('New user? '),
                               GestureDetector(
                                 onTap: widget.onTap,
                                 child: Text(
-                                  'Sign in Here',
+                                  'Register here',
                                   style: TextStyle(
                                       color: Colors.red.shade900,
                                       fontWeight: FontWeight.bold),
@@ -258,8 +312,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

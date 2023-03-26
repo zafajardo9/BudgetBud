@@ -1,3 +1,5 @@
+import 'package:budget_bud/pages/dashboard_page.dart';
+import 'package:budget_bud/pages/profile_page.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +24,7 @@ class _RunState extends State<Run> {
     });
   }
 
-  final navigation = [HomePage()];
+  final navigation = [HomePage(), DashboardPage(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +32,10 @@ class _RunState extends State<Run> {
       extendBody: true,
       body: navigation[_selectedTab.index],
       bottomNavigationBar: DotNavigationBar(
-        paddingR: EdgeInsets.all(15),
-        backgroundColor: Colors.redAccent.shade200,
+        paddingR: EdgeInsets.all(10),
+        backgroundColor: Colors.red[700],
         margin: EdgeInsets.only(bottom: 10),
-        dotIndicatorColor: Colors.black,
+        dotIndicatorColor: Colors.white,
         currentIndex: _SelectedTab.values.indexOf(_selectedTab),
         unselectedItemColor: Colors.grey[300],
         onTap: _handleIndexChanged,
@@ -44,9 +46,15 @@ class _RunState extends State<Run> {
             selectedColor: Colors.white,
           ),
 
-          /// Likes
+          /// Dashboard
           DotNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
+            icon: Icon(Icons.bar_chart_rounded),
+            selectedColor: Colors.white,
+          ),
+
+          /// Profile
+          DotNavigationBarItem(
+            icon: Icon(Icons.account_circle),
             selectedColor: Colors.white,
           ),
         ],
@@ -55,4 +63,4 @@ class _RunState extends State<Run> {
   }
 }
 
-enum _SelectedTab { home, favorite, search, person }
+enum _SelectedTab { home, barchart, person }

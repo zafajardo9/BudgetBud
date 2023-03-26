@@ -1,11 +1,12 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class AppColors {
-  static final Color textColor1 = Color(0xFF989acd);
-  static final Color textColor2 = Color(0xFF878593);
-  static final Color bigTextColor = Color(0xFF2e2e31);
-  static final Color mainColor = Color(0xFF5d69b3);
-  static final Color starColor = Color(0xFFe7bb4e);
-  static final Color mainTextColor = Color(0xFFababad);
-  static final Color buttonBackground = Color(0xFFf1f1f9);
+  //Color have a a prefix of 0xFF
+  static final Color mainColorOne = Color(0xFF6A0D0D);
+  static final Color mainColorTwo = Color(0xFFFFBD59);
+  static final Color mainColorThree = Color(0xFFF4F3FF);
+  static final Color mainColorFour = Color(0xFFB38484);
+
+  //background white
+  static final Color backgroundWhite = Color(0xFFf9f9f9);
 }

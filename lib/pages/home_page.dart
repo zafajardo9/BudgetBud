@@ -31,7 +31,9 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Center(
-        child: Text('Logged In As ${user.email!}'),
+        child: Text(
+          'Logged In As ${user.email!}',
+        ),
       ),
     );
   }

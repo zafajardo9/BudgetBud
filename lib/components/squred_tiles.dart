@@ -1,12 +1,16 @@
+import 'package:budget_bud/misc/colors.dart';
 import 'package:flutter/material.dart';
 
 class SquaredTiles extends StatelessWidget {
   final Function()? onTap;
   final String imageLocation;
+  final String btnName;
+
   const SquaredTiles({
     super.key,
     required this.imageLocation,
     required this.onTap,
+    required this.btnName,
   });
 
   @override
@@ -14,14 +18,19 @@ class SquaredTiles extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.mainColorFour),
+            borderRadius: BorderRadius.circular(15),
             color: Colors.white),
-        child: Image.asset(
-          imageLocation,
-          height: 40,
+        child: Row(
+          children: [
+            Image.asset(
+              imageLocation,
+              height: 20,
+            ),
+            Text(btnName),
+          ],
         ),
       ),
     );
