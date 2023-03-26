@@ -70,6 +70,8 @@ flutter_native_splash:
   color: "#6A0D0D"
 
 ###############################END#################################
+
+
 flutter:
 
   # The following line ensures that the Material Icons font is
