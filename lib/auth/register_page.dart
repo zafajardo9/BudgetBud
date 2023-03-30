@@ -144,9 +144,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.zero,
                                     prefixIcon: Icon(Icons
                                         .email), // kulang sa focus border color
                                     hintText: 'Email',
+
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
@@ -164,6 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   controller: pwdController,
                                   obscureText: showPassword,
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.zero,
                                     prefixIcon: Icon(Icons.lock),
                                     hintText: 'Password',
                                     border: OutlineInputBorder(
@@ -192,6 +195,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   controller: pwdController,
                                   obscureText: showPassword,
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.zero,
                                     prefixIcon: Icon(Icons.lock),
                                     hintText: 'Repeat Password',
                                     border: OutlineInputBorder(

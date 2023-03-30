@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           //text welcome
-                          addVerticalSpace(25),
+                          addVerticalSpace(20),
                           Text(
                             'Welcome Back',
                             style: ThemeText.headerAuth,
@@ -142,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                                     prefixIcon: Icon(Icons
                                         .email), // kulang sa focus border color
                                     hintText: 'Email',
+                                    contentPadding: EdgeInsets.zero,
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
@@ -161,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.lock),
                                     hintText: 'Password',
+                                    contentPadding: EdgeInsets.zero,
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),

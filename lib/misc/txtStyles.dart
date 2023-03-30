@@ -1,3 +1,4 @@
+import 'package:budget_bud/misc/colors.dart';
 import 'package:flutter/material.dart';
 
 abstract class ThemeText {
@@ -39,27 +40,32 @@ abstract class ThemeText {
 
   //SUB HEADERS
 
+  // Lato font removed
   static const TextStyle subHeader1 = TextStyle(
-      fontFamily: 'Lato',
-      color: Colors.black87,
-      fontSize: 20,
-      fontWeight: FontWeight.w400);
+      color: Colors.black87, fontSize: 20, fontWeight: FontWeight.w400);
 
   static const TextStyle subHeader2 = TextStyle(
-      fontFamily: 'Lato',
-      color: Colors.black87,
-      fontSize: 16,
-      fontWeight: FontWeight.w400);
+      color: Colors.black87, fontSize: 16, fontWeight: FontWeight.w400);
 
   static const TextStyle subHeader3 = TextStyle(
-      fontFamily: 'Lato',
-      color: Colors.black87,
-      fontSize: 12,
-      fontWeight: FontWeight.w400);
+      color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w400);
 
   static const TextStyle paragraph = TextStyle(
-    fontFamily: 'Lato',
     color: Colors.black,
+    fontSize: 12,
+  );
+
+  static const TextStyle subHeaderWhite1 = TextStyle(
+      color: Colors.white70, fontSize: 20, fontWeight: FontWeight.w800);
+
+  static const TextStyle subHeaderWhite2 = TextStyle(
+      color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w800);
+
+  static const TextStyle subHeaderWhite3 = TextStyle(
+      color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w800);
+
+  static const TextStyle paragraphWhite = TextStyle(
+    color: Colors.white70,
     fontSize: 12,
   );
 }
