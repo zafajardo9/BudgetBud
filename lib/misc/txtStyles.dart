@@ -18,6 +18,12 @@ abstract class ThemeText {
     fontSize: 20,
     fontWeight: FontWeight.bold,
   );
+  //For APPBAR TITLES
+  static const TextStyle appBarTitle = TextStyle(
+    color: Colors.white,
+    fontSize: 30,
+    fontWeight: FontWeight.bold,
+  );
 
   //FOR AUTH SCREENS
   static const TextStyle headerAuth = TextStyle(

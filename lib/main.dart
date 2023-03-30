@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: AppColors.mainColorThree,
           primaryColor: AppColors.mainColorOne,
           brightness: Brightness.light,
-          primarySwatch: Colors.red, //learn to make a color swatch
+          primarySwatch: buildMaterialColor(Color(0xFF6A0D0D)),
           fontFamily: GoogleFonts.montserrat().fontFamily,
         ),
         home: AuthPage());
