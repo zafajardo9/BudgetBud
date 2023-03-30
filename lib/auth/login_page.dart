@@ -65,17 +65,16 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  bool showPassword = true;
-
   @override
   Widget build(BuildContext context) {
     //screen size to use
     final size = MediaQuery.of(context).size;
     //for show/hide
-    bool showPassword = false;
-    void togglevisibility() {
+    bool _isObscured = true;
+
+    void toggleVisibility() {
       setState(() {
-        showPassword = !showPassword;
+        _isObscured = !_isObscured;
       });
     }
 
@@ -158,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                                 //textfield password
                                 TextFormField(
                                   controller: pwdController,
-                                  obscureText: showPassword,
+                                  obscureText: _isObscured,
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.lock),
                                     hintText: 'Password',
@@ -170,12 +169,14 @@ class _LoginPageState extends State<LoginPage> {
                                         borderRadius: BorderRadius.circular(20),
                                         borderSide: BorderSide(
                                             color: AppColors.mainColorOne)),
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        togglevisibility();
+                                    suffixIcon: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _isObscured = !_isObscured;
+                                        });
                                       }, //add FUNCTIONALITY
-                                      icon: Icon(
-                                        showPassword
+                                      child: Icon(
+                                        !_isObscured
                                             ? Icons.visibility
                                             : Icons.visibility_off,
                                       ),

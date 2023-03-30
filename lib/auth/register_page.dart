@@ -192,7 +192,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ),
                                 addVerticalSpace(15),
                                 TextFormField(
-                                  controller: pwdController,
+                                  controller: confirmPwdController,
                                   obscureText: showPassword,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
@@ -262,7 +262,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   child: Text(
-                                    'or Sign in with',
+                                    'or Sign up with',
                                     style: TextStyle(
                                       color: Colors.grey.shade600,
                                     ),
@@ -299,11 +299,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('New user? '),
+                              Text('Already have account? '),
                               GestureDetector(
                                 onTap: widget.onTap,
                                 child: Text(
-                                  'Register here',
+                                  'Sign In now',
                                   style: TextStyle(
                                       color: Colors.red.shade900,
                                       fontWeight: FontWeight.bold),
