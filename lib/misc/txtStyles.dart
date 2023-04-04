@@ -41,6 +41,7 @@ abstract class ThemeText {
   //SUB HEADERS
 
   // Lato font removed
+  //Subheader in BLACK
   static const TextStyle subHeader1 = TextStyle(
       color: Colors.black87, fontSize: 20, fontWeight: FontWeight.w400);
 
@@ -50,11 +51,7 @@ abstract class ThemeText {
   static const TextStyle subHeader3 = TextStyle(
       color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w400);
 
-  static const TextStyle paragraph = TextStyle(
-    color: Colors.black,
-    fontSize: 12,
-  );
-
+  //Subheader in WHITE
   static const TextStyle subHeaderWhite1 = TextStyle(
       color: Colors.white70, fontSize: 20, fontWeight: FontWeight.w800);
 
@@ -68,4 +65,25 @@ abstract class ThemeText {
     color: Colors.white70,
     fontSize: 12,
   );
+  //SUBHEADERS BLACK in BOLD
+  static const TextStyle subHeader1Bold = TextStyle(
+      color: Colors.black87, fontSize: 20, fontWeight: FontWeight.bold);
+
+  static const TextStyle subHeader2Bold = TextStyle(
+      color: Colors.black87, fontSize: 18, fontWeight: FontWeight.bold);
+
+  static const TextStyle subHeader3Bold = TextStyle(
+      color: Colors.black87, fontSize: 14, fontWeight: FontWeight.bold);
+
+  //PARAGRAPH
+  static const TextStyle paragraph = TextStyle(
+    color: Colors.black,
+    fontSize: 12,
+  );
+  static const TextStyle paragraph54 = TextStyle(
+    color: Colors.black54,
+    fontSize: 12,
+  );
 }
+
+//NOT THE BEST WAY TO CODE

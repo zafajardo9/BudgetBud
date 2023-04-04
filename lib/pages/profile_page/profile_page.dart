@@ -1,7 +1,10 @@
+import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../components/my_button.dart';
 import '../../misc/colors.dart';
 import '../../misc/txtStyles.dart';
+import 'components/profile_page_details.dart';
 import 'components/user_detail_header.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -19,6 +22,22 @@ class _ProfilePageState extends State<ProfilePage> {
     FirebaseAuth.instance.signOut();
   }
 
+  getProfilePic() {
+    // if (user.photoURL != null) {
+    //   String link = user.photoURL.toString();
+    //   return NetworkImage(
+    //     link,
+    //   );
+    // } else {
+    //   return AssetImage('assets/user.png');
+    // }
+
+    //OPTIMIZED
+    return user.photoURL != null
+        ? NetworkImage(user.photoURL!)
+        : AssetImage('assets/user.png');
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -32,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: ThemeText.appBarTitle,
           ),
           actions: [
-            IconButton(onPressed: signUserOut, icon: const Icon(Icons.settings))
+            IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
           ],
         ),
         body: Container(
@@ -50,17 +69,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       CircleAvatar(
-                        radius: 50,
-                        backgroundColor: AppColors.mainColorThree,
-                        child: const Text('AH'),
-                      ),
+                          radius: 50, backgroundImage: getProfilePic()),
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Text for username', //user.displayName
+                              user.displayName != null
+                                  ? user.email!.replaceFirst("@gmail.com", '')
+                                  : '${user.displayName}',
                               style: ThemeText.subHeaderWhite1,
                             ),
                             Text(
@@ -114,7 +132,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Details'),
+                            Text(
+                              'Details',
+                              style: ThemeText.textHeader3,
+                            ),
                             IconButton(
                               icon: const Icon(
                                 Icons.edit_note,
@@ -125,7 +146,12 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      Text('HELLO'),
+                      ProfilePageDetailTile(),
+                      addVerticalSpace(60),
+                      MyButton(
+                        btn: "Sign Out",
+                        onTap: signUserOut,
+                      ),
                     ],
                   ),
                 ),

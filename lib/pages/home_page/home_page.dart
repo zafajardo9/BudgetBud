@@ -16,25 +16,21 @@ class _HomePageState extends State<HomePage> {
     FirebaseAuth.instance.signOut();
   }
 
+  //add new expense
+  void addNewExpense() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text('TODO LIST'),
+        appBar: AppBar(
+          title: Center(
+            child: Text('TODO LIST'),
+          ),
         ),
-        actions: [
-          IconButton(
-            onPressed: signUserOut,
-            icon: Icon(Icons.logout),
-          )
-        ],
-      ),
-      body: Center(
-        child: Text(
-          'Logged In As ${user.email!}',
-        ),
-      ),
-    );
+        body: Scaffold(
+          floatingActionButton: FloatingActionButton.small(
+            onPressed: addNewExpense,
+            child: Icon(Icons.add),
+          ),
+        ));
   }
 }

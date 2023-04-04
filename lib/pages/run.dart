@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../misc/colors.dart';
 
-import 'home_page.dart';
+import 'home_page/home_page.dart';
 
 class Run extends StatefulWidget {
   const Run({super.key});
