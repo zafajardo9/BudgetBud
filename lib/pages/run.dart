@@ -1,4 +1,5 @@
 import 'package:budget_bud/pages/dashboard_page.dart';
+import 'package:budget_bud/pages/input_page/input_page.dart';
 import 'package:budget_bud/pages/profile_page/profile_page.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _RunState extends State<Run> {
     });
   }
 
-  final navigation = [HomePage(), DashboardPage(), ProfilePage()];
+  final navigation = [HomePage(), InputPage(), DashboardPage(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +49,12 @@ class _RunState extends State<Run> {
             selectedColor: Colors.white,
           ),
 
+          ///
+          DotNavigationBarItem(
+            icon: Icon(Icons.add),
+            selectedColor: Colors.white,
+          ),
+
           /// Dashboard
           DotNavigationBarItem(
             icon: Icon(Icons.bar_chart_rounded),
@@ -65,4 +72,4 @@ class _RunState extends State<Run> {
   }
 }
 
-enum _SelectedTab { home, barchart, person }
+enum _SelectedTab { home, input, barchart, person }

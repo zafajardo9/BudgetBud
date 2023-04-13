@@ -9,28 +9,43 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final user = FirebaseAuth.instance.currentUser!;
-
-  //sign out
-  void signUserOut() {
-    FirebaseAuth.instance.signOut();
+  //add new expense
+  void addNewExpense() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Add Expense'),
+        content: Column(
+          children: [],
+        ),
+      ),
+    );
   }
 
-  //add new expense
-  void addNewExpense() {}
+  //controllers
+  final newExpenseNameController = TextEditingController();
+  final newExpenseAmountController = TextEditingController();
+
+  //Methods
+  //save
+  void saveExpense() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text('TODO LIST'),
-          ),
+      appBar: AppBar(
+        title: Center(
+          child: Text('TODO LIST'),
         ),
-        body: Scaffold(
-          floatingActionButton: FloatingActionButton.small(
-            onPressed: addNewExpense,
-            child: Icon(Icons.add),
-          ),
-        ));
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: addNewExpense,
+                child: Icon(Icons.add),
+              )),
+        ],
+      ),
+    );
   }
 }
