@@ -45,6 +45,7 @@ dependencies:
   google_fonts: ^4.0.3
   provider: ^6.0.5 #can be removed
   font_awesome: ^5.10.1
+  shared_preferences: ^2.0.5
 
 
 

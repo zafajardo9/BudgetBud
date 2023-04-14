@@ -1,8 +1,9 @@
-import 'package:budget_bud/auth/login_or_register.dart';
+import 'package:budget_bud/auth/auth_page.dart';
 import 'package:budget_bud/misc/colors.dart';
-import 'package:budget_bud/pages/onBoarding_page/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'constant.dart';
 import 'onBoarding_contents.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -13,187 +14,201 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  late PageController _controller;
+  int currentIndex = 0;
+  late PageController _pageController;
+  List<OnboardModel> screens = <OnboardModel>[
+    OnboardModel(
+      img: 'assets/other/5.jpg',
+      text: "Welcome to Our Financial Budgeting App",
+      desc: "Start Managing Your Money Today",
+      bg: Colors.white,
+      button: AppColors.mainColorOne,
+    ),
+    OnboardModel(
+      img: 'assets/other/8.jpg',
+      text: "Create Your Budget",
+      desc: " Plan Your Finances for Success",
+      bg: AppColors.mainColorOne,
+      button: Colors.white,
+    ),
+    OnboardModel(
+      img: 'assets/other/10.jpg',
+      text: "Make an Account",
+      desc: "Login or Signup for your Finances in One Place",
+      bg: Colors.white,
+      button: AppColors.mainColorOne,
+    ),
+    OnboardModel(
+      img: 'assets/other/11.jpg',
+      text: "Monitor Your Progress",
+      desc: "Stay on Track and Achieve Your Goals",
+      bg: AppColors.mainColorTwo,
+      button: AppColors.mainColorOne,
+    ),
+    OnboardModel(
+      img: 'assets/other/5.jpg',
+      text: "Get Support and Assistance",
+      desc: "With our Algorithm, we're Here to Help You Succeed",
+      bg: AppColors.mainColorThree,
+      button: AppColors.mainColorOne,
+    ),
+  ];
 
   @override
   void initState() {
-    _controller = PageController();
+    _pageController = PageController(initialPage: 0);
     super.initState();
   }
 
-  int _currentPage = 0;
-  List colors = const [
-    Color(0xFFF4F3FF),
-    Color(0xFFF4F3FF),
-    Color(0xFFF4F3FF),
-  ];
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
-  AnimatedContainer _buildDots({
-    int? index,
-  }) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(50),
-        ),
-        color: Color(0xFF6A0D0D),
-      ),
-      margin: const EdgeInsets.only(right: 5),
-      height: 10,
-      curve: Curves.easeIn,
-      width: _currentPage == index ? 20 : 10,
-    );
+  _storeOnboardInfo() async {
+    print("Shared pref called");
+    int isViewed = 0;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('onBoard', isViewed);
+    print(prefs.getInt('onBoard'));
   }
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    double width = SizeConfig.screenW!;
-    double height = SizeConfig.screenH!;
-
     return Scaffold(
-      backgroundColor: colors[_currentPage],
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              flex: 3,
-              child: PageView.builder(
-                physics: const BouncingScrollPhysics(),
-                controller: _controller,
-                onPageChanged: (value) => setState(() => _currentPage = value),
-                itemCount: contents.length,
-                itemBuilder: (context, i) {
-                  return Padding(
-                    padding: const EdgeInsets.all(40.0),
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          contents[i].image,
-                          height: SizeConfig.blockV! * 35,
-                        ),
-                        SizedBox(
-                          height: (height >= 840) ? 60 : 30,
-                        ),
-                        Text(
-                          contents[i].title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: "Mulish",
-                            fontWeight: FontWeight.w600,
-                            fontSize: (width <= 550) ? 30 : 35,
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        Text(
-                          contents[i].desc,
-                          style: TextStyle(
-                            fontFamily: "Mulish",
-                            fontWeight: FontWeight.w300,
-                            fontSize: (width <= 550) ? 17 : 25,
-                          ),
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                  );
-                },
+      backgroundColor: currentIndex % 2 == 0 ? kwhite : AppColors.mainColorOne,
+      appBar: AppBar(
+        backgroundColor:
+            currentIndex % 2 == 0 ? kwhite : AppColors.mainColorOne,
+        elevation: 0.0,
+        actions: [
+          TextButton(
+            onPressed: () {
+              _storeOnboardInfo();
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => AuthPage()));
+            },
+            child: Text(
+              "Skip",
+              style: TextStyle(
+                color: currentIndex % 2 == 0 ? kblack : kwhite,
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: PageView.builder(
+            itemCount: screens.length,
+            controller: _pageController,
+            physics: NeverScrollableScrollPhysics(),
+            onPageChanged: (int index) {
+              setState(() {
+                currentIndex = index;
+              });
+            },
+            itemBuilder: (_, index) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      contents.length,
-                      (int index) => _buildDots(
-                        index: index,
-                      ),
+                  Image.asset(screens[index].img),
+                  SizedBox(
+                    height: 10.0,
+                    child: ListView.builder(
+                      itemCount: screens.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 3.0),
+                                width: currentIndex == index ? 25 : 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: currentIndex == index
+                                      ? kbrown
+                                      : kbrown300,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                            ]);
+                      },
                     ),
                   ),
-                  _currentPage + 1 == contents.length
-                      ? Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          LoginOrRegisterPage()));
-                            },
-                            child: const Text("START"),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.mainColorOne,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              padding: (width <= 550)
-                                  ? const EdgeInsets.symmetric(
-                                      horizontal: 100, vertical: 20)
-                                  : EdgeInsets.symmetric(
-                                      horizontal: width * 0.2, vertical: 25),
-                              textStyle:
-                                  TextStyle(fontSize: (width <= 550) ? 13 : 17),
-                            ),
+                  Text(
+                    screens[index].text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 27.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      color: index % 2 == 0 ? kblack : kwhite,
+                    ),
+                  ),
+                  Text(
+                    screens[index].desc,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      fontFamily: 'Montserrat',
+                      color: index % 2 == 0 ? kblack : kwhite,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      print(index);
+                      if (index == screens.length - 1) {
+                        await _storeOnboardInfo();
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AuthPage()));
+                      }
+
+                      _pageController.nextPage(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.bounceIn,
+                      );
+                    },
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+                      decoration: BoxDecoration(
+                          color: index % 2 == 0
+                              ? AppColors.mainColorOne
+                              : AppColors.mainColorTwo,
+                          borderRadius: BorderRadius.circular(15.0)),
+                      child: Row(mainAxisSize: MainAxisSize.min, children: [
+                        Text(
+                          "Next",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            color: index % 2 == 0
+                                ? AppColors.mainColorThree
+                                : AppColors.mainColorOne,
                           ),
+                        ),
+                        SizedBox(
+                          width: 15.0,
+                        ),
+                        Icon(
+                          Icons.arrow_forward_sharp,
+                          color: index % 2 == 0
+                              ? AppColors.mainColorThree
+                              : AppColors.mainColorOne,
                         )
-                      : Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  _controller.jumpToPage(2);
-                                },
-                                child: const Text(
-                                  "SKIP",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                style: TextButton.styleFrom(
-                                  elevation: 0,
-                                  textStyle: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: (width <= 550) ? 13 : 17,
-                                  ),
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _controller.nextPage(
-                                    duration: const Duration(milliseconds: 200),
-                                    curve: Curves.easeIn,
-                                  );
-                                },
-                                child: Text("NEXT"),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.mainColorOne,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  elevation: 0,
-                                  padding: (width <= 550)
-                                      ? const EdgeInsets.symmetric(
-                                          horizontal: 30, vertical: 20)
-                                      : const EdgeInsets.symmetric(
-                                          horizontal: 30, vertical: 25),
-                                  textStyle: TextStyle(
-                                      fontSize: (width <= 550) ? 13 : 17),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                      ]),
+                    ),
+                  )
                 ],
-              ),
-            ),
-          ],
-        ),
+              );
+            }),
       ),
     );
   }

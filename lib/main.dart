@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // ignore: unused_import
 import 'firebase_options.dart';
 import 'misc/colors.dart';
 import 'auth/auth_page.dart';
+import 'pages/onBoarding_page/onBoarding_page.dart';
 
+int? isviewed;
 void main() async {
+  //for onboarding screen
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  //onboarding screen
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  isviewed = prefs.getInt('onBoard');
 
   runApp(const MyApp());
 }
@@ -31,6 +44,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: buildMaterialColor(Color(0xFF6A0D0D)),
           fontFamily: GoogleFonts.montserrat().fontFamily,
         ),
-        home: AuthPage());
+        home: isviewed != 0 ? OnboardingScreen() : AuthPage());
   }
 }
