@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../pages/onBoarding_page/onBoarding_page.dart';
 import '../pages/run.dart';
 import 'login_or_register.dart';
 
@@ -17,7 +16,7 @@ class AuthPage extends StatelessWidget {
           if (snapshot.hasData) {
             return Run();
           } else {
-            return OnboardingScreen();
+            return LoginOrRegisterPage();
           }
         },
       ),
