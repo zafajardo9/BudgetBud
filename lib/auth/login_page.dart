@@ -7,6 +7,7 @@ import '../components/squred_tiles.dart';
 import '../misc/txtStyles.dart';
 import '../misc/widgetSize.dart';
 import '../services/auth_service.dart';
+import 'forgotPassword_page/forgot_pwd_page.dart';
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -192,7 +193,12 @@ class _LoginPageState extends State<LoginPage> {
                           addVerticalSpace(15),
                           //forgot password
                           GestureDetector(
-                            onTap: () {}, //function
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return ForgotPasswordPage();
+                              }));
+                            }, //function
                             child: Text(
                               'Forgot Password',
                               style: TextStyle(

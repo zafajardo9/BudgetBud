@@ -1,39 +1,26 @@
-import 'package:budget_bud/misc/colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../misc/txtStyles.dart';
+import '../../../misc/colors.dart';
+import '../../../misc/txtStyles.dart';
 
-class InputPage extends StatefulWidget {
-  const InputPage({Key? key}) : super(key: key);
+class IncomeTab extends StatefulWidget {
+  const IncomeTab({Key? key}) : super(key: key);
 
   @override
-  State<InputPage> createState() => _InputPageState();
+  State<IncomeTab> createState() => _IncomeTabState();
 }
 
-class _InputPageState extends State<InputPage> {
+class _IncomeTabState extends State<IncomeTab> {
   //controllers
   final newBudgetNameController = TextEditingController();
   final newBudgetAmountController = TextEditingController();
 
-  //Methods
   //save
   void saveExpense() {}
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        bottomOpacity: 0.0,
-        elevation: 0.0,
-        title: const Text(
-          'Create Budget',
-          style: ThemeText.appBarTitle,
-        ),
-        // actions: [
-        //   IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
-        // ],
-      ),
-      body: Column(
+    return SingleChildScrollView(
+      child: Column(
         children: [
           Container(
             width: double.infinity,
