@@ -13,7 +13,7 @@ class TransactionPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Create your Budget',
+            'Input your Transactions',
           ),
           elevation: 0,
           bottom: TabBar(
