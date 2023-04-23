@@ -3,9 +3,14 @@ import 'package:budget_bud/pages/transaction_page/tabs/expense_tab.dart';
 import 'package:budget_bud/pages/transaction_page/tabs/income_tab.dart';
 import 'package:flutter/material.dart';
 
-class TransactionPage extends StatelessWidget {
+class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
 
+  @override
+  State<TransactionPage> createState() => _TransactionPageState();
+}
+
+class _TransactionPageState extends State<TransactionPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
