@@ -45,8 +45,9 @@ dependencies:
   #asdfasdf///
   liquid_swipe: ^3.1.0
   smooth_page_indicator: ^1.1.0
-  intro_screen_onboarding_flutter: ^1.0.0
-  concentric_transition: ^1.0.3
+  #intro_screen_onboarding_flutter: ^1.0.0
+  #concentric_transition: ^1.0.3
+  #VALIDATORS
 
 
 

@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:budget_bud/auth/validators/validators.dart';
 import 'package:budget_bud/misc/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,12 +22,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
-
   final pwdController = TextEditingController();
 
   //Login user
   void signUserIn() async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+    }
+
     showDialog(
       context: context,
       builder: (context) {
@@ -66,9 +71,26 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-
-      //show error message
-      showErrorMessage(e.code);
+      if (e.code == 'network-request-failed') {
+        showErrorMessage("There is a problem on internet connection");
+        //devtools.log('No Internet Connection');
+      } else if (e.code == "wrong-password") {
+        showErrorMessage('Please enter correct password');
+      } else if (e.code == 'user-not-found') {
+        showErrorMessage('Email not found, Please Sign-Up!');
+        // print('Email not found');
+      } else if (e.code == 'too-many-requests') {
+        showErrorMessage('Too many attempts please try later');
+      } else if (e.code == 'invalid-email') {
+        showErrorMessage('You inputted a wrong email!');
+      } else if (e.code == 'unknown') {
+        showErrorMessage('Email and Password Fields are required');
+        //print(e.code);
+      } else {
+        showErrorMessage(e.code);
+      }
+      emailController.clear();
+      pwdController.clear();
     }
   }
 
@@ -110,6 +132,7 @@ class _LoginPageState extends State<LoginPage> {
 
               Expanded(
                 child: Form(
+                  key: formKey,
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -159,6 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                                         borderSide: BorderSide(
                                             color: AppColors.mainColorOne)),
                                   ),
+                                  validator: validateEmail,
                                 ),
 
                                 addVerticalSpace(15),
@@ -181,6 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   keyboardType: TextInputType.visiblePassword,
                                   textInputAction: TextInputAction.done,
+                                  validator: validatePassword,
                                 ),
                               ],
                             ),

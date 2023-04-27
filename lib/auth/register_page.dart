@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:budget_bud/auth/validators/validators.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,12 +21,17 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final confirmPwdController = TextEditingController();
   final pwdController = TextEditingController();
 
   //Login user
   void signUserUp() async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+    }
+
     showDialog(
       context: context,
       builder: (context) {
@@ -43,7 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         content: AwesomeSnackbarContent(
-          title: 'On Snap!',
+          title: 'Error!',
           message: message,
 
           /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
@@ -54,20 +60,6 @@ class _RegisterPageState extends State<RegisterPage> {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
-
-      // showDialog(
-      //     context: context,
-      //     builder: (context) {
-      //       return AlertDialog(
-      //         backgroundColor: Colors.red.shade600,
-      //         title: Text(
-      //           message,
-      //           style: TextStyle(
-      //             color: Colors.white,
-      //           ),
-      //         ),
-      //       );
-      //     });
     }
 
     try {
@@ -85,9 +77,25 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-
-      //show error message
-      showErrorMessage(e.code);
+      if (e.code == 'network-request-failed') {
+        showErrorMessage("There is a problem on internet connection");
+        //devtools.log('No Internet Connection');
+      } else if (e.code == "email-already-in-use") {
+        showErrorMessage('There is already an account existing');
+      } else if (e.code == 'operation-not-allowed') {
+        showErrorMessage('There is a problem in the Authentication');
+      } else if (e.code == 'too-many-requests') {
+        showErrorMessage('Too many attempts please try later');
+      } else if (e.code == 'invalid-email') {
+        showErrorMessage('You inputted a wrong email!');
+      } else if (e.code == 'unknown') {
+        showErrorMessage('Email and Password Fields are required');
+      } else if (e.code == 'weak-password') {
+        showErrorMessage('Weak Password pls input more than 6');
+      }
+      emailController.clear();
+      pwdController.clear();
+      confirmPwdController.clear();
     }
   }
 
@@ -128,6 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
               Expanded(
                 child: Form(
+                  key: formKey,
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -178,6 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         borderSide: BorderSide(
                                             color: AppColors.mainColorOne)),
                                   ),
+                                  validator: validateEmailSignUp,
                                 ),
 
                                 addVerticalSpace(15),
@@ -200,6 +210,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   keyboardType: TextInputType.visiblePassword,
                                   textInputAction: TextInputAction.done,
+                                  validator: validatePasswordSignUp,
                                 ),
                                 addVerticalSpace(15),
                                 TextFormField(
@@ -220,6 +231,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   keyboardType: TextInputType.visiblePassword,
                                   textInputAction: TextInputAction.done,
+                                  validator: (val) {
+                                    if (val == null || val.isEmpty) {
+                                      return 'This field is required.';
+                                    } else if (val !=
+                                        confirmPwdController.text) {
+                                      return 'Does not match to password';
+                                    }
+
+                                    return null;
+                                  },
                                 ),
                               ],
                             ),
@@ -281,7 +302,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               addHorizontalSpace(20),
                               SquaredTiles(
-                                onTap: () {},
+                                onTap: null,
                                 imageLocation: 'images/apple.png',
                                 btnName: ' Apple',
                               ),
