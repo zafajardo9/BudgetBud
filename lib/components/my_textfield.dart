@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../misc/colors.dart';
 
 class MyTextField extends StatelessWidget {
   final controller;
   final String hintText;
+  final String kbType;
+  // final String preIcon;
+  // final String lastIcon;
   final bool obscureText;
 
   const MyTextField({
     super.key,
+    required this.kbType,
     required this.controller,
     required this.hintText,
     required this.obscureText,
@@ -18,18 +23,19 @@ class MyTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
-        obscureText: obscureText,
+        keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.mainColorOne)),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.mainColorOne)),
-            fillColor: AppColors.mainColorFour,
-            filled: true,
-            hintText: hintText,
-            hintStyle: TextStyle(color: Colors.grey[400])),
+          prefixIcon: Icon(Icons.email), // kulang sa focus border color
+          hintText: 'Email',
+          contentPadding: EdgeInsets.zero,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: AppColors.mainColorOne)),
+        ),
       ),
     );
   }

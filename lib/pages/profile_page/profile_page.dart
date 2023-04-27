@@ -1,11 +1,11 @@
 import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../components/my_button.dart';
 import '../../misc/colors.dart';
 import '../../misc/txtStyles.dart';
 import 'components/profile_page_details.dart';
-import 'components/user_detail_header.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -46,9 +46,8 @@ class _ProfilePageState extends State<ProfilePage> {
         appBar: AppBar(
           bottomOpacity: 0.0,
           elevation: 0.0,
-          title: const Text(
+          title: Text(
             'Profile',
-            style: ThemeText.appBarTitle,
           ),
           actions: [
             IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
@@ -62,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: double.infinity,
+                width: Adaptive.w(100),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(
@@ -107,9 +106,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Icon(Icons.wallet),
-                      Text('Wallet'),
+                      Text(
+                        'Wallet',
+                        style: ThemeText.paragraph,
+                      ),
                       Icon(Icons.arrow_forward_ios_outlined),
                     ],
                   ),
@@ -125,34 +127,38 @@ class _ProfilePageState extends State<ProfilePage> {
                         topEnd: Radius.circular(25),
                       )),
                   padding: EdgeInsets.symmetric(vertical: 20.0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Details',
-                              style: ThemeText.textHeader3,
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.edit_note,
-                                size: 30,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Details',
+                                style: ThemeText.textHeader3,
                               ),
-                              onPressed: () {},
-                            ),
-                          ],
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.edit_note,
+                                  size: 30,
+                                ),
+                                onPressed: () {
+                                  //to be made
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      ProfilePageDetailTile(),
-                      addVerticalSpace(60),
-                      MyButton(
-                        btn: "Sign Out",
-                        onTap: signUserOut,
-                      ),
-                    ],
+                        ProfilePageDetailTile(),
+                        addVerticalSpace(Adaptive.h(4)),
+                        MyButton(
+                          btn: "Sign Out",
+                          onTap: signUserOut,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )

@@ -1,6 +1,8 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:budget_bud/misc/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../components/my_button.dart';
 import '../components/squred_tiles.dart';
@@ -36,19 +38,23 @@ class _LoginPageState extends State<LoginPage> {
 
     //error handler message
     void showErrorMessage(String message) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.red.shade600,
-              title: Text(
-                message,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            );
-          });
+      final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error',
+          message: message,
+
+          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
 
     try {
@@ -96,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                 color: AppColors.mainColorOne,
                 child: Image.asset(
                   'assets/bbLogo.png',
-                  height: size.height * 0.3,
+                  height: size.height * 0.25,
                 ),
               ),
 
@@ -125,19 +131,20 @@ class _LoginPageState extends State<LoginPage> {
                             style: ThemeText.headerAuth,
                           ),
                           Text(
-                            'Enter your details',
+                            'Input your email and password',
                             style: ThemeText.subAuth,
                           ),
 
                           addVerticalSpace(20),
                           //FORM AREA =======================
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                          SizedBox(
+                            width: Adaptive.w(90),
                             child: Column(
                               children: [
                                 TextFormField(
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
+                                  style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons
                                         .email), // kulang sa focus border color
@@ -159,6 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                 TextFormField(
                                   controller: pwdController,
                                   obscureText: _isObscured,
+                                  style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
                                     prefixIcon: Icon(Icons.lock),
                                     hintText: 'Password',
@@ -170,18 +178,6 @@ class _LoginPageState extends State<LoginPage> {
                                         borderRadius: BorderRadius.circular(20),
                                         borderSide: BorderSide(
                                             color: AppColors.mainColorOne)),
-                                    suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _isObscured = !_isObscured;
-                                        });
-                                      }, //add FUNCTIONALITY
-                                      child: Icon(
-                                        !_isObscured
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                      ),
-                                    ),
                                   ),
                                   keyboardType: TextInputType.visiblePassword,
                                   textInputAction: TextInputAction.done,
@@ -201,9 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                             }, //function
                             child: Text(
                               'Forgot Password',
-                              style: TextStyle(
-                                  color: Colors.black45,
-                                  fontWeight: FontWeight.bold),
+                              style: ThemeText.paragraph54Bold,
                             ),
                           ),
 
@@ -236,6 +230,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     'or Sign in with',
                                     style: TextStyle(
+                                      fontSize: 15.sp,
                                       color: Colors.grey.shade600,
                                     ),
                                   ),
@@ -249,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 25),
+                          SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -271,12 +266,16 @@ class _LoginPageState extends State<LoginPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('New user? '),
+                              Text(
+                                'New user? ',
+                                style: ThemeText.paragraph,
+                              ),
                               GestureDetector(
                                 onTap: widget.onTap,
                                 child: Text(
                                   'Register here',
                                   style: TextStyle(
+                                      fontSize: 15.sp,
                                       color: Colors.red.shade900,
                                       fontWeight: FontWeight.bold),
                                 ),

@@ -1,6 +1,8 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../components/my_button.dart';
 import '../components/squred_tiles.dart';
@@ -35,19 +37,37 @@ class _RegisterPageState extends State<RegisterPage> {
 
     //error handler message
     void showErrorMessage(String message) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: Colors.red.shade600,
-              title: Text(
-                message,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            );
-          });
+      final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'On Snap!',
+          message: message,
+
+          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+
+      // showDialog(
+      //     context: context,
+      //     builder: (context) {
+      //       return AlertDialog(
+      //         backgroundColor: Colors.red.shade600,
+      //         title: Text(
+      //           message,
+      //           style: TextStyle(
+      //             color: Colors.white,
+      //           ),
+      //         ),
+      //       );
+      //     });
     }
 
     try {
@@ -61,7 +81,6 @@ class _RegisterPageState extends State<RegisterPage> {
         //error if not the same
         showErrorMessage("Password don't match");
       }
-
       //pop Loading Circle
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
@@ -77,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
     //screen size to use
     final size = MediaQuery.of(context).size;
     //for show/hide
-    bool showPassword = false;
+    bool showPassword = true;
     void togglevisibility() {
       setState(() {
         showPassword = !showPassword;
@@ -126,7 +145,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           //text welcome
                           addVerticalSpace(25),
                           Text(
-                            'Welcome Back',
+                            'Hello New User!',
                             style: ThemeText.headerAuth,
                           ),
                           Text(
@@ -143,6 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 TextFormField(
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
+                                  style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
                                     prefixIcon: Icon(Icons
@@ -165,6 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 TextFormField(
                                   controller: pwdController,
                                   obscureText: showPassword,
+                                  style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
                                     prefixIcon: Icon(Icons.lock),
@@ -176,16 +197,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                         borderRadius: BorderRadius.circular(20),
                                         borderSide: BorderSide(
                                             color: AppColors.mainColorOne)),
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        togglevisibility();
-                                      }, //add FUNCTIONALITY
-                                      icon: Icon(
-                                        showPassword
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                      ),
-                                    ),
                                   ),
                                   keyboardType: TextInputType.visiblePassword,
                                   textInputAction: TextInputAction.done,
@@ -194,6 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 TextFormField(
                                   controller: confirmPwdController,
                                   obscureText: showPassword,
+                                  style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
                                     prefixIcon: Icon(Icons.lock),
@@ -205,16 +217,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                         borderRadius: BorderRadius.circular(20),
                                         borderSide: BorderSide(
                                             color: AppColors.mainColorOne)),
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        togglevisibility();
-                                      }, //add FUNCTIONALITY
-                                      icon: Icon(
-                                        showPassword
-                                            ? Icons.visibility
-                                            : Icons.visibility_off,
-                                      ),
-                                    ),
                                   ),
                                   keyboardType: TextInputType.visiblePassword,
                                   textInputAction: TextInputAction.done,
@@ -223,17 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ),
                           ),
 
-                          addVerticalSpace(15),
                           //forgot password
-                          GestureDetector(
-                            onTap: () {}, //function
-                            child: Text(
-                              'Forgot Password',
-                              style: TextStyle(
-                                  color: Colors.black45,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
 
                           //textfield password
 
@@ -264,6 +256,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   child: Text(
                                     'or Sign up with',
                                     style: TextStyle(
+                                      fontSize: 15.sp,
                                       color: Colors.grey.shade600,
                                     ),
                                   ),
@@ -299,12 +292,16 @@ class _RegisterPageState extends State<RegisterPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Already have account? '),
+                              Text(
+                                'Already have account? ',
+                                style: ThemeText.paragraph,
+                              ),
                               GestureDetector(
                                 onTap: widget.onTap,
                                 child: Text(
                                   'Sign In now',
                                   style: TextStyle(
+                                      fontSize: 15.sp,
                                       color: Colors.red.shade900,
                                       fontWeight: FontWeight.bold),
                                 ),

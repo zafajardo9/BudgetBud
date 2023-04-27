@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,23 +28,53 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: userEmailController.text.trim());
       // using a BuildContext is bad practice in async
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text('Password link has been sent! Check your email.'),
-          );
-        },
+      final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Great!',
+          message: 'Password link has been sent! Check your email.',
+
+          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+          contentType: ContentType.success,
+        ),
       );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return AlertDialog(
+      //       content: Text('Password link has been sent! Check your email.'),
+      //     );
+      //   },
+      // );
     } on FirebaseAuthException catch (e) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(e.message.toString()),
-            );
-          });
+      final snackBar = SnackBar(
+        /// need to set following properties for best effect of awesome_snackbar_content
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        content: AwesomeSnackbarContent(
+          title: 'Error',
+          message: e.message.toString(),
+
+          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+          contentType: ContentType.failure,
+        ),
+      );
+
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
     }
+
+    userEmailController.clear();
   }
 
   @override
@@ -61,9 +92,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             style: ThemeText.subHeader1Bold,
           ),
           addVerticalSpace(10),
-          Text(
-            'Enter your Email and we will send you a password reset link',
-            style: ThemeText.paragraph54,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              'Enter your Email and we will send you a password reset link',
+              style: ThemeText.paragraph54,
+            ),
           ),
           addVerticalSpace(60),
           Padding(

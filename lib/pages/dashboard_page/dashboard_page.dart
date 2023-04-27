@@ -53,7 +53,7 @@ class DashboardPage extends StatelessWidget {
   Widget _getBody(incomes) {
     return incomes.isEmpty
         ? Center(
-            child: Text('No Income Yet, pls add Income'),
+            child: Text('No Income Yet, pls som transactions'),
           )
         : ListView.builder(
             itemCount: incomes.length,

@@ -1,5 +1,6 @@
 import 'package:budget_bud/misc/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class SquaredTiles extends StatelessWidget {
   final Function()? onTap;
@@ -18,6 +19,8 @@ class SquaredTiles extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: Adaptive.w(30),
+        height: Adaptive.w(10),
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
             border: Border.all(color: AppColors.mainColorFour),
@@ -27,9 +30,12 @@ class SquaredTiles extends StatelessWidget {
           children: [
             Image.asset(
               imageLocation,
-              height: 20,
+              height: Adaptive.w(40),
             ),
-            Text(btnName),
+            Text(
+              btnName,
+              style: TextStyle(fontSize: 15.sp),
+            ),
           ],
         ),
       ),

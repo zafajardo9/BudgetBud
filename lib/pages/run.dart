@@ -2,6 +2,7 @@ import 'package:budget_bud/pages/dashboard_page/dashboard_page.dart';
 import 'package:budget_bud/pages/profile_page/profile_page.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../misc/colors.dart';
 
@@ -40,7 +41,7 @@ class _RunState extends State<Run> {
       extendBody: true,
       body: navigation[_selectedTab.index],
       bottomNavigationBar: DotNavigationBar(
-        paddingR: EdgeInsets.all(10),
+        paddingR: EdgeInsets.all(8),
         backgroundColor: AppColors.mainColorOne,
         margin: EdgeInsets.only(bottom: 10),
         dotIndicatorColor: Colors.white,
@@ -50,25 +51,37 @@ class _RunState extends State<Run> {
         items: [
           /// Home
           DotNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(
+              Icons.home,
+              size: 20.sp,
+            ),
             selectedColor: Colors.white,
           ),
 
           ///
           DotNavigationBarItem(
-            icon: Icon(Icons.add),
+            icon: Icon(
+              Icons.add,
+              size: 20.sp,
+            ),
             selectedColor: Colors.white,
           ),
 
           /// Dashboard
           DotNavigationBarItem(
-            icon: Icon(Icons.bar_chart_rounded),
+            icon: Icon(
+              Icons.bar_chart_rounded,
+              size: 20.sp,
+            ),
             selectedColor: Colors.white,
           ),
 
           /// Profile
           DotNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(
+              Icons.account_circle,
+              size: 20.sp,
+            ),
             selectedColor: Colors.white,
           ),
         ],

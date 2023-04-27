@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Center(
-          child: Text('TODO LIST'),
+          child: Text('Analytics'),
         ),
         actions: [
           Padding(
