@@ -4,8 +4,8 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'onBoarding_model.dart';
 
-class onBoarding_Pages extends StatelessWidget {
-  const onBoarding_Pages({
+class OnBoardingPagesWidget extends StatelessWidget {
+  const OnBoardingPagesWidget({
     super.key,
     required this.model,
   });

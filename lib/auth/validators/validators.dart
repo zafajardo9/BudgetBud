@@ -1,6 +1,3 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:flutter/material.dart';
-
 //FOR SIGN IN
 String? validateEmail(String? formEmail) {
   if (formEmail == null || formEmail.isEmpty)

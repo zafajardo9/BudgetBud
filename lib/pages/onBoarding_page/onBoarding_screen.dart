@@ -32,7 +32,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     final screenWidth = MediaQuery.of(context).size;
 
     final pages = [
-      onBoarding_Pages(
+      OnBoardingPagesWidget(
         model: OnboardModel(
             title: 'Welcome to Our Financial Budgeting App',
             desc: 'Start Managing Your Money Today',
@@ -42,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             counterText: '1',
             height: screenWidth.height),
       ),
-      onBoarding_Pages(
+      OnBoardingPagesWidget(
           model: OnboardModel(
         title: 'Create Your Budget',
         desc: 'Plan Your Finances for Success',
@@ -52,7 +52,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         counterText: '2',
         height: screenWidth.height,
       )),
-      onBoarding_Pages(
+      OnBoardingPagesWidget(
           model: OnboardModel(
         title: "Make an Account",
         desc: "Login or Signup for your Finances in One Place",
@@ -62,7 +62,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         counterText: '3',
         height: screenWidth.height,
       )),
-      onBoarding_Pages(
+      OnBoardingPagesWidget(
           model: OnboardModel(
         title: 'Monitor Your Progress',
         desc: 'Stay on Track and Achieve Your Goals',
@@ -72,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         counterText: '4',
         height: screenWidth.height,
       )),
-      onBoarding_Pages(
+      OnBoardingPagesWidget(
           model: OnboardModel(
         title: 'Get Support and Assistance',
         desc: "With our Algorithm, we're Here to Help You Succeed",
