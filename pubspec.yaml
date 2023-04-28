@@ -48,6 +48,7 @@ dependencies:
   #intro_screen_onboarding_flutter: ^1.0.0
   #concentric_transition: ^1.0.3
   #VALIDATORS
+  validators: ^3.0.0
 
 
 

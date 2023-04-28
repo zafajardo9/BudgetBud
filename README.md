@@ -48,3 +48,19 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## Links
+### Support Us
+<a href="https://www.buymeacoffee.com/zafajardo9"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="200" /></a>
+### Socials
+<p align="center"> 
+ - [Gab](bernardogabriellefaith@gmail.com)
+ - [Federico](jrlegarte6@gmail.com)
+ - [Zackery](zafajardo9.programming@gmail.com)
+ - [Roselyn](rviray29.rv@gmail.com)
+
+<a href="https://linkedin.com/in/zafajardo9" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="zafajardo9" height="30" width="40" /></a>
+<a href="https://fb.com/zafajardo" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/facebook.svg" alt="zafajardo" height="30" width="40" /></a>
+<a href="https://instagram.com/zahiroshi" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="zahiroshi" height="30" width="40" /></a>
+<a href="https://www.youtube.com/@chill_programmer5134" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="chill_programmer" height="30" width="40" /></a>
+</p>

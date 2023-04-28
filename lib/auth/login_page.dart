@@ -26,6 +26,14 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final pwdController = TextEditingController();
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    emailController.dispose();
+    pwdController.dispose();
+    super.dispose();
+  }
+
   //Login user
   void signUserIn() async {
     if (formKey.currentState!.validate()) {
@@ -133,6 +141,7 @@ class _LoginPageState extends State<LoginPage> {
               Expanded(
                 child: Form(
                   key: formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,

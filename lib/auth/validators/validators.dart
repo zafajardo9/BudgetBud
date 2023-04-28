@@ -13,6 +13,10 @@ String? validatePassword(String? formPassword) {
   return null;
 }
 
+bool isEmailCorrect = false;
+bool isPasswordCorrect = false;
+bool isRPwdCorrect = false;
+
 //FOR SIGN UP
 String? validatePasswordSignUp(String? formSignUpEmail) {
   if (formSignUpEmail == null || formSignUpEmail.isEmpty) {

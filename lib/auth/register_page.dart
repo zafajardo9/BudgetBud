@@ -4,6 +4,7 @@ import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:validators/validators.dart';
 
 import '../components/my_button.dart';
 import '../components/squred_tiles.dart';
@@ -25,6 +26,15 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final confirmPwdController = TextEditingController();
   final pwdController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    emailController.dispose();
+    confirmPwdController.dispose();
+    confirmPwdController.dispose();
+    super.dispose();
+  }
 
   //Login user
   void signUserUp() async {
@@ -137,6 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
               Expanded(
                 child: Form(
                   key: formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white,
@@ -174,10 +185,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                   style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
-                                    prefixIcon: Icon(Icons
-                                        .email), // kulang sa focus border color
+                                    prefixIcon: Icon(Icons.email,
+                                        color: isEmailCorrect == false
+                                            ? AppColors.mainColorOne
+                                            : Colors
+                                                .green), // kulang sa focus border color
                                     hintText: 'Email',
-
+                                    suffixIcon: isEmailCorrect == false
+                                        ? null
+                                        : const Icon(
+                                            Icons.done,
+                                            color: Colors.green,
+                                          ),
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
@@ -185,9 +204,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(20),
                                         borderSide: BorderSide(
-                                            color: AppColors.mainColorOne)),
+                                            color: isEmailCorrect == false
+                                                ? AppColors.mainColorOne
+                                                : Colors.green)),
                                   ),
                                   validator: validateEmailSignUp,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      isEmailCorrect = isEmail(val);
+                                    });
+                                  },
                                 ),
 
                                 addVerticalSpace(15),
@@ -198,19 +224,30 @@ class _RegisterPageState extends State<RegisterPage> {
                                   style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
-                                    prefixIcon: Icon(Icons.lock),
+                                    prefixIcon: Icon(Icons.lock,
+                                        color: isPasswordCorrect == false
+                                            ? AppColors.mainColorOne
+                                            : Colors.green),
                                     hintText: 'Password',
                                     border: OutlineInputBorder(
                                         borderRadius:
                                             BorderRadius.circular(20)),
                                     focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        borderSide: BorderSide(
-                                            color: AppColors.mainColorOne)),
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(
+                                          color: isPasswordCorrect == false
+                                              ? AppColors.mainColorOne
+                                              : Colors.green),
+                                    ),
                                   ),
                                   keyboardType: TextInputType.visiblePassword,
                                   textInputAction: TextInputAction.done,
                                   validator: validatePasswordSignUp,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      isPasswordCorrect = isLength(val, 6);
+                                    });
+                                  },
                                 ),
                                 addVerticalSpace(15),
                                 TextFormField(
@@ -219,7 +256,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                   style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.zero,
-                                    prefixIcon: Icon(Icons.lock),
+                                    prefixIcon: Icon(Icons.lock,
+                                        color: isRPwdCorrect == false
+                                            ? AppColors.mainColorOne
+                                            : Colors.green),
                                     hintText: 'Repeat Password',
                                     border: OutlineInputBorder(
                                         borderRadius:
@@ -227,7 +267,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                     focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(20),
                                         borderSide: BorderSide(
-                                            color: AppColors.mainColorOne)),
+                                            color: isRPwdCorrect == false
+                                                ? AppColors.mainColorOne
+                                                : Colors.green)),
                                   ),
                                   keyboardType: TextInputType.visiblePassword,
                                   textInputAction: TextInputAction.done,
@@ -240,6 +282,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                     }
 
                                     return null;
+                                  },
+                                  onChanged: (val) {
+                                    setState(() {
+                                      isRPwdCorrect = isLength(val, 6);
+                                    });
                                   },
                                 ),
                               ],
