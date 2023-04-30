@@ -16,6 +16,7 @@ class _TransactionPageState extends State<TransactionPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(
             'Input your Transactions',

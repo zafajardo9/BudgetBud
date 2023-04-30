@@ -38,6 +38,7 @@ class _RunState extends State<Run> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBody: true,
       body: navigation[_selectedTab.index],
       bottomNavigationBar: DotNavigationBar(

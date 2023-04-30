@@ -194,7 +194,8 @@ class _IncomeTabState extends State<IncomeTab> {
                               DateTime? newDate = await showDatePicker(
                                   context: context,
                                   initialDate: _dateTime,
-                                  firstDate: DateTime(1900),
+                                  firstDate: DateTime.now()
+                                      .subtract(Duration(days: 0)),
                                   lastDate: DateTime(2100));
 
                               //if "CANCEL" => null
