@@ -53,7 +53,6 @@ SOFTWARE.
 ### Support Us
 <a href="https://www.buymeacoffee.com/zafajardo9"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" width="200" /></a>
 ### Socials
-<p align="center"> 
  - Gab **bernardogabriellefaith@gmail.com**
  - Federico **jrlegarte6@gmail.com**
  - Zackery **zafajardo9.programming@gmail.com**
@@ -63,4 +62,3 @@ SOFTWARE.
 <a href="https://fb.com/zafajardo" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/facebook.svg" alt="zafajardo" height="30" width="40" /></a>
 <a href="https://instagram.com/zahiroshi" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/instagram.svg" alt="zahiroshi" height="30" width="40" /></a>
 <a href="https://www.youtube.com/@chill_programmer5134" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/youtube.svg" alt="chill_programmer" height="30" width="40" /></a>
-</p>
