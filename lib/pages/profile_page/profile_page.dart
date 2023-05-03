@@ -17,155 +17,172 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final user = FirebaseAuth.instance.currentUser!;
 
+
+
   //sign out
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
 
-  getProfilePic() {
-    // if (user.photoURL != null) {
-    //   String link = user.photoURL.toString();
-    //   return NetworkImage(
-    //     link,
-    //   );
-    // } else {
-    //   return AssetImage('assets/user.png');
-    // }
 
-    //OPTIMIZED
+  getProfilePic() {
     return user.photoURL != null
         ? NetworkImage(user.photoURL!)
         : AssetImage('assets/user.png');
   }
 
+  String getDisplayName(User? user) {
+    if (user == null) {
+      return '';
+    }
+
+    if (user.displayName != null) {
+      return user.email!.replaceAll("@gmail.com", "");
+    } else {
+      return '${user.displayName}';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          bottomOpacity: 0.0,
-          elevation: 0.0,
-          title: Text(
-            'Profile',
-          ),
-          actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
-          ],
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+        title: Text(
+          'Profile',
         ),
-        body: Container(
-          width: double.infinity,
-          color: AppColors.mainColorOne,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: Adaptive.w(100),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+        ],
+      ),
+      body: Container(
+        width: double.infinity,
+        color: AppColors.mainColorOne,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: Adaptive.w(100),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CircleAvatar(
+                        radius: 50, backgroundImage: getProfilePic()),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: StreamBuilder<User?>(
+                        stream: FirebaseAuth.instance.authStateChanges(),
+                        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+
+                          if (!snapshot.hasData) {
+                            // User is not logged in
+                            return Text('Not logged in');
+                          }
+                          final user = snapshot.data!;
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(getDisplayName(user),
+                                style: ThemeText.subHeaderWhite1,
+                              ),
+                              Text(
+                                user.email!,
+                                //  user Email
+                                style: ThemeText.paragraphWhite,
+                              ),
+                            ],
+                          );
+                        },
+                      )
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  shadowColor: Colors.transparent,
+                  elevation: 0.0,
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                  backgroundColor:
+                      AppColors.mainColorFour, // background (button) color
+                  foregroundColor: Colors.black87, // foreground (text) color
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.wallet),
+                    Text(
+                      'Wallet',
+                      style: ThemeText.paragraph,
+                    ),
+                    Icon(Icons.arrow_forward_ios_outlined),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadiusDirectional.only(
+                      topStart: Radius.circular(25),
+                      topEnd: Radius.circular(25),
+                    )),
+                padding: EdgeInsets.symmetric(vertical: 20.0),
+                child: SingleChildScrollView(
+                  child: Column(
                     children: [
-                      CircleAvatar(
-                          radius: 50, backgroundImage: getProfilePic()),
                       Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              user.displayName != null
-                                  ? user.email!.replaceFirst("@gmail.com", '')
-                                  : '${user.displayName}',
-                              style: ThemeText.subHeaderWhite1,
+                              'Details',
+                              style: ThemeText.textHeader3,
                             ),
-                            Text(
-                              user.email!,
-                              //  user Email
-                              style: ThemeText.paragraphWhite,
+                            IconButton(
+                              icon: const Icon(
+                                Icons.edit_note,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                //to be made
+                              },
                             ),
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    shadowColor: Colors.transparent,
-                    elevation: 0.0,
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                    backgroundColor:
-                        AppColors.mainColorFour, // background (button) color
-                    foregroundColor: Colors.black87, // foreground (text) color
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Icon(Icons.wallet),
-                      Text(
-                        'Wallet',
-                        style: ThemeText.paragraph,
                       ),
-                      Icon(Icons.arrow_forward_ios_outlined),
+                      ProfilePageDetailTile(),
+                      addVerticalSpace(Adaptive.h(4)),
+                      MyButton(
+                        btn: "Sign Out",
+                        onTap: signUserOut,
+                      ),
                     ],
                   ),
                 ),
               ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadiusDirectional.only(
-                        topStart: Radius.circular(25),
-                        topEnd: Radius.circular(25),
-                      )),
-                  padding: EdgeInsets.symmetric(vertical: 20.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Details',
-                                style: ThemeText.textHeader3,
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.edit_note,
-                                  size: 30,
-                                ),
-                                onPressed: () {
-                                  //to be made
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        ProfilePageDetailTile(),
-                        addVerticalSpace(Adaptive.h(4)),
-                        MyButton(
-                          btn: "Sign Out",
-                          onTap: signUserOut,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
   }
 }
+
+
