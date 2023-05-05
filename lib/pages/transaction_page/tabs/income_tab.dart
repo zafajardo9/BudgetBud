@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../data/income_data.dart';
+import '../../../dataModels/transaction_model.dart';
 import '../../../misc/colors.dart';
 import '../../../misc/txtStyles.dart';
 
@@ -35,7 +36,7 @@ class _IncomeTabState extends State<IncomeTab> {
     //getting values
     var incomeName = newIncomeNameController.text.trim();
     var incomeDescription = newIncomeDescriptionController.text.trim();
-    var incomeAmount = int.parse(newIncomeAmountController.text.trim());
+    var incomeAmount = double.parse(newIncomeAmountController.text.trim());
 
     var incomeTransaction = Income(
         userEmail: user.email!,
@@ -46,6 +47,19 @@ class _IncomeTabState extends State<IncomeTab> {
     FirebaseFirestore.instance
         .collection(COLLECTION_NAME)
         .add(incomeTransaction.toJson());
+
+    var transaction = TransactionData(
+      userEmail: user.email!,
+      transactionName: incomeName,
+      transactionType: 'Income',
+      description: incomeDescription,
+      amount: incomeAmount,
+      category: 'any',
+      transactionDate: _dateTime,
+    );
+    FirebaseFirestore.instance
+        .collection('Transactions')
+        .add(transaction.toJson());
 
     messageBar();
     _clearTextFields();
@@ -192,11 +206,11 @@ class _IncomeTabState extends State<IncomeTab> {
                             ),
                             onPressed: () async {
                               DateTime? newDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: _dateTime,
-                                  firstDate: DateTime.now()
-                                      .subtract(Duration(days: 0)),
-                                  lastDate: DateTime(2100));
+                                context: context,
+                                initialDate: _dateTime,
+                                firstDate: DateTime(1850),
+                                lastDate: DateTime.now(),
+                              );
 
                               //if "CANCEL" => null
                               if (newDate == null) return;

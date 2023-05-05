@@ -2,6 +2,38 @@ import 'package:budget_bud/dateTime/date_time_helper.dart';
 
 import '../dataModels/expense_item.dart';
 
+class Expense {
+  Expense({
+    required this.userEmail,
+    required this.expenseName,
+    required this.expenseDescription,
+    required this.expenseAmount,
+    required this.expenseDate,
+  });
+  final String userEmail;
+  final String expenseName;
+  final String expenseDescription;
+  final double expenseAmount;
+  final DateTime expenseDate;
+
+  factory Expense.fromJson(Map<String, dynamic> json) => Expense(
+        userEmail: json["UserEmail"],
+        expenseName: json["ExpenseName"],
+        expenseDescription: json["ExpenseDescription"],
+        expenseAmount: json["ExpenseAmount"],
+        expenseDate: DateTime.parse(json["ExpenseDate"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "UserEmail": userEmail,
+        "ExpenseName": expenseName,
+        "ExpenseDescription": expenseDescription,
+        "ExpenseAmount": expenseAmount,
+        "ExpenseDate": expenseDate.toIso8601String(),
+      };
+}
+
+//for displaying in a yyyy/mm/dd
 class ExpenseData {
   List<ExpenseItem> overallExpenseList = [];
 

@@ -53,7 +53,7 @@ abstract class ThemeText {
 
   //Subheader in WHITE
   static TextStyle subHeaderWhite1 = TextStyle(
-      color: Colors.white70, fontSize: 20.sp, fontWeight: FontWeight.w800);
+      color: Colors.white70, fontSize: 18.sp, fontWeight: FontWeight.w800);
 
   static TextStyle subHeaderWhite2 = TextStyle(
       color: Colors.white70, fontSize: 16.sp, fontWeight: FontWeight.w800);

@@ -15,7 +15,7 @@ class Income {
   final String userEmail;
   final String incomeName;
   final String incomeDescription;
-  final int incomeAmount;
+  final double incomeAmount;
   final DateTime incomeDate;
 
   factory Income.fromJson(Map<String, dynamic> json) => Income(

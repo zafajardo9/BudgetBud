@@ -17,13 +17,10 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final user = FirebaseAuth.instance.currentUser!;
 
-
-
   //sign out
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
-
 
   getProfilePic() {
     return user.photoURL != null
@@ -71,39 +68,48 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    CircleAvatar(
-                        radius: 50, backgroundImage: getProfilePic()),
+                    CircleAvatar(radius: 50, backgroundImage: getProfilePic()),
                     Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: StreamBuilder<User?>(
-                        stream: FirebaseAuth.instance.authStateChanges(),
-                        builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          }
+                        padding: const EdgeInsets.all(16),
+                        child: StreamBuilder<User?>(
+                          stream: FirebaseAuth.instance.authStateChanges(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<User?> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
 
-                          if (!snapshot.hasData) {
-                            // User is not logged in
-                            return Text('Not logged in');
-                          }
-                          final user = snapshot.data!;
+                            if (!snapshot.hasData) {
+                              // User is not logged in
+                              return Text('Not logged in');
+                            }
+                            final user = snapshot.data!;
 
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(getDisplayName(user),
-                                style: ThemeText.subHeaderWhite1,
+                            return Flexible(
+                              child: SizedBox(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      getDisplayName(user),
+                                      style: ThemeText.subHeaderWhite1,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      user.email!,
+                                      //  user Email
+                                      style: ThemeText.paragraphWhite,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Text(
-                                user.email!,
-                                //  user Email
-                                style: ThemeText.paragraphWhite,
-                              ),
-                            ],
-                          );
-                        },
-                      )
-                    )
+                            );
+                          },
+                        ))
                   ],
                 ),
               ),
@@ -184,5 +190,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-
-

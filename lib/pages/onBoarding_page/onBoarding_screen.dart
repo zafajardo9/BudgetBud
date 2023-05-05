@@ -114,8 +114,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 child: Container(
                   padding: const EdgeInsets.all(20),
-                  decoration: const BoxDecoration(
-                      color: Colors.black87, shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                      color: currentIndex == pages.length - 1
+                          ? Colors.black87
+                          : AppColors.mainColorOne,
+                      shape: BoxShape.circle),
                   child: Icon(
                     currentIndex == pages.length - 1
                         ? Icons.check
