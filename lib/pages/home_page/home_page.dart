@@ -4,6 +4,7 @@ import 'package:budget_bud/misc/graphs/bargraph.dart';
 import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,6 +33,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!;
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -57,7 +60,11 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: _reference.snapshots(),
+              stream: _reference
+                  .where('UserEmail', isEqualTo: user.email)
+                  .snapshots(),
+              //.snapshots()
+              // .where('UserEmail', isEqualTo: user.email).get(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(

@@ -1,4 +1,5 @@
 import 'package:budget_bud/misc/widgetSize.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -17,6 +18,12 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final user = FirebaseAuth.instance.currentUser!;
 
+  @override
+  void initState() {
+    super.initState();
+    getUserName();
+  }
+
   //sign out
   void signUserOut() {
     FirebaseAuth.instance.signOut();
@@ -28,17 +35,47 @@ class _ProfilePageState extends State<ProfilePage> {
         : AssetImage('assets/user.png');
   }
 
-  String getDisplayName(User? user) {
-    if (user == null) {
-      return '';
+  String? userName;
+
+  Future<void> getUserName() async {
+    final userEmail = FirebaseAuth.instance.currentUser?.email;
+
+    if (userEmail == null) {
+      // Handle the case when the user is not signed in.
+      return;
     }
 
-    if (user.displayName != null) {
-      return user.email!.replaceAll("@gmail.com", "");
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('User')
+        .where('UserEmail', isEqualTo: userEmail)
+        .get();
+
+    if (querySnapshot.size > 0) {
+      final data = querySnapshot.docs.first.data();
+      setState(() {
+        print(data);
+        userName = data['UserName'];
+      });
     } else {
-      return '${user.displayName}';
+      setState(() {
+        userName = FirebaseAuth.instance.currentUser?.displayName;
+      });
     }
   }
+
+  //
+  // String getDisplayName(User? user) {
+  //   if (user == null) {
+  //     return '';
+  //   }
+  //
+  //   if (user.displayName != null) {
+  //     return userName!;
+  //     //return user.email!.replaceAll("@gmail.com", "");
+  //   } else {
+  //     return '${user.displayName}';
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      getDisplayName(user),
+                                      userName ?? '',
                                       style: ThemeText.subHeaderWhite1,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -173,7 +210,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      ProfilePageDetailTile(),
+                      ProfilePageDetailTile(
+                          userName: userName, userEmail: user.email),
                       addVerticalSpace(Adaptive.h(4)),
                       MyButton(
                         btn: "Sign Out",

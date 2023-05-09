@@ -124,6 +124,7 @@ class _DashboardPageState extends State<DashboardPage>
                       ),
                       FutureBuilder<QuerySnapshot>(
                         future: expenseRef
+                            //FirebaseFirestore.instance.collection('Expense')
                             .where('UserEmail', isEqualTo: user.email)
                             .get(),
                         builder: (context, snapshot) {

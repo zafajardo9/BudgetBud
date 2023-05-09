@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:budget_bud/auth/validators/validators.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -8,6 +9,7 @@ import 'package:validators/validators.dart';
 
 import '../components/my_button.dart';
 import '../components/squred_tiles.dart';
+import '../data/user_data.dart';
 import '../misc/colors.dart';
 import '../misc/txtStyles.dart';
 import '../services/auth_service.dart';
@@ -79,6 +81,17 @@ class _RegisterPageState extends State<RegisterPage> {
           email: emailController.text,
           password: pwdController.text,
         );
+        String extractUsername(String email) {
+          final usernameRegex = RegExp(r'^([^@]+)@');
+          final match = usernameRegex.firstMatch(email);
+          return match?.group(1) ?? '';
+        }
+
+        var user = UserData(
+          userEmail: emailController.text,
+          userName: extractUsername(emailController.text),
+        );
+        await FirebaseFirestore.instance.collection('User').add(user.toJson());
       } else {
         //error if not the same
         showErrorMessage("Password don't match");

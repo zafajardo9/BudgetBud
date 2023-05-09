@@ -5,7 +5,14 @@ import '../../../misc/txtStyles.dart';
 import '../../../misc/widgetSize.dart';
 
 class ProfilePageDetailTile extends StatefulWidget {
-  const ProfilePageDetailTile({Key? key}) : super(key: key);
+  final String? userName;
+  final String? userEmail;
+
+  const ProfilePageDetailTile({
+    Key? key,
+    this.userName,
+    this.userEmail,
+  }) : super(key: key);
 
   @override
   State<ProfilePageDetailTile> createState() => _ProfilePageDetailTileState();
@@ -37,9 +44,7 @@ class _ProfilePageDetailTileState extends State<ProfilePageDetailTile> {
                     style: ThemeText.subHeader3Bold,
                   ),
                   Text(
-                    user.displayName != null
-                        ? user.email!.replaceFirst("@gmail.com", '')
-                        : '${user.displayName}',
+                    widget.userName ?? '',
                     style: ThemeText.paragraph54,
                   ),
                 ],
@@ -65,7 +70,7 @@ class _ProfilePageDetailTileState extends State<ProfilePageDetailTile> {
                     style: ThemeText.subHeader3Bold,
                   ),
                   Text(
-                    '${user.email}',
+                    widget.userEmail ?? '',
                     style: ThemeText.paragraph54,
                   ),
                 ],
