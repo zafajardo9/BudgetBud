@@ -1,7 +1,10 @@
 import 'package:budget_bud/pages/dashboard_page/dashboard_page.dart';
 import 'package:budget_bud/pages/profile_page/profile_page.dart';
+import 'package:budget_bud/pages/user_budget_goals/user_budgets.dart';
+import 'package:budget_bud/pages/user_wallet/wallet.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../misc/colors.dart';
@@ -20,7 +23,7 @@ class Run extends StatefulWidget {
 
 //===================
 class _RunState extends State<Run> {
-  var _selectedTab = _SelectedTab.home;
+  var _selectedTab = _SelectedTab.homePage;
 
   void _handleIndexChanged(int i) {
     setState(() {
@@ -29,12 +32,14 @@ class _RunState extends State<Run> {
   }
 
   final navigation = [
+    DashboardPage(),
     HomePage(),
     TransactionPage(),
-    DashboardPage(),
-    ProfilePage()
+    UserBudgetGoals(),
+    ProfilePage(),
   ];
 
+  final int iconValue = 20;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,37 +47,58 @@ class _RunState extends State<Run> {
       extendBody: true,
       body: navigation[_selectedTab.index],
       bottomNavigationBar: DotNavigationBar(
-        paddingR: EdgeInsets.all(8),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white.withOpacity(0.4),
+        paddingR: EdgeInsets.all(4),
+        margin: EdgeInsets.only(bottom: 20),
+        borderRadius: 15,
+        dotIndicatorColor: Colors.transparent,
         backgroundColor: AppColors.mainColorOne,
-        margin: EdgeInsets.only(bottom: 10),
-        dotIndicatorColor: Colors.white,
         currentIndex: _SelectedTab.values.indexOf(_selectedTab),
-        unselectedItemColor: Colors.grey[300],
         onTap: _handleIndexChanged,
+        enableFloatingNavBar: true,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 4,
+            offset: Offset(0, 3),
+          ),
+        ],
         items: [
-          /// Home
-          DotNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 20.sp,
-            ),
-            selectedColor: Colors.white,
-          ),
-
-          ///
-          DotNavigationBarItem(
-            icon: Icon(
-              Icons.add,
-              size: 20.sp,
-            ),
-            selectedColor: Colors.white,
-          ),
-
           /// Dashboard
           DotNavigationBarItem(
             icon: Icon(
+              Icons.home,
+              size: iconValue.sp,
+            ),
+            selectedColor: Colors.white,
+          ),
+
+          /// Analytics
+          DotNavigationBarItem(
+            icon: Icon(
               Icons.bar_chart_rounded,
-              size: 20.sp,
+              size: iconValue.sp,
+            ),
+            selectedColor: Colors.white,
+          ),
+
+          ///Input Expense & Income
+          DotNavigationBarItem(
+            icon: Icon(
+              Icons.add,
+              size: iconValue.sp,
+            ),
+            selectedColor: Colors.white,
+          ),
+
+          //Wallet of user and budget Goal
+          DotNavigationBarItem(
+            icon: Icon(
+              //when using fontawesome you should minus it to 5
+              FontAwesomeIcons.calculator,
+              size: iconValue - 5.sp,
             ),
             selectedColor: Colors.white,
           ),
@@ -81,7 +107,7 @@ class _RunState extends State<Run> {
           DotNavigationBarItem(
             icon: Icon(
               Icons.account_circle,
-              size: 20.sp,
+              size: iconValue.sp,
             ),
             selectedColor: Colors.white,
           ),
@@ -91,4 +117,10 @@ class _RunState extends State<Run> {
   }
 }
 
-enum _SelectedTab { home, transaction, barchart, person }
+enum _SelectedTab {
+  homePage,
+  dashboardPage,
+  transactionPage,
+  userBudget,
+  profilePage
+}

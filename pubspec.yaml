@@ -85,6 +85,8 @@ flutter:
     - assets/
     - images/
     - assets/other/
+    - assets/pointer/
+    - assets/category/
     - images/onboarding_page/
 
 

@@ -1,7 +1,11 @@
+import 'dart:math' as Math;
+
 import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/pages/transaction_page/tabs/expense_tab.dart';
 import 'package:budget_bud/pages/transaction_page/tabs/income_tab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -24,6 +28,7 @@ class _TransactionPageState extends State<TransactionPage> {
           elevation: 0,
           bottom: TabBar(
               labelColor: AppColors.mainColorOne,
+              indicatorColor: AppColors.mainColorTwo,
               unselectedLabelColor: Colors.white,
               indicator: BoxDecoration(
                   borderRadius: BorderRadius.only(

@@ -1,4 +1,5 @@
 import 'package:budget_bud/misc/widgetSize.dart';
+import 'package:budget_bud/pages/user_wallet/wallet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -63,25 +64,13 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  //
-  // String getDisplayName(User? user) {
-  //   if (user == null) {
-  //     return '';
-  //   }
-  //
-  //   if (user.displayName != null) {
-  //     return userName!;
-  //     //return user.email!.replaceAll("@gmail.com", "");
-  //   } else {
-  //     return '${user.displayName}';
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: AppColors.backgroundWhite,
+        foregroundColor: Colors.black,
         bottomOpacity: 0.0,
         elevation: 0.0,
         title: Text(
@@ -93,89 +82,114 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Container(
         width: double.infinity,
-        color: AppColors.mainColorOne,
+        color: AppColors.backgroundWhite,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: Adaptive.w(100),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CircleAvatar(radius: 50, backgroundImage: getProfilePic()),
-                    Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: StreamBuilder<User?>(
-                          stream: FirebaseAuth.instance.authStateChanges(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<User?> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
-
-                            if (!snapshot.hasData) {
-                              // User is not logged in
-                              return Text('Not logged in');
-                            }
-                            final user = snapshot.data!;
-
-                            return Flexible(
-                              child: SizedBox(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      userName ?? '',
-                                      style: ThemeText.subHeaderWhite1,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      user.email!,
-                                      //  user Email
-                                      style: ThemeText.paragraphWhite,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ))
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  shadowColor: Colors.transparent,
-                  elevation: 0.0,
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                  backgroundColor:
-                      AppColors.mainColorFour, // background (button) color
-                  foregroundColor: Colors.black87, // foreground (text) color
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(Icons.wallet),
-                    Text(
-                      'Wallet',
-                      style: ThemeText.paragraph,
+            Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 43),
+                    width: double.infinity,
+                    height: Adaptive.h(20),
+                    decoration: BoxDecoration(
+                      color: AppColors.mainColorFive.withOpacity(.7),
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
-                    Icon(Icons.arrow_forward_ios_outlined),
-                  ],
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: StreamBuilder<User?>(
+                              stream: FirebaseAuth.instance.authStateChanges(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<User?> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                if (!snapshot.hasData) {
+                                  // User is not logged in
+                                  return Text('Not logged in');
+                                }
+
+                                return Flexible(
+                                  child: SizedBox(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '@${userName ?? ''}',
+                                          style: ThemeText.subHeader1,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UserWallet()),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shadowColor: Colors.transparent,
+                              elevation: 0,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 20),
+                              backgroundColor: AppColors.mainColorSix
+                                  .withOpacity(.9), // background (button) color
+                              foregroundColor: Colors.black87,
+                              // foreground (text) color
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Icon(Icons.wallet),
+                                Text(
+                                  'Wallet',
+                                  style: ThemeText.paragraph,
+                                ),
+                                Icon(Icons.arrow_forward_ios_outlined),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      child: CircleAvatar(
+                        radius: 40.0,
+                        backgroundColor: Colors.white,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: getProfilePic(),
+                          backgroundColor: Colors.grey.withOpacity(.5),
+                        ),
+                      ),
+                    )),
+              ],
             ),
+
+            //different Details Part
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -189,6 +203,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      Divider(
+                        color: Colors.black54,
+                        thickness: 2,
+                        indent: Adaptive.w(25),
+                        endIndent: Adaptive.w(25),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: Row(
@@ -214,7 +234,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           userName: userName, userEmail: user.email),
                       addVerticalSpace(Adaptive.h(4)),
                       MyButton(
-                        btn: "Sign Out",
+                        btn: "Log Out",
                         onTap: signUserOut,
                       ),
                     ],

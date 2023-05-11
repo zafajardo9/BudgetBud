@@ -6,6 +6,8 @@ class AppColors {
   static final Color mainColorTwo = Color(0xFFFFBD59);
   static final Color mainColorThree = Color(0xFFF4F3FF);
   static final Color mainColorFour = Color(0xFFB38484);
+  static final Color mainColorFive = Color(0xFFC6B9B9);
+  static final Color mainColorSix = Color(0xFFF0E5E5);
 
   //background white
   static final Color backgroundWhite = Color(0xFFf9f9f9);

@@ -40,10 +40,12 @@ class _DashboardPageState extends State<DashboardPage>
             elevation: 3,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
+                color: Colors.black.withOpacity(0.13),
+                borderRadius: BorderRadius.circular(15),
               ),
               child: TabBar(
+                labelColor: AppColors.backgroundWhite,
+                unselectedLabelColor: AppColors.mainColorOne,
                 indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: AppColors.mainColorOne),
@@ -53,13 +55,11 @@ class _DashboardPageState extends State<DashboardPage>
                   Tab(
                     child: Text(
                       'Income',
-                      style: ThemeText.subHeaderWhite2,
                     ),
                   ),
                   Tab(
                     child: Text(
                       'Expense',
-                      style: ThemeText.subHeaderWhite2,
                     ),
                   ),
                 ],
