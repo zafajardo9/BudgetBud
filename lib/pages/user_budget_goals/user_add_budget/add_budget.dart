@@ -1,11 +1,15 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../data/budget_goal_data.dart';
 import '../../category_page/category_page.dart';
 
 class AddBudget extends StatefulWidget {
@@ -16,14 +20,61 @@ class AddBudget extends StatefulWidget {
 }
 
 class _AddBudgetState extends State<AddBudget> {
-  DateTime _dateTime = DateTime.now();
+  final user = FirebaseAuth.instance.currentUser!;
   //controllers
-  final newIncomeNameController = TextEditingController();
-  final newIncomeDescriptionController = TextEditingController();
-  final newIncomeAmountController = TextEditingController();
+  final newBudgetNameController = TextEditingController();
+  // final newBudgetDescriptionController = TextEditingController();
+  final newBudgetAmountController = TextEditingController();
 
   DateTimeRange dateTimeRange =
       DateTimeRange(start: DateTime.now(), end: DateTime.now());
+
+  saveBudgetGoal() {
+    //getting values
+    var budgetName = newBudgetNameController.text.trim();
+    //var budgetDescription = newBudgetDescriptionController.text.trim();
+    var budgetAmount = double.parse(newBudgetAmountController.text.trim());
+
+    var budgetGoal = BudgetGoal(
+      documentId: '',
+      budgetName: budgetName,
+      budgetAmount: budgetAmount,
+      startDate: dateTimeRange.start,
+      endDate: dateTimeRange.end,
+      userEmail: user.email!,
+    );
+    FirebaseFirestore.instance
+        .collection('BudgetGoals')
+        .add(budgetGoal.toJson());
+
+    messageBar();
+    _clearTextFields();
+  }
+
+  void messageBar() {
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Success',
+        message: 'You have successfully recorded a Budget Goal',
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.success,
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+
+  void _clearTextFields() {
+    newBudgetNameController.clear();
+    newBudgetAmountController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +183,7 @@ class _AddBudgetState extends State<AddBudget> {
                           ),
                         ),
                       ),
-                      controller: newIncomeDescriptionController,
+                      controller: newBudgetNameController,
                     ),
                     addVerticalSpace(20),
                     Text(
@@ -162,31 +213,7 @@ class _AddBudgetState extends State<AddBudget> {
                         FilteringTextInputFormatter
                             .digitsOnly // Only allow digits
                       ],
-                      controller: newIncomeAmountController,
-                    ),
-                    addVerticalSpace(20),
-                    Text(
-                      'Description (Optional)',
-                      style: ThemeText.paragraph54,
-                    ),
-                    TextField(
-                      style: ThemeText.textfieldInput,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 1.w, horizontal: 4.h),
-                        prefixIcon: Icon(
-                          FontAwesomeIcons.penToSquare,
-                          size: 15,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade400,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                      controller: newIncomeDescriptionController,
+                      controller: newBudgetAmountController,
                     ),
                     addVerticalSpace(20),
                   ],
@@ -194,39 +221,25 @@ class _AddBudgetState extends State<AddBudget> {
               ),
             ),
             addVerticalSpace(25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    // Do something when the button is pressed
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(20), // Rounded corners
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: saveBudgetGoal,
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(20), // Rounded corners
+                      ),
+                      minimumSize: Size(40.w, 6.h),
                     ),
-                    minimumSize: Size(40.w, 6.h),
+                    icon: Icon(Icons.arrow_forward), // Button icon
+                    label: Text('Add New Budget Goal'), // Button label
                   ),
-                  icon: Icon(Icons.category), // Button icon
-                  label: Text('Categories'), // Button label
-                ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(CircleBorder()),
-                    padding: MaterialStateProperty.all(
-                        EdgeInsets.all(2.h)), // <-- Button color
-                    overlayColor:
-                        MaterialStateProperty.resolveWith<Color?>((states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return AppColors.mainColorTwo; // <-- Splash color
-                      }
-                    }),
-                  ),
-                  onPressed: () {},
-                  child: Icon(Icons.arrow_forward),
-                ),
-              ],
+                ],
+              ),
             )
           ],
         ),

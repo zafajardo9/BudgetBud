@@ -1,18 +1,24 @@
+import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/pages/user_budget_goals/user_add_budget/add_budget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../misc/colors.dart';
-import '../../misc/txtStyles.dart';
-
-class UserBudgetGoals extends StatelessWidget {
+class UserBudgetGoals extends StatefulWidget {
   const UserBudgetGoals({Key? key}) : super(key: key);
 
+  @override
+  State<UserBudgetGoals> createState() => _UserBudgetGoalsState();
+}
+
+class _UserBudgetGoalsState extends State<UserBudgetGoals> {
+  CollectionReference _budgetGoalsRef =
+      FirebaseFirestore.instance.collection('BudgetGoals');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Budget'),
+        title: Text('Budget Goals'),
       ),
       body: Column(
         children: [
@@ -69,101 +75,57 @@ class UserBudgetGoals extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: GridView(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12.0,
-                  mainAxisSpacing: 12.0,
-                ),
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.mainColorOne,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 4,
-                          blurRadius: 10,
-                          offset: Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.ac_unit,
-                          size: 10.w,
-                          color: AppColors.backgroundWhite,
-                        ),
-                        Text(
-                          'Budget One',
-                          style: ThemeText.subHeaderWhite2,
-                        ),
-                      ],
-                    ),
+            child: StreamBuilder<QuerySnapshot>(
+              stream: _budgetGoalsRef.snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Something went wrong'),
+                  );
+                }
+
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                List<DocumentSnapshot> budgetGoals = snapshot.data!.docs;
+
+                return GridView.builder(
+                  itemCount: budgetGoals.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12.0,
+                    mainAxisSpacing: 12.0,
+                    childAspectRatio: 1,
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.mainColorOne,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 4,
-                          blurRadius: 10,
-                          offset: Offset(0, 8),
+                  itemBuilder: (BuildContext context, int index) {
+                    DocumentSnapshot doc = budgetGoals[index];
+                    String title = doc['BudgetName'];
+                    double amount = doc['BudgetAmount'];
+
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border:
+                            Border.all(color: AppColors.mainColorOne, width: 1),
+                      ),
+                      child: Card(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(title),
+                            SizedBox(height: 8),
+                            Text('Amount: \₱$amount'),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.ac_unit,
-                          size: 10.w,
-                          color: AppColors.backgroundWhite,
-                        ),
-                        Text(
-                          'Budget One',
-                          style: ThemeText.subHeaderWhite2,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.mainColorOne,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 4,
-                          blurRadius: 10,
-                          offset: Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.ac_unit,
-                          size: 10.w,
-                          color: AppColors.backgroundWhite,
-                        ),
-                        Text(
-                          'Budget One',
-                          style: ThemeText.subHeaderWhite2,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],

@@ -1,3 +1,9 @@
+import 'dart:convert';
+
+BudgetGoal goalFromJson(String str) => BudgetGoal.fromJson(json.decode(str));
+
+String goalToJson(BudgetGoal data) => json.encode(data.toJson());
+
 class BudgetGoal {
   final String documentId;
   final String budgetName;
