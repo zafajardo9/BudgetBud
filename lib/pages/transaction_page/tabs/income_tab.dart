@@ -43,7 +43,8 @@ class _IncomeTabState extends State<IncomeTab> {
         incomeName: incomeName,
         incomeDescription: incomeDescription,
         incomeAmount: incomeAmount,
-        incomeDate: _dateTime);
+        incomeDate: _dateTime,
+        documentId: '');
     FirebaseFirestore.instance
         .collection(COLLECTION_NAME)
         .add(incomeTransaction.toJson());
@@ -56,6 +57,7 @@ class _IncomeTabState extends State<IncomeTab> {
       amount: incomeAmount,
       category: 'any',
       transactionDate: _dateTime,
+      documentId: '',
     );
     FirebaseFirestore.instance
         .collection('Transactions')

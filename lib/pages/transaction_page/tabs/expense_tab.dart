@@ -54,6 +54,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
       amount: expenseAmount,
       category: 'any',
       transactionDate: _dateTime,
+      documentId: '',
     );
     FirebaseFirestore.instance
         .collection('Transactions')

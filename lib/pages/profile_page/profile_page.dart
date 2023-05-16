@@ -118,20 +118,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                   return Text('Not logged in');
                                 }
 
-                                return Flexible(
-                                  child: SizedBox(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          '@${userName ?? ''}',
-                                          style: ThemeText.subHeader1,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
+                                return SizedBox(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '@${userName ?? ''}',
+                                        style: ThemeText.subHeader1,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ),
                                 );
                               },
@@ -190,56 +188,52 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
 
             //different Details Part
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadiusDirectional.only(
-                      topStart: Radius.circular(25),
-                      topEnd: Radius.circular(25),
-                    )),
-                padding: EdgeInsets.symmetric(vertical: 20.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Divider(
-                        color: Colors.black54,
-                        thickness: 2,
-                        indent: Adaptive.w(25),
-                        endIndent: Adaptive.w(25),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Details',
-                              style: ThemeText.textHeader3,
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.edit_note,
-                                size: 30,
-                              ),
-                              onPressed: () {
-                                //to be made
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      ProfilePageDetailTile(
-                          userName: userName, userEmail: user.email),
-                      addVerticalSpace(Adaptive.h(4)),
-                      MyButton(
-                        btn: "Log Out",
-                        onTap: signUserOut,
-                      ),
-                    ],
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadiusDirectional.only(
+                    topStart: Radius.circular(25),
+                    topEnd: Radius.circular(25),
+                  )),
+              padding: EdgeInsets.symmetric(vertical: 20.0),
+              child: Column(
+                children: [
+                  Divider(
+                    color: Colors.black54,
+                    thickness: 2,
+                    indent: Adaptive.w(25),
+                    endIndent: Adaptive.w(25),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Details',
+                          style: ThemeText.textHeader3,
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.edit_note,
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            //to be made
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  ProfilePageDetailTile(
+                      userName: userName, userEmail: user.email),
+                  addVerticalSpace(Adaptive.h(4)),
+                  MyButton(
+                    btn: "Log Out",
+                    onTap: signUserOut,
+                  ),
+                ],
               ),
             )
           ],

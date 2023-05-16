@@ -117,6 +117,7 @@ class _HomePageState extends State<HomePage> {
                                   category: e["TransactionCategory"],
                                   transactionDate:
                                       DateTime.parse(e["TransactionDate"]),
+                                  documentId: '',
                                 ),
                               )
                               .toList();

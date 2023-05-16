@@ -6,12 +6,14 @@ String incomeToJson(Income data) => json.encode(data.toJson());
 
 class Income {
   Income({
+    required this.documentId,
     required this.userEmail,
     required this.incomeName,
     required this.incomeDescription,
     required this.incomeAmount,
     required this.incomeDate,
   });
+  final String documentId;
   final String userEmail;
   final String incomeName;
   final String incomeDescription;
@@ -24,6 +26,7 @@ class Income {
         incomeDescription: json["IncomeDescription"],
         incomeAmount: json["IncomeAmount"],
         incomeDate: DateTime.parse(json["IncomeDate"]),
+        documentId: '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,17 +36,4 @@ class Income {
         "IncomeAmount": incomeAmount,
         "IncomeDate": incomeDate.toIso8601String(),
       };
-
-  //getting and displaying
-
-  // factory Income.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
-  //   final data = document.data()!;
-  //   return Income(
-  //     userEmail: data["UserEmail"],
-  //     incomeName: data["IncomeName"],
-  //     incomeDescription: data["IncomeDescription"],
-  //     incomeAmount: data["IncomeAmount"],
-  //     incomeDate: data["IncomeDate"],
-  //   );
-  // }
 }

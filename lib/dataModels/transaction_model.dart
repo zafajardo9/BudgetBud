@@ -6,6 +6,7 @@ TransactionData incomeFromJson(String str) =>
 String incomeToJson(TransactionData data) => json.encode(data.toJson());
 
 class TransactionData {
+  final String documentId;
   final String userEmail;
   final String transactionName;
   final String transactionType;
@@ -15,6 +16,7 @@ class TransactionData {
   final DateTime transactionDate;
 
   TransactionData({
+    required this.documentId,
     required this.userEmail,
     required this.transactionName,
     required this.transactionType,
@@ -33,6 +35,7 @@ class TransactionData {
         amount: json["TransactionAmount"],
         category: json["TransactionCategory"],
         transactionDate: DateTime.parse(json["TransactionDate"]),
+        documentId: '',
       );
 
   Map<String, dynamic> toJson() => {
