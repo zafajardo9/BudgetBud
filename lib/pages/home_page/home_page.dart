@@ -12,6 +12,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../misc/graphs/pie_graph/pie_graph.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -58,7 +60,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.all(20),
             child: Container(
-              height: Adaptive.h(40),
+              height: Adaptive.h(30),
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -68,6 +70,10 @@ class _HomePageState extends State<HomePage> {
                 weeklySummary: weeklySummary,
               ),
             ),
+          ),
+          Container(
+            height: Adaptive.h(25),
+            child: PieGraphWidget(),
           ),
           Expanded(
             child: Container(
@@ -116,7 +122,8 @@ class _HomePageState extends State<HomePage> {
                                   amount: e["TransactionAmount"],
                                   category: e["TransactionCategory"],
                                   transactionDate:
-                                      DateTime.parse(e["TransactionDate"]),
+                                      DateTime.parse(e["TransactionDate"])
+                                          .toLocal(),
                                   documentId: '',
                                 ),
                               )

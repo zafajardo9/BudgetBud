@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 
 import '../../../dataModels/transaction_model.dart';
 import '../../../misc/colors.dart';
+import '../../../misc/txtStyles.dart';
 
 enum TransactionType {
   Income,
@@ -82,7 +84,8 @@ class _DashBoardExpenseState extends State<DashBoardExpense> {
                         description: e['TransactionDescription'],
                         amount: e['TransactionAmount'],
                         category: e['TransactionCategory'],
-                        transactionDate: DateTime.parse(e['TransactionDate']),
+                        transactionDate:
+                            DateTime.parse(e['TransactionDate']).toLocal(),
                       ),
                     )
                     .toList();
@@ -92,35 +95,60 @@ class _DashBoardExpenseState extends State<DashBoardExpense> {
                         child: Text(
                             'No Expense Yet, please add some transactions'),
                       )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: transactions.length,
-                        itemBuilder: (context, index) {
-                          final transaction = transactions[index];
-                          return Slidable(
-                            endActionPane: ActionPane(
-                              motion: StretchMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: ((context) {
-                                    deleteDocument(context,
-                                        transactions[index].documentId);
-                                  }),
-                                  icon: Icons.delete,
-                                  backgroundColor: AppColors.mainColorOne,
+                    : Expanded(
+                        child: SingleChildScrollView(
+                          child: ListView.separated(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: transactions.length,
+                            separatorBuilder: (context, index) => SizedBox(
+                              height: 10, // Adjust the gap height as needed
+                            ),
+                            itemBuilder: (context, index) {
+                              return Slidable(
+                                endActionPane: ActionPane(
+                                  motion: StretchMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: ((context) {
+                                        deleteDocument(context,
+                                            transactions[index].documentId);
+                                      }),
+                                      icon: Icons.delete,
+                                      backgroundColor: AppColors.mainColorOne,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            child: ListTile(
-                              title: Text(transaction.transactionName ?? ''),
-                              subtitle: Text(transaction.description ?? ''),
-                              trailing: Text(
-                                '₱ ${transaction.amount.toString()}',
-                              ),
-                              // Customize the list tile as per your data
-                            ),
-                          );
-                        },
+                                child: ListTile(
+                                  title: Text(
+                                      transactions[index].transactionName ?? '',
+                                      style: ThemeText.transactionName),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        transactions[index].category ?? '',
+                                        style: ThemeText.transactionDetails,
+                                      ),
+                                      Text(
+                                        DateFormat('MMMM d, yyyy').format(
+                                            transactions[index]
+                                                .transactionDate),
+                                        style: ThemeText.transactionDateDetails,
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: Text(
+                                    '₱ ${transactions[index].amount.toString()}',
+                                    style: ThemeText.transactionAmount,
+                                  ),
+                                  // Customize the list tile as per your data
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       );
               }
 

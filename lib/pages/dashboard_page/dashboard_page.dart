@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/expense_data.dart';
-import 'dashboard_tabs/dahboard_expense_tab.dart';
+import 'dashboard_tabs/dashboard_expense_tab.dart';
 import 'dashboard_tabs/dashboard_income_tab.dart';
 
 class DashboardPage extends StatefulWidget {

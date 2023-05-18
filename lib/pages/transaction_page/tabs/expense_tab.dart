@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:budget_bud/pages/category_page/category_list/category_lists.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../data/expense_data.dart';
 import '../../../dataModels/transaction_model.dart';
 import '../../../misc/colors.dart';
 import '../../../misc/txtStyles.dart';
@@ -29,6 +29,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
   final newExpenseNameController = TextEditingController();
   final newExpenseDescriptionController = TextEditingController();
   final newExpenseAmountController = TextEditingController();
+  String selectedItem = '';
 
   saveExpense() {
     //getting values
@@ -36,23 +37,13 @@ class _ExpenseTabState extends State<ExpenseTab> {
     var expenseDescription = newExpenseDescriptionController.text.trim();
     var expenseAmount = double.parse(newExpenseAmountController.text.trim());
 
-    var expenseTransaction = Expense(
-        userEmail: user.email!,
-        expenseName: expenseName,
-        expenseDescription: expenseDescription,
-        expenseAmount: expenseAmount,
-        expenseDate: _dateTime);
-    FirebaseFirestore.instance
-        .collection(COLLECTION_NAME)
-        .add(expenseTransaction.toJson());
-
     var transaction = TransactionData(
       userEmail: user.email!,
       transactionName: expenseName,
       transactionType: 'Expense',
       description: expenseDescription,
       amount: expenseAmount,
-      category: 'any',
+      category: selectedItem,
       transactionDate: _dateTime,
       documentId: '',
     );
@@ -88,6 +79,81 @@ class _ExpenseTabState extends State<ExpenseTab> {
     newExpenseNameController.clear();
     newExpenseDescriptionController.clear();
     newExpenseAmountController.clear();
+    selectedItem == '';
+  }
+
+  void onTextFieldTap() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        // <-- SEE HERE
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Select Item',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: expenseCategories.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final item = expenseCategories[index];
+                        final isSelected = selectedItem == item;
+
+                        return ListTile(
+                          title: Text(
+                            item,
+                            style: TextStyle(
+                              color: isSelected ? Colors.blue : null,
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              selectedItem = item;
+                            });
+                          },
+                          trailing: isSelected
+                              ? Icon(Icons.check_circle, color: Colors.blue)
+                              : null,
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context, selectedItem);
+                    },
+                    child: Text('Done'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    ).then((value) {
+      if (value != null) {
+        // Handle selected item
+        String selectedItem = value as String;
+        print(selectedItem);
+      }
+    });
   }
 
   //Widget ITSELF
@@ -228,9 +294,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton.icon(
-                        onPressed: () {
-                          // Do something when the button is pressed
-                        },
+                        onPressed: onTextFieldTap,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius:

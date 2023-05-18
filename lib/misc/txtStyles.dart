@@ -40,7 +40,6 @@ abstract class ThemeText {
 
   //SUB HEADERS
 
-  // Lato font removed
   //Subheader in BLACK
   static TextStyle subHeader1 = TextStyle(
       color: Colors.black87, fontSize: 20.sp, fontWeight: FontWeight.w400);
@@ -92,6 +91,26 @@ abstract class ThemeText {
   static TextStyle textfieldInput = TextStyle(
     color: Colors.black54,
     fontSize: 16.sp,
+  );
+
+  static TextStyle transactionName = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontSize: 17.sp,
+  );
+  static TextStyle transactionAmount = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    fontSize: 16.sp,
+  );
+  static TextStyle transactionDetails = TextStyle(
+    color: Colors.grey.shade500,
+    fontSize: 15.sp,
+  );
+  static TextStyle transactionDateDetails = TextStyle(
+    color: Colors.grey.shade500,
+    fontStyle: FontStyle.italic,
+    fontSize: 15.sp,
   );
 }
 

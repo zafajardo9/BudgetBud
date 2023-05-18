@@ -34,7 +34,7 @@ class TransactionData {
         description: json["TransactionDescription"],
         amount: json["TransactionAmount"],
         category: json["TransactionCategory"],
-        transactionDate: DateTime.parse(json["TransactionDate"]),
+        transactionDate: DateTime.parse(json["TransactionDate"]).toLocal(),
         documentId: '',
       );
 

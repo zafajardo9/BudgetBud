@@ -7,10 +7,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../data/income_data.dart';
 import '../../../dataModels/transaction_model.dart';
 import '../../../misc/colors.dart';
 import '../../../misc/txtStyles.dart';
+import '../../category_page/category_list/category_lists.dart';
+import '../transaction_components/item_selection_modal.dart';
 
 const COLLECTION_NAME = 'Income';
 
@@ -30,6 +31,7 @@ class _IncomeTabState extends State<IncomeTab> {
   final newIncomeNameController = TextEditingController();
   final newIncomeDescriptionController = TextEditingController();
   final newIncomeAmountController = TextEditingController();
+  String selectedItem = '';
 
   //save
   saveIncome() {
@@ -38,24 +40,13 @@ class _IncomeTabState extends State<IncomeTab> {
     var incomeDescription = newIncomeDescriptionController.text.trim();
     var incomeAmount = double.parse(newIncomeAmountController.text.trim());
 
-    var incomeTransaction = Income(
-        userEmail: user.email!,
-        incomeName: incomeName,
-        incomeDescription: incomeDescription,
-        incomeAmount: incomeAmount,
-        incomeDate: _dateTime,
-        documentId: '');
-    FirebaseFirestore.instance
-        .collection(COLLECTION_NAME)
-        .add(incomeTransaction.toJson());
-
     var transaction = TransactionData(
       userEmail: user.email!,
       transactionName: incomeName,
       transactionType: 'Income',
       description: incomeDescription,
       amount: incomeAmount,
-      category: 'any',
+      category: selectedItem,
       transactionDate: _dateTime,
       documentId: '',
     );
@@ -91,6 +82,76 @@ class _IncomeTabState extends State<IncomeTab> {
     newIncomeNameController.clear();
     newIncomeDescriptionController.clear();
     newIncomeAmountController.clear();
+    selectedItem == '';
+  }
+
+  //For dropdown modal
+  void onTextFieldTap() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Select Item',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: incomeCategories.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final item = incomeCategories[index];
+                        final isSelected = selectedItem == item;
+
+                        return ListTile(
+                          title: Text(
+                            item,
+                            style: TextStyle(
+                              color: isSelected ? Colors.blue : null,
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              selectedItem = item;
+                            });
+                          },
+                          trailing: isSelected
+                              ? Icon(Icons.check_circle, color: Colors.blue)
+                              : null,
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context, selectedItem);
+                    },
+                    child: Text('Done'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    ).then((value) {
+      if (value != null) {
+        // Handle selected item
+        String selectedItem = value as String;
+        print(selectedItem);
+      }
+    });
   }
 
   @override
@@ -230,9 +291,7 @@ class _IncomeTabState extends State<IncomeTab> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton.icon(
-                        onPressed: () {
-                          // Do something when the button is pressed
-                        },
+                        onPressed: onTextFieldTap,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius:
