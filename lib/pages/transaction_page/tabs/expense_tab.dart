@@ -63,7 +63,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
       backgroundColor: Colors.transparent,
       content: AwesomeSnackbarContent(
         title: 'Success',
-        message: 'You have successfully recorded an Income',
+        message: 'You have successfully recorded an Expense',
 
         /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
         contentType: ContentType.success,
@@ -79,7 +79,9 @@ class _ExpenseTabState extends State<ExpenseTab> {
     newExpenseNameController.clear();
     newExpenseDescriptionController.clear();
     newExpenseAmountController.clear();
-    selectedItem == '';
+    setState(() {
+      selectedItem = ''; // Reset the selected item
+    });
   }
 
   void onTextFieldTap() {

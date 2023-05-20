@@ -44,7 +44,7 @@ class _DashBoardIncomeState extends State<DashBoardIncome> {
       setState(() {
         transactions.removeWhere((transaction) =>
             transaction.documentId == documentId &&
-            transaction.transactionType == TransactionType.Expense);
+            transaction.transactionType == TransactionType.Income);
       });
     } catch (error) {
       print('Failed to delete document: $error');
@@ -60,7 +60,10 @@ class _DashBoardIncomeState extends State<DashBoardIncome> {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         FutureBuilder<QuerySnapshot>(
-          future: collection.where('UserEmail', isEqualTo: user.email).get(),
+          future: collection
+              .where('UserEmail', isEqualTo: user.email)
+              .where('TransactionType', isEqualTo: 'Income')
+              .get(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(

@@ -131,7 +131,7 @@ class _AddBudgetState extends State<AddBudget> {
                     ),
                   ),
                 ),
-                addHorizontalSpace(10),
+                addHorizontalSpace(1),
                 Expanded(
                   child: SizedBox(
                     height: Adaptive.h(20),
@@ -161,7 +161,7 @@ class _AddBudgetState extends State<AddBudget> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: [
-                    addVerticalSpace(20),
+                    addVerticalSpace(2),
                     Text(
                       'Goal Name',
                       style: ThemeText.paragraph54,
@@ -185,7 +185,7 @@ class _AddBudgetState extends State<AddBudget> {
                       ),
                       controller: newBudgetNameController,
                     ),
-                    addVerticalSpace(20),
+                    addVerticalSpace(2),
                     Text(
                       'Goal Amount to save',
                       style: ThemeText.paragraph54,
@@ -215,12 +215,12 @@ class _AddBudgetState extends State<AddBudget> {
                       ],
                       controller: newBudgetAmountController,
                     ),
-                    addVerticalSpace(20),
+                    addVerticalSpace(2),
                   ],
                 ),
               ),
             ),
-            addVerticalSpace(25),
+            addVerticalSpace(2),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Row(

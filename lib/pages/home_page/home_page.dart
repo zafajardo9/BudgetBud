@@ -13,6 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../misc/graphs/pie_graph/pie_graph.dart';
+import '../graph_screen/graph_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,16 +25,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   CollectionReference _reference =
       FirebaseFirestore.instance.collection('Transactions');
-
-  List<double> weeklySummary = [
-    4.40,
-    25.1,
-    16.18,
-    15.1,
-    13,
-    3.40,
-    10.3,
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -60,20 +51,13 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.all(20),
             child: Container(
-              height: Adaptive.h(30),
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: MyBarGraph(
-                weeklySummary: weeklySummary,
-              ),
+              child: GraphScreen(),
             ),
-          ),
-          Container(
-            height: Adaptive.h(25),
-            child: PieGraphWidget(),
           ),
           Expanded(
             child: Container(

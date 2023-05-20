@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 Widget addVerticalSpace(double height) {
   return SizedBox(
-    height: height,
+    height: Adaptive.h(height),
   );
 }
 
 Widget addHorizontalSpace(double width) {
   return SizedBox(
-    width: width,
+    width: Adaptive.w(width),
   );
 }

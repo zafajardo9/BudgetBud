@@ -228,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   ProfilePageDetailTile(
                       userName: userName, userEmail: user.email),
-                  addVerticalSpace(Adaptive.h(4)),
+                  addVerticalSpace(3),
                   MyButton(
                     btn: "Log Out",
                     onTap: signUserOut,
