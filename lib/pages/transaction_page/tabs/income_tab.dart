@@ -163,7 +163,7 @@ class _IncomeTabState extends State<IncomeTab> {
             width: double.infinity,
             color: AppColors.mainColorTwo,
           ),
-          addVerticalSpace(30),
+          addVerticalSpace(3),
           Text(
             'Input your Income',
             style: ThemeText.subHeader1Bold,
@@ -196,7 +196,7 @@ class _IncomeTabState extends State<IncomeTab> {
                           ),
                         ),
                       ),
-                      addVerticalSpace(20),
+                      addVerticalSpace(2),
 
                       Text(
                         'Amount',
@@ -227,7 +227,7 @@ class _IncomeTabState extends State<IncomeTab> {
                         ],
                         controller: newIncomeAmountController,
                       ),
-                      addVerticalSpace(20),
+                      addVerticalSpace(2),
                       Text(
                         'Income Description (Optional)',
                         style: ThemeText.paragraph54,
@@ -251,7 +251,7 @@ class _IncomeTabState extends State<IncomeTab> {
                         ),
                         controller: newIncomeDescriptionController,
                       ),
-                      addVerticalSpace(20),
+                      addVerticalSpace(2),
                       //FOR DATETIME
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -286,7 +286,7 @@ class _IncomeTabState extends State<IncomeTab> {
                       )
                     ],
                   ),
-                  addVerticalSpace(25),
+                  addVerticalSpace(2.5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

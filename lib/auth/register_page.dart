@@ -176,7 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           //text welcome
-                          addVerticalSpace(25),
+                          addVerticalSpace(2),
                           Text(
                             'Hello New User!',
                             style: ThemeText.headerAuth,
@@ -186,7 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: ThemeText.subAuth,
                           ),
 
-                          addVerticalSpace(20),
+                          addVerticalSpace(2),
                           //FORM AREA =======================
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -229,7 +229,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   },
                                 ),
 
-                                addVerticalSpace(15),
+                                addVerticalSpace(1.5),
                                 //textfield password
                                 TextFormField(
                                   controller: pwdController,
@@ -262,7 +262,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     });
                                   },
                                 ),
-                                addVerticalSpace(15),
+                                addVerticalSpace(1.5),
                                 TextFormField(
                                   controller: confirmPwdController,
                                   obscureText: showPassword,
@@ -310,7 +310,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                           //textfield password
 
-                          addVerticalSpace(15),
+                          addVerticalSpace(1.5),
 
                           //sign in btn
                           MyButton(
@@ -319,7 +319,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
 
                           // other ways
-                          SizedBox(height: 20),
+                          addVerticalSpace(2),
 
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -351,7 +351,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 25),
+                          addVerticalSpace(2.5),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -360,7 +360,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 imageLocation: 'images/google.png',
                                 btnName: ' Google',
                               ),
-                              addHorizontalSpace(20),
+                              addHorizontalSpace(2),
                               SquaredTiles(
                                 onTap: null,
                                 imageLocation: 'images/apple.png',
@@ -369,7 +369,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             ],
                           ),
 
-                          SizedBox(height: 20),
+                          addVerticalSpace(2),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

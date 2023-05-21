@@ -35,7 +35,7 @@ class _ProfilePageDetailTileState extends State<ProfilePageDetailTile> {
                 size: 40,
                 color: Colors.black54,
               ),
-              addHorizontalSpace(30),
+              addHorizontalSpace(3),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -61,7 +61,7 @@ class _ProfilePageDetailTileState extends State<ProfilePageDetailTile> {
                 size: 40,
                 color: Colors.black54,
               ),
-              addHorizontalSpace(30),
+              addHorizontalSpace(3),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

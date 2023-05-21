@@ -15,7 +15,6 @@ class BarGraphWidget extends StatelessWidget {
       future: FirebaseFirestore.instance
           .collection('Transactions')
           .where('UserEmail', isEqualTo: user.email)
-          .where('TransactionType', isEqualTo: 'Income')
           .get(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
@@ -29,41 +28,52 @@ class BarGraphWidget extends StatelessWidget {
         final List<DocumentSnapshot> documents = snapshot.data!.docs;
 
         // Create a map to store the total amount per day
-        final Map<int, double> totalAmountPerDay = {};
+        final Map<int, double> totalIncomePerDay = {};
+        final Map<int, double> totalExpensePerDay = {};
 
         // Iterate over the documents and calculate the total amount per day
         for (final document in documents) {
           final DateTime transactionDate =
               DateTime.parse(document['TransactionDate']).toLocal();
           final double amount = document['TransactionAmount'];
+          final String transactionType = document['TransactionType'];
 
           final int dayOfWeek = transactionDate.weekday;
 
-          if (totalAmountPerDay.containsKey(dayOfWeek)) {
-            totalAmountPerDay[dayOfWeek] =
-                totalAmountPerDay[dayOfWeek]! + amount;
-            print(totalAmountPerDay[dayOfWeek]);
-          } else {
-            totalAmountPerDay[dayOfWeek] = amount;
+          if (transactionType == 'Income') {
+            if (totalIncomePerDay.containsKey(dayOfWeek)) {
+              totalIncomePerDay[dayOfWeek] =
+                  totalIncomePerDay[dayOfWeek]! + amount;
+            } else {
+              totalIncomePerDay[dayOfWeek] = amount;
+            }
+          } else if (transactionType == 'Expense') {
+            if (totalExpensePerDay.containsKey(dayOfWeek)) {
+              totalExpensePerDay[dayOfWeek] =
+                  totalExpensePerDay[dayOfWeek]! + amount;
+            } else {
+              totalExpensePerDay[dayOfWeek] = amount;
+            }
           }
         }
+        print(totalExpensePerDay);
 
-        // Create a list of BarChartGroupData objects for each day
-        final List<BarChartGroupData> barChartData = totalAmountPerDay.entries
-            .map((entry) => BarChartGroupData(
-                  x: entry.key.round(),
-                  barRods: [
-                    BarChartRodData(
-                      color: AppColors.mainColorOne,
-                      toY: entry.value,
-                      width: 15,
-                      borderRadius: BorderRadius.circular(4),
-                      backDrawRodData: BackgroundBarChartRodData(
-                          show: true, color: Colors.grey[300]),
-                    ),
-                  ],
-                ))
-            .toList();
+        final List<BarChartGroupData> barChartData = List.generate(
+          7,
+          (index) => BarChartGroupData(
+            x: index,
+            barRods: [
+              BarChartRodData(
+                toY: totalIncomePerDay[index + 1] ?? 0,
+                color: AppColors.mainColorOne,
+              ),
+              BarChartRodData(
+                toY: totalExpensePerDay[index + 1] ?? 0,
+                color: AppColors.mainColorTwo,
+              ),
+            ],
+          ),
+        );
 
         return AspectRatio(
           aspectRatio: 1,
@@ -99,7 +109,7 @@ class BarGraphWidget extends StatelessWidget {
                           text = const Text('W', style: style);
                           break;
                         case 3:
-                          text = const Text('T', style: style);
+                          text = const Text('Th', style: style);
                           break;
                         case 4:
                           text = const Text('F', style: style);

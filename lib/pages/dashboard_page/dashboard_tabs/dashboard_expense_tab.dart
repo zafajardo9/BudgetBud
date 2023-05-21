@@ -90,6 +90,10 @@ class _DashBoardExpenseState extends State<DashBoardExpense> {
                     )
                     .toList();
 
+                // Sort transactions by date in descending order
+                transactions.sort(
+                    (a, b) => b.transactionDate.compareTo(a.transactionDate));
+
                 return transactions.isEmpty
                     ? Center(
                         child: Text(

@@ -168,7 +168,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
             width: double.infinity,
             color: AppColors.mainColorTwo,
           ),
-          addVerticalSpace(30),
+          addVerticalSpace(3),
           Text(
             'Input your Expense',
             style: ThemeText.subHeader1Bold,
@@ -201,7 +201,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                           ),
                         ),
                       ),
-                      addVerticalSpace(20),
+                      addVerticalSpace(2),
 
                       Text(
                         'Amount',
@@ -232,7 +232,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                         ],
                         controller: newExpenseAmountController,
                       ),
-                      addVerticalSpace(20),
+                      addVerticalSpace(2),
                       Text(
                         'Expense Description (Optional)',
                         style: ThemeText.paragraph54,
@@ -256,7 +256,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                         ),
                         controller: newExpenseDescriptionController,
                       ),
-                      addVerticalSpace(20),
+                      addVerticalSpace(2),
                       //FOR DATETIME
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -291,7 +291,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                       )
                     ],
                   ),
-                  addVerticalSpace(25),
+                  addVerticalSpace(2.5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

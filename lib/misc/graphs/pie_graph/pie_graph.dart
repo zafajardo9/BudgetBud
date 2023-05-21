@@ -26,6 +26,9 @@ class PieGraphWidget extends StatelessWidget {
         if (documents.isEmpty) {
           return Text('No data available.');
         }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
 
         // Calculate the total amount for each category
         final Map<String, double> categoryAmounts = {};

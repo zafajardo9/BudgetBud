@@ -1,25 +1,18 @@
-import 'package:budget_bud/misc/graphs/dummydata_piegraph.dart';
 import 'package:budget_bud/dataModels/transaction_model.dart';
-import 'package:budget_bud/misc/graphs/bargraph.dart';
+
 import 'package:budget_bud/misc/colors.dart';
-import 'package:budget_bud/misc/txtStyles.dart';
-import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
-import '../../misc/graphs/pie_graph/pie_graph.dart';
 import '../graph_screen/graph_screen.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
@@ -39,11 +32,12 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(Icons.sort),
-              )),
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {},
+              child: Icon(Icons.sort),
+            ),
+          ),
         ],
       ),
       body: Column(
@@ -63,28 +57,31 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadiusDirectional.only(
-                    topStart: Radius.circular(25),
-                    topEnd: Radius.circular(25),
-                  )),
+                color: Colors.white,
+                borderRadius: BorderRadiusDirectional.only(
+                  topStart: Radius.circular(25),
+                  topEnd: Radius.circular(25),
+                ),
+              ),
               padding: EdgeInsets.symmetric(vertical: 20.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text('Transactions',
-                          style: TextStyle(
-                              fontSize: 15.sp, fontWeight: FontWeight.bold)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'Transactions',
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    StreamBuilder<QuerySnapshot>(
+                  ),
+                  Expanded(
+                    child: StreamBuilder<QuerySnapshot>(
                       stream: _reference
                           .where('UserEmail', isEqualTo: user.email)
                           .snapshots(),
-                      //.snapshots()
-                      // .where('UserEmail', isEqualTo: user.email).get(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return Center(
@@ -112,17 +109,17 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               )
                               .toList();
+
                           return _getBody(transactions);
                         } else {
-                          //loader
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
                         }
                       },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -132,7 +129,10 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Widget _getBody(transactions) {
+Widget _getBody(List<TransactionData> transactions) {
+  // Sort transactions by date in descending order
+  transactions.sort((a, b) => b.transactionDate.compareTo(a.transactionDate));
+
   return transactions.isEmpty
       ? Center(
           child: Text('No Transactions Yet'),
@@ -146,15 +146,19 @@ Widget _getBody(transactions) {
                     contentPadding: EdgeInsets.symmetric(horizontal: 20),
                     title: Text(
                       transactions[index].transactionName,
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     leading: RotatedBox(
                       quarterTurns: 3,
-                      child: SvgPicture.asset('assets/pointer/dark.svg',
-                          width: Adaptive.w(5),
-                          height: Adaptive.h(5),
-                          semanticsLabel: 'Income'),
+                      child: SvgPicture.asset(
+                        'assets/pointer/dark.svg',
+                        width: Adaptive.w(5),
+                        height: Adaptive.h(5),
+                        semanticsLabel: 'Income',
+                      ),
                     ),
                     trailing: Text(
                       '\₱${transactions[index].amount.toString()}',
@@ -168,13 +172,17 @@ Widget _getBody(transactions) {
                     contentPadding: EdgeInsets.symmetric(horizontal: 20),
                     title: Text(
                       transactions[index].transactionName,
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    leading: SvgPicture.asset('assets/pointer/dark.svg',
-                        width: Adaptive.w(5),
-                        height: Adaptive.h(5),
-                        semanticsLabel: 'Expense'),
+                    leading: SvgPicture.asset(
+                      'assets/pointer/dark.svg',
+                      width: Adaptive.w(5),
+                      height: Adaptive.h(5),
+                      semanticsLabel: 'Expense',
+                    ),
                     trailing: Text(
                       '\₱${transactions[index].amount.toString()}',
                       style: TextStyle(

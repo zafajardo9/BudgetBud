@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           //text welcome
-                          addVerticalSpace(20),
+                          addVerticalSpace(2),
                           Text(
                             'Welcome Back',
                             style: ThemeText.headerAuth,
@@ -167,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: ThemeText.subAuth,
                           ),
 
-                          addVerticalSpace(20),
+                          addVerticalSpace(2),
                           //FORM AREA =======================
                           SizedBox(
                             width: Adaptive.w(90),
@@ -178,8 +178,9 @@ class _LoginPageState extends State<LoginPage> {
                                   keyboardType: TextInputType.emailAddress,
                                   style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons
-                                        .email), // kulang sa focus border color
+                                    prefixIcon: Icon(Icons.email,
+                                        color: AppColors
+                                            .mainColorOne), // kulang sa focus border color
                                     hintText: 'Email',
                                     contentPadding: EdgeInsets.zero,
                                     border: OutlineInputBorder(
@@ -194,14 +195,15 @@ class _LoginPageState extends State<LoginPage> {
                                   validator: validateEmail,
                                 ),
 
-                                addVerticalSpace(15),
+                                addVerticalSpace(1.5),
                                 //textfield password
                                 TextFormField(
                                   controller: pwdController,
                                   obscureText: _isObscured,
                                   style: ThemeText.textfieldInput,
                                   decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.lock),
+                                    prefixIcon: Icon(Icons.lock,
+                                        color: AppColors.mainColorOne),
                                     hintText: 'Password',
                                     contentPadding: EdgeInsets.zero,
                                     border: OutlineInputBorder(
@@ -220,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
 
-                          addVerticalSpace(15),
+                          addVerticalSpace(1.5),
                           //forgot password
                           GestureDetector(
                             onTap: () {
@@ -237,7 +239,7 @@ class _LoginPageState extends State<LoginPage> {
 
                           //textfield password
 
-                          addVerticalSpace(15),
+                          addVerticalSpace(1.5),
 
                           //sign in btn
                           MyButton(
@@ -246,7 +248,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
 
                           // other ways
-                          SizedBox(height: 20),
+                          addVerticalSpace(2),
 
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -287,7 +289,7 @@ class _LoginPageState extends State<LoginPage> {
                                 imageLocation: 'images/google.png',
                                 btnName: ' Google',
                               ),
-                              addHorizontalSpace(20),
+                              addHorizontalSpace(2),
                               SquaredTiles(
                                 onTap: () {},
                                 imageLocation: 'images/apple.png',
