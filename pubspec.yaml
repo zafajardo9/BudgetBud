@@ -50,6 +50,12 @@ dependencies:
   flutter_slidable: ^3.0.0
   fl_chart: ^0.62.0
 
+  #ML KITS
+  google_mlkit_text_recognition: ^0.6.0
+  camera: ^0.10.5+2
+  permission_handler: ^10.2.0
+  image_picker: ^0.8.7+5
+
 
 
 

@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -13,7 +14,8 @@ import 'auth/auth_page.dart';
 import 'pages/onBoarding_page/onBoarding_screen.dart';
 
 late SharedPreferences prefs;
-void main() async {
+List<CameraDescription> cameras = [];
+Future<void> main() async {
   // Check for internet connectivity before running the app
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -41,6 +43,14 @@ void main() async {
 
   //onboarding screen
   prefs = await SharedPreferences.getInstance();
+
+  // Fetch the available cameras before initializing the app.
+  try {
+    WidgetsFlutterBinding.ensureInitialized();
+    cameras = await availableCameras();
+  } on CameraException catch (e) {
+    debugPrint('CameraError: ${e.description}');
+  }
 
   runApp(const MyApp());
 }

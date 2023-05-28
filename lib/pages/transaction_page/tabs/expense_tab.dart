@@ -1,12 +1,16 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:budget_bud/pages/category_page/category_list/category_lists.dart';
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../MLKit/TextRecognition/camera_screen.dart';
 import '../../../dataModels/transaction_model.dart';
 import '../../../misc/colors.dart';
 import '../../../misc/txtStyles.dart';
@@ -22,6 +26,10 @@ class ExpenseTab extends StatefulWidget {
 }
 
 class _ExpenseTabState extends State<ExpenseTab> {
+  bool _isPermissionGranted = false;
+  bool textScanning = false;
+  XFile? imageFile;
+  String scannedText = "";
   final user = FirebaseAuth.instance.currentUser!;
 
   DateTime _dateTime = DateTime.now();
@@ -158,6 +166,35 @@ class _ExpenseTabState extends State<ExpenseTab> {
     });
   }
 
+  //text scanning
+  void getImage(ImageSource source) async {
+    try {
+      final pickedImage = await ImagePicker().pickImage(source: source);
+      if (pickedImage != null) {
+        textScanning = true;
+        imageFile = pickedImage;
+        setState(() {});
+      }
+    } catch (e) {
+      textScanning = false;
+      imageFile = null;
+      setState(() {
+        scannedText = "Error Occured";
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  Future<void> _requestCameraPermission() async {
+    final status = await Permission.camera.request();
+    _isPermissionGranted = status == PermissionStatus.granted;
+  }
+
   //Widget ITSELF
   @override
   Widget build(BuildContext context) {
@@ -286,7 +323,22 @@ class _ExpenseTabState extends State<ExpenseTab> {
                               setState(() => _dateTime = newDate);
                             },
                             child: Text('Select a Date'),
-                          )
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all(CircleBorder()),
+                              padding: MaterialStateProperty.all(
+                                  EdgeInsets.all(2.h)), // <-- Button color
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CameraScreen()),
+                              );
+                            },
+                            child: Icon(Icons.camera_alt_outlined),
+                          ),
                         ],
                       )
                     ],
