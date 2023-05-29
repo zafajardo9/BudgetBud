@@ -65,7 +65,7 @@ class PieGraphWidget extends StatelessWidget {
           child: PieChart(
             PieChartData(
               sections: pieChartSections,
-              centerSpaceRadius: 0,
+              centerSpaceRadius: 50,
               startDegreeOffset: -90,
               borderData: FlBorderData(show: false),
               sectionsSpace: 0,

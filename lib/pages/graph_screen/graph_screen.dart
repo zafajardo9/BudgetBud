@@ -3,11 +3,13 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../misc/graphs/bar_graph/bar_graph.dart';
 import '../../misc/graphs/bargraph.dart';
+import '../../misc/graphs/line_graph/line_graph.dart';
 import '../../misc/graphs/pie_graph/pie_graph.dart';
 
 enum GraphType {
   BarGraph,
   PieChart,
+  LineChart,
   //LineChart,
 }
 
@@ -62,6 +64,9 @@ class GraphWidget extends StatelessWidget {
         return BarGraph();
       case GraphType.PieChart:
         return PieChart();
+
+      case GraphType.LineChart:
+        return LineChart();
     }
   }
 }
@@ -79,6 +84,14 @@ class PieChart extends StatelessWidget {
   Widget build(BuildContext context) {
     // Build the Pie Chart widget
     return PieGraphWidget();
+  }
+}
+
+class LineChart extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Build the Pie Chart widget
+    return LineGraph();
   }
 }
 

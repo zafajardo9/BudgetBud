@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: AppColors.mainColorThree,
               primaryColor: AppColors.mainColorOne,
               brightness: Brightness.light,
-              primarySwatch: buildMaterialColor(Color(0xFF6A0D0D)),
+              primarySwatch: buildMaterialColor(Color(0xFF0D1853)),
               fontFamily: GoogleFonts.montserrat().fontFamily,
             ),
             home: isOnboarded ? AuthPage() : OnboardingScreen());

@@ -1,10 +1,17 @@
 import 'package:budget_bud/data/income_data.dart';
 import 'package:budget_bud/misc/colors.dart';
+import 'package:budget_bud/misc/graphs/heatmap/heatmap_calendar.dart';
+import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../components/btn_icons_text.dart';
 import '../../data/expense_data.dart';
+import '../../misc/graphs/line_graph/line_graph.dart';
 import 'dashboard_tabs/dashboard_expense_tab.dart';
 import 'dashboard_tabs/dashboard_income_tab.dart';
 
@@ -33,16 +40,137 @@ class _DashboardPageState extends State<DashboardPage>
   }
 
   @override
+  void initState() {
+    super.initState();
+    getUserName();
+  }
+
+  String? userName;
+
+  Future<void> getUserName() async {
+    final userEmail = FirebaseAuth.instance.currentUser?.email;
+
+    if (userEmail == null) {
+      // Handle the case when the user is not signed in.
+      return;
+    }
+
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('User')
+        .where('UserEmail', isEqualTo: userEmail)
+        .get();
+
+    if (querySnapshot.size > 0) {
+      final data = querySnapshot.docs.first.data();
+      setState(() {
+        print(data);
+        userName = data['UserName'];
+      });
+    } else {
+      setState(() {
+        userName = FirebaseAuth.instance.currentUser?.displayName;
+      });
+    }
+
+    print(userName);
+  }
+
+  @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 2, vsync: this);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('User Dashboard'),
       ),
       body: Column(
         children: [
-          SizedBox(height: 20),
+          Container(
+            width: Adaptive.w(100),
+            height: Adaptive.h(30),
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hello, ${userName ?? ''}',
+                          style: ThemeText.headerAuth,
+                        ),
+                        Text(
+                          'Your Daily Update',
+                          style: ThemeText.paragraph54,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      '\₱500.00',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16),
+                Card(
+                  color: AppColors.mainColorOne,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButtonWithText(
+                          onPressed: () {
+                            // Button 1 action
+                          },
+                          icon: Icon(
+                            FontAwesomeIcons.moneyBillTransfer,
+                            size: 17.sp,
+                          ),
+                          label: 'Transactions',
+                        ),
+                        IconButtonWithText(
+                          onPressed: () {
+                            // Button 1 action
+                          },
+                          icon: Icon(
+                            FontAwesomeIcons.robot,
+                            size: 17.sp,
+                          ),
+                          label: 'Suggestions',
+                        ),
+                        IconButtonWithText(
+                          onPressed: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => HeatMapCalendarExample(),
+                            //   ),
+                            // );
+                          },
+                          icon: Icon(
+                            Icons.history,
+                            size: 19.sp,
+                          ),
+                          label: 'History',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          //---------HEADER DASHBOARD-------
+          //---------BODY DASHBOARD-------
           Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -75,6 +203,7 @@ class _DashboardPageState extends State<DashboardPage>
               ),
             ),
           ),
+
           Expanded(
             child: TabBarView(
               controller: tabController,

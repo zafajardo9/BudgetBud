@@ -89,6 +89,12 @@ class _IncomeTabState extends State<IncomeTab> {
   void onTextFieldTap() {
     showModalBottomSheet(
       context: context,
+      shape: const RoundedRectangleBorder(
+        // <-- SEE HERE
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25.0),
+        ),
+      ),
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   //Color have a a prefix of 0xFF
-  static final Color mainColorOne = Color(0xFF6A0D0D);
+  static final Color mainColorOne = Color(0xFF0D1853);
   static final Color mainColorTwo = Color(0xFFFFBD59);
   static final Color mainColorThree = Color(0xFFF4F3FF);
   static final Color mainColorFour = Color(0xFFB38484);
   static final Color mainColorFive = Color(0xFFC6B9B9);
   static final Color mainColorSix = Color(0xFFF0E5E5);
   static final Color onBoardingColorButton = Color(0xFF101010);
+  static final Color deleteButton = Color(0xFFBD0000);
+  static final Color updateButton = Color(0xFF00BD03);
 
   //background white
   static final Color backgroundWhite = Color(0xFFf9f9f9);

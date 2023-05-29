@@ -119,7 +119,7 @@ class _DashBoardExpenseState extends State<DashBoardExpense> {
                                             transactions[index].documentId);
                                       }),
                                       icon: Icons.delete,
-                                      backgroundColor: AppColors.mainColorOne,
+                                      backgroundColor: AppColors.deleteButton,
                                     ),
                                   ],
                                 ),

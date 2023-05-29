@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DetailScreen extends StatefulWidget {
   final String imagePath;
@@ -196,7 +197,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             ),
                           ),
                           Container(
-                            height: 60,
+                            height: Adaptive.h(20),
                             child: SingleChildScrollView(
                               child: _listAllStrings != null
                                   ? ListView.builder(

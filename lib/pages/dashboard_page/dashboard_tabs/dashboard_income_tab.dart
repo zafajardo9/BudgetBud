@@ -118,7 +118,7 @@ class _DashBoardIncomeState extends State<DashBoardIncome> {
                                           transactions[index].documentId);
                                     }),
                                     icon: Icons.delete,
-                                    backgroundColor: AppColors.mainColorOne,
+                                    backgroundColor: AppColors.deleteButton,
                                   ),
                                 ],
                               ),

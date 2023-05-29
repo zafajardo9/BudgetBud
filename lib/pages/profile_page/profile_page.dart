@@ -8,6 +8,7 @@ import '../../components/my_button.dart';
 import '../../misc/colors.dart';
 import '../../misc/txtStyles.dart';
 import 'components/profile_page_details.dart';
+import 'components/profile_page_header.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
