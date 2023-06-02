@@ -76,8 +76,8 @@ dev_dependencies:
 ############################FOR SPLASH SCREEN######################
 flutter_native_splash:
   image: assets/bbLogo.png
-  color: "#6A0D0D"
-
+  color: "#0D1853"
+###CLI: flutter pub run flutter_native_splash:create
 ###############################END#################################
 
 

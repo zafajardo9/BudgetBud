@@ -55,10 +55,6 @@ class _DashBoardIncomeState extends State<DashBoardIncome> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          'Income',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
         FutureBuilder<QuerySnapshot>(
           future: collection
               .where('UserEmail', isEqualTo: user.email)

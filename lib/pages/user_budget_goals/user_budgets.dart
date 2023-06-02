@@ -106,21 +106,18 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                     String title = doc['BudgetName'];
                     double amount = doc['BudgetAmount'];
 
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border:
-                            Border.all(color: AppColors.mainColorOne, width: 1),
-                      ),
-                      child: Card(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(title),
-                            SizedBox(height: 8),
-                            Text('Amount: \₱$amount'),
-                          ],
-                        ),
+                    return Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                          side: BorderSide(
+                              width: 1, color: AppColors.mainColorOne)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(title),
+                          SizedBox(height: 8),
+                          Text('Amount: \₱$amount'),
+                        ],
                       ),
                     );
                   },

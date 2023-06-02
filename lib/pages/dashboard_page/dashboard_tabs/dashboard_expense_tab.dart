@@ -56,10 +56,6 @@ class _DashBoardExpenseState extends State<DashBoardExpense> {
     return SizedBox(
       child: Column(
         children: [
-          Text(
-            'Expense',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
           FutureBuilder<QuerySnapshot>(
             future: collection
                 .where('UserEmail', isEqualTo: user.email)

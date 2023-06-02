@@ -11,6 +11,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../components/btn_icons_text.dart';
 import '../../data/expense_data.dart';
+import '../../data/transaction_data_summary.dart';
 import '../../misc/graphs/line_graph/line_graph.dart';
 import 'dashboard_tabs/dashboard_expense_tab.dart';
 import 'dashboard_tabs/dashboard_income_tab.dart';
@@ -43,6 +44,7 @@ class _DashboardPageState extends State<DashboardPage>
   void initState() {
     super.initState();
     getUserName();
+    fetchBalance();
   }
 
   String? userName;
@@ -75,98 +77,144 @@ class _DashboardPageState extends State<DashboardPage>
     print(userName);
   }
 
+  double balance = 0.0;
+  double totalIncome = 0.0;
+  double totalExpense = 0.0;
+
+  Future<void> fetchBalance() async {
+    TransactionSummary summary = await calculateTransactionSummary();
+    setState(() {
+      balance = summary.balance;
+      totalIncome = summary.totalIncome;
+      totalExpense = summary.totalExpense;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     TabController tabController = TabController(length: 2, vsync: this);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('User Dashboard'),
       ),
       body: Column(
         children: [
-          Container(
-            width: Adaptive.w(100),
-            height: Adaptive.h(30),
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Hello, ${userName ?? ''}',
-                          style: ThemeText.headerAuth,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hello, ${userName ?? ''}',
+                            style: ThemeText.headerAuth,
+                          ),
+                          Text(
+                            'Your Daily Update',
+                            style: ThemeText.paragraph54,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        '\₱$balance',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          'Your Daily Update',
-                          style: ThemeText.paragraph54,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Your total Income',
+                        style: ThemeText.paragraph54,
+                      ),
+                      Text(
+                        '\₱$totalIncome',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.updateButton,
                         ),
-                      ],
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Your total Expenses',
+                        style: ThemeText.paragraph54,
+                      ),
+                      Text(
+                        '\₱$totalExpense',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.deleteButton,
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Card(
+                    color: AppColors.mainColorOne,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
-                    SizedBox(height: 8),
-                    Text(
-                      '\₱500.00',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          IconButtonWithText(
+                            onPressed: () {
+                              // Button 1 action
+                            },
+                            icon: Icon(
+                              FontAwesomeIcons.moneyBillTransfer,
+                              size: 17.sp,
+                            ),
+                            label: 'Transactions',
+                          ),
+                          IconButtonWithText(
+                            onPressed: () {
+                              // Button 1 action
+                            },
+                            icon: Icon(
+                              FontAwesomeIcons.robot,
+                              size: 17.sp,
+                            ),
+                            label: 'Suggestions',
+                          ),
+                          IconButtonWithText(
+                            onPressed: () {
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => HeatMapCalendarExample(),
+                              //   ),
+                              // );
+                            },
+                            icon: Icon(
+                              FontAwesomeIcons.newspaper,
+                              size: 17.sp,
+                            ),
+                            label: 'News',
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                Card(
-                  color: AppColors.mainColorOne,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.0),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        IconButtonWithText(
-                          onPressed: () {
-                            // Button 1 action
-                          },
-                          icon: Icon(
-                            FontAwesomeIcons.moneyBillTransfer,
-                            size: 17.sp,
-                          ),
-                          label: 'Transactions',
-                        ),
-                        IconButtonWithText(
-                          onPressed: () {
-                            // Button 1 action
-                          },
-                          icon: Icon(
-                            FontAwesomeIcons.robot,
-                            size: 17.sp,
-                          ),
-                          label: 'Suggestions',
-                        ),
-                        IconButtonWithText(
-                          onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => HeatMapCalendarExample(),
-                            //   ),
-                            // );
-                          },
-                          icon: Icon(
-                            Icons.history,
-                            size: 19.sp,
-                          ),
-                          label: 'History',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           //---------HEADER DASHBOARD-------

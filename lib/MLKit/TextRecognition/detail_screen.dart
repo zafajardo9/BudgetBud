@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -177,37 +178,64 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Card(
-                    elevation: 8,
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Card(
+                      elevation: 8,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Stack(
+                        children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Text(
-                              "Identified fields",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Text(
+                                    "Identified fields",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: Adaptive.h(20),
+                                  child: SingleChildScrollView(
+                                    child: _listAllStrings != null
+                                        ? ListView.builder(
+                                            shrinkWrap: true,
+                                            physics: BouncingScrollPhysics(),
+                                            itemCount: _listAllStrings!.length,
+                                            itemBuilder: (context, index) =>
+                                                Text(_listAllStrings![index]),
+                                          )
+                                        : Container(),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Container(
-                            height: Adaptive.h(20),
-                            child: SingleChildScrollView(
-                              child: _listAllStrings != null
-                                  ? ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: BouncingScrollPhysics(),
-                                      itemCount: _listAllStrings!.length,
-                                      itemBuilder: (context, index) =>
-                                          Text(_listAllStrings![index]),
-                                    )
-                                  : Container(),
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                shape:
+                                    MaterialStateProperty.all(CircleBorder()),
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsets.all(2.h)), // <-- Button color
+                              ),
+                              onPressed: () {
+                                // Button action
+                              },
+                              child: Icon(Icons.send_rounded),
                             ),
                           ),
                         ],

@@ -4,8 +4,6 @@ import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/pages/transaction_page/tabs/expense_tab.dart';
 import 'package:budget_bud/pages/transaction_page/tabs/income_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -20,6 +18,7 @@ class _TransactionPageState extends State<TransactionPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: AppColors.backgroundWhite,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(

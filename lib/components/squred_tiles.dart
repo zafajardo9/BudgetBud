@@ -23,7 +23,7 @@ class SquaredTiles extends StatelessWidget {
         height: Adaptive.w(10),
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
-            border: Border.all(color: AppColors.mainColorFour),
+            border: Border.all(color: AppColors.mainColorOne),
             borderRadius: BorderRadius.circular(15),
             color: Colors.white),
         child: Row(

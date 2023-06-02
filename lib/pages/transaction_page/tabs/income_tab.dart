@@ -140,6 +140,13 @@ class _IncomeTabState extends State<IncomeTab> {
                   ),
                   SizedBox(height: 16.0),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(20), // Rounded corners
+                      ),
+                      minimumSize: Size(50.w, 5.h),
+                    ),
                     onPressed: () {
                       Navigator.pop(context, selectedItem);
                     },
