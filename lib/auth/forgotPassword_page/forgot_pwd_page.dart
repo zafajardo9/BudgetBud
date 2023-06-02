@@ -86,12 +86,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ),
       body: Column(
         children: [
-          addVerticalSpace(40),
+          addVerticalSpace(4),
           Text(
             'Enter your Email',
             style: ThemeText.subHeader1Bold,
           ),
-          addVerticalSpace(10),
+          addVerticalSpace(1),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Text(
@@ -99,7 +99,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               style: ThemeText.paragraph54,
             ),
           ),
-          addVerticalSpace(60),
+          addVerticalSpace(6),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: TextFormField(
@@ -119,7 +119,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               textInputAction: TextInputAction.done,
             ),
           ),
-          addVerticalSpace(60),
+          addVerticalSpace(6),
           GestureDetector(
             onTap: passwordResetBtn,
             child: Container(

@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:budget_bud/auth/terms_and_services/terms_of_use.dart';
 import 'package:budget_bud/auth/validators/validators.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -310,8 +311,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
                           //textfield password
 
-                          addVerticalSpace(1.5),
-
+                          //addVerticalSpace(1.5),
+                          TermsOfUse(),
                           //sign in btn
                           MyButton(
                             btn: "Sign Up",
