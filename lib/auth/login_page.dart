@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //Login user
   void signUserIn() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
     }
@@ -122,14 +123,26 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: AppColors.backgroundWhite,
         body: Container(
           width: double.infinity,
-          color: AppColors.mainColorOne,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.mainColorOne,
+                AppColors.mainColorThree,
+              ],
+              stops: [
+                0.1,
+                1,
+              ],
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               //Logo
               Container(
                 width: double.infinity,
-                color: AppColors.mainColorOne,
                 child: Image.asset(
                   'assets/bbLogo.png',
                   height: size.height * 0.25,

@@ -1,5 +1,3 @@
-import 'dart:math' as Math;
-
 import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/pages/transaction_page/tabs/expense_tab.dart';
 import 'package:budget_bud/pages/transaction_page/tabs/income_tab.dart';

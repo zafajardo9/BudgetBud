@@ -1,18 +1,15 @@
 import 'package:budget_bud/data/income_data.dart';
 import 'package:budget_bud/misc/colors.dart';
-import 'package:budget_bud/misc/graphs/heatmap/heatmap_calendar.dart';
 import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../components/btn_icons_text.dart';
 import '../../data/expense_data.dart';
 import '../../data/transaction_data_summary.dart';
-import '../../misc/graphs/line_graph/line_graph.dart';
 import 'dashboard_tabs/dashboard_expense_tab.dart';
 import 'dashboard_tabs/dashboard_income_tab.dart';
 
@@ -96,7 +93,24 @@ class _DashboardPageState extends State<DashboardPage>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Dashboard'),
+        elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.mainColorOne, AppColors.mainColorOneSecondary],
+              stops: [
+                0.1,
+                1,
+              ],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+            ),
+          ),
+        ),
+        title: Text(
+          'User Dashboard',
+          style: ThemeText.appBarTitle,
+        ),
       ),
       body: Column(
         children: [

@@ -22,8 +22,12 @@ Future<void> main() async {
   final connectivityResult = await Connectivity().checkConnectivity();
   if (connectivityResult == ConnectivityResult.none) {
     // If there's no internet connectivity, stop the app
-    return runApp(const MaterialApp(
+    return runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
+      themeMode: ThemeMode.dark,
       home: Scaffold(
         body: Center(
           child: Text('No internet connection.'),
@@ -71,8 +75,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               scaffoldBackgroundColor: AppColors.mainColorThree,
               primaryColor: AppColors.mainColorOne,
-              brightness: Brightness.light,
-              primarySwatch: buildMaterialColor(Color(0xFF0D1853)),
+              brightness: Brightness
+                  .light, //part for switching dark to light mode theme
+              primarySwatch: buildMaterialColor(Color(0xFF4E3EC8)),
               fontFamily: GoogleFonts.montserrat().fontFamily,
             ),
             home: isOnboarded ? AuthPage() : OnboardingScreen());

@@ -34,8 +34,9 @@ dependencies:
   cloud_firestore: ^4.5.2
   flutter_svg: ^2.0.5
 
-  salomon_bottom_bar: ^3.3.1 #can be removed
   dot_navigation_bar: ^1.0.1+4
+  flutter_snake_navigationbar: ^0.6.1
+
   google_fonts: ^4.0.3
   provider: ^6.0.5 #can be removed
   shared_preferences: ^2.0.5
@@ -57,6 +58,9 @@ dependencies:
   image_picker: ^0.8.7+5
   flutter_heatmap_calendar: ^1.0.5
   flutter_markdown: ^0.6.15
+
+
+
 
 
 

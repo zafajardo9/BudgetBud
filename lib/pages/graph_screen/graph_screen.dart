@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../misc/graphs/bar_graph/bar_graph.dart';
-import '../../misc/graphs/bargraph.dart';
 import '../../misc/graphs/line_graph/line_graph.dart';
 import '../../misc/graphs/pie_graph/pie_graph.dart';
 

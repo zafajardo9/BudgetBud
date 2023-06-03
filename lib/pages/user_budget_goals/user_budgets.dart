@@ -18,6 +18,19 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [AppColors.mainColorOne, AppColors.mainColorOneSecondary],
+              stops: [
+                0.1,
+                1,
+              ],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+            ),
+          ),
+        ),
         title: Text('Budget Goals'),
       ),
       body: Column(

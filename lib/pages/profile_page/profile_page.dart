@@ -8,7 +8,6 @@ import '../../components/my_button.dart';
 import '../../misc/colors.dart';
 import '../../misc/txtStyles.dart';
 import 'components/profile_page_details.dart';
-import 'components/profile_page_header.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -70,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundWhite,
+        backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
         bottomOpacity: 0.0,
         elevation: 0.0,
@@ -191,12 +190,6 @@ class _ProfilePageState extends State<ProfilePage> {
             //different Details Part
             Container(
               width: double.infinity,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadiusDirectional.only(
-                    topStart: Radius.circular(25),
-                    topEnd: Radius.circular(25),
-                  )),
               padding: EdgeInsets.symmetric(vertical: 20.0),
               child: Column(
                 children: [
@@ -213,7 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         Text(
                           'Details',
-                          style: ThemeText.textHeader3,
+                          style: ThemeText.subHeader2Bold,
                         ),
                         IconButton(
                           icon: const Icon(

@@ -1,9 +1,7 @@
-import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../colors.dart';
 

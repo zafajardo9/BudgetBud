@@ -64,6 +64,8 @@ class _IncomeTabState extends State<IncomeTab> {
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
+      margin: EdgeInsets.only(bottom: Adaptive.px(60)),
+
       content: AwesomeSnackbarContent(
         title: 'Success',
         message: 'You have successfully recorded an Income',
@@ -76,6 +78,29 @@ class _IncomeTabState extends State<IncomeTab> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(snackBar);
+
+    // final materialBanner = MaterialBanner(
+    //   /// need to set following properties for best effect of awesome_snackbar_content
+    //   elevation: 0,
+    //   backgroundColor: Colors.transparent,
+    //   forceActionsBelow: true,
+    //   content: AwesomeSnackbarContent(
+    //     title: 'Oh Hey!!',
+    //     message:
+    //         'This is an example error message that will be shown in the body of materialBanner!',
+    //
+    //     /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+    //     contentType: ContentType.success,
+    //     // to configure for material banner
+    //     inMaterialBanner: true,
+    //   ),
+    //   actions: const [SizedBox.shrink()],
+    // );
+    //
+    // ScaffoldMessenger.of(context)
+    //   ..hideCurrentMaterialBanner()
+    //   ..removeCurrentMaterialBanner()
+    //   ..showMaterialBanner(materialBanner);
   }
 
   void _clearTextFields() {

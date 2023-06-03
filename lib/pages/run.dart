@@ -1,9 +1,8 @@
 import 'package:budget_bud/pages/dashboard_page/dashboard_page.dart';
 import 'package:budget_bud/pages/profile_page/profile_page.dart';
 import 'package:budget_bud/pages/user_budget_goals/user_budgets.dart';
-import 'package:budget_bud/pages/user_wallet/wallet.dart';
-import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -39,79 +38,63 @@ class _RunState extends State<Run> {
     ProfilePage(),
   ];
 
+  ShapeBorder? bottomBarShape = const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(20)),
+  );
+  SnakeBarBehaviour snakeBarStyle = SnakeBarBehaviour.floating;
+  EdgeInsets padding = const EdgeInsets.all(12);
+
+  SnakeShape snakeShape = SnakeShape.circle;
+
+  bool showSelectedLabels = false;
+  bool showUnselectedLabels = false;
+
+  Color selectedColor = AppColors.mainColorOne;
+  Color unselectedColor = Colors.black.withOpacity(.4);
+
   final int iconValue = 20;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
-      body: navigation[_selectedTab.index],
-      bottomNavigationBar: DotNavigationBar(
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white.withOpacity(0.4),
-        paddingR: EdgeInsets.all(4),
-        margin: EdgeInsets.only(bottom: 20),
-        borderRadius: 15,
-        dotIndicatorColor: Colors.transparent,
-        backgroundColor: AppColors.mainColorOne,
+      body: navigation[_selectedTab.index] /**DashboardPage() **/,
+      bottomNavigationBar: SnakeNavigationBar.color(
+        height: Adaptive.h(7),
+        backgroundColor: AppColors.mainColorTwo,
+        behaviour: snakeBarStyle,
+        snakeShape: snakeShape,
+        shape: bottomBarShape,
+        padding: padding,
+        elevation: 2,
+
+        ///configuration for SnakeNavigationBar.color
+        snakeViewColor: selectedColor,
+        selectedItemColor:
+            snakeShape == SnakeShape.indicator ? selectedColor : null,
+        unselectedItemColor: unselectedColor,
+
+        ///configuration for SnakeNavigationBar.gradient
+        // snakeViewGradient: selectedGradient,
+        // selectedItemGradient: snakeShape == SnakeShape.indicator ? selectedGradient : null,
+        // unselectedItemGradient: unselectedGradient,
+
+        showUnselectedLabels: showUnselectedLabels,
+        showSelectedLabels: showSelectedLabels,
+
         currentIndex: _SelectedTab.values.indexOf(_selectedTab),
         onTap: _handleIndexChanged,
-        enableFloatingNavBar: true,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
-            blurRadius: 4,
-            offset: Offset(0, 3),
-          ),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: '1'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.auto_graph_outlined), label: '2'),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: '3'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month_outlined), label: '4'),
+          BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.user), label: '5')
         ],
-        items: [
-          /// Dashboard
-          DotNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: iconValue.sp,
-            ),
-            selectedColor: Colors.white,
-          ),
-
-          /// Analytics
-          DotNavigationBarItem(
-            icon: Icon(
-              Icons.bar_chart_rounded,
-              size: iconValue.sp,
-            ),
-            selectedColor: Colors.white,
-          ),
-
-          ///Input Expense & Income
-          DotNavigationBarItem(
-            icon: Icon(
-              Icons.add,
-              size: iconValue.sp,
-            ),
-            selectedColor: Colors.white,
-          ),
-
-          //Wallet of user and budget Goal
-          DotNavigationBarItem(
-            icon: Icon(
-              //when using fontawesome you should minus it to 5
-              FontAwesomeIcons.calculator,
-              size: iconValue - 5.sp,
-            ),
-            selectedColor: Colors.white,
-          ),
-
-          /// Profile
-          DotNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle,
-              size: iconValue.sp,
-            ),
-            selectedColor: Colors.white,
-          ),
-        ],
+        selectedLabelStyle: const TextStyle(fontSize: 14),
+        unselectedLabelStyle: const TextStyle(fontSize: 10),
       ),
     );
   }

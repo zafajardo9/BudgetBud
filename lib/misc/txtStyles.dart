@@ -22,7 +22,7 @@ abstract class ThemeText {
   //For APPBAR TITLES
   static TextStyle appBarTitle = TextStyle(
     color: Colors.white,
-    fontSize: 23.sp,
+    fontSize: 20.sp,
     fontWeight: FontWeight.bold,
   );
 

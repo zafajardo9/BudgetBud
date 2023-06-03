@@ -26,7 +26,6 @@ class ExpenseTab extends StatefulWidget {
 }
 
 class _ExpenseTabState extends State<ExpenseTab> {
-  bool _isPermissionGranted = false;
   bool textScanning = false;
   XFile? imageFile;
   String scannedText = "";
@@ -195,11 +194,6 @@ class _ExpenseTabState extends State<ExpenseTab> {
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-
-  Future<void> _requestCameraPermission() async {
-    final status = await Permission.camera.request();
-    _isPermissionGranted = status == PermissionStatus.granted;
   }
 
   //Widget ITSELF

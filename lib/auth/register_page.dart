@@ -30,6 +30,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final confirmPwdController = TextEditingController();
   final pwdController = TextEditingController();
 
+  bool privacyPolicyCheck = false;
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -41,6 +43,29 @@ class _RegisterPageState extends State<RegisterPage> {
 
   //Login user
   void signUserUp() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (!privacyPolicyCheck) {
+      // If the privacy policy checkbox is not checked, show an error message
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Please accept the privacy policy to sign up.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return; // Return early to prevent sign up if privacy policy is not accepted
+    }
+
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
     }
@@ -54,10 +79,10 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
 
-    //error handler message
+    // Error handler message
     void showErrorMessage(String message) {
       final snackBar = SnackBar(
-        /// need to set following properties for best effect of awesome_snackbar_content
+        /// Need to set following properties for best effect of awesome_snackbar_content
         elevation: 0,
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
@@ -65,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
           title: 'Error!',
           message: message,
 
-          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+          /// Change contentType to ContentType.success, ContentType.warning, or ContentType.help for variants
           contentType: ContentType.failure,
         ),
       );
@@ -76,7 +101,9 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     try {
-      //check if password and confirm password is same
+      // Check if user accepts T&C and Privacy Policy
+
+      // Check if password and confirm password are the same
       if (pwdController.text == confirmPwdController.text) {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
@@ -94,29 +121,46 @@ class _RegisterPageState extends State<RegisterPage> {
         );
         await FirebaseFirestore.instance.collection('User').add(user.toJson());
       } else {
-        //error if not the same
-        showErrorMessage("Password don't match");
+        // Error if passwords don't match
+        showErrorMessage("Passwords don't match");
       }
-      //pop Loading Circle
+      // Pop loading circle
       Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
       Navigator.pop(context);
-      if (e.code == 'network-request-failed') {
-        showErrorMessage("There is a problem on internet connection");
-        //devtools.log('No Internet Connection');
-      } else if (e.code == "email-already-in-use") {
-        showErrorMessage('There is already an account existing');
-      } else if (e.code == 'operation-not-allowed') {
-        showErrorMessage('There is a problem in the Authentication');
-      } else if (e.code == 'too-many-requests') {
-        showErrorMessage('Too many attempts please try later');
-      } else if (e.code == 'invalid-email') {
-        showErrorMessage('You inputted a wrong email!');
-      } else if (e.code == 'unknown') {
-        showErrorMessage('Email and Password Fields are required');
-      } else if (e.code == 'weak-password') {
-        showErrorMessage('Weak Password pls input more than 6');
+      String errorMessage = 'An error occurred';
+
+      // Handle specific Firebase exceptions
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'network-request-failed':
+            errorMessage = 'There is a problem with the internet connection';
+            break;
+          case 'email-already-in-use':
+            errorMessage =
+                'There is already an existing account with this email';
+            break;
+          case 'operation-not-allowed':
+            errorMessage = 'There is a problem with the authentication';
+            break;
+          case 'too-many-requests':
+            errorMessage = 'Too many attempts, please try again later';
+            break;
+          case 'invalid-email':
+            errorMessage = 'Invalid email address';
+            break;
+          case 'weak-password':
+            errorMessage = 'Weak password, please enter at least 6 characters';
+            break;
+          default:
+            errorMessage = 'An error occurred';
+        }
       }
+
+      // Show error message
+      showErrorMessage(errorMessage);
+
+      // Clear input fields
       emailController.clear();
       pwdController.clear();
       confirmPwdController.clear();
@@ -142,7 +186,20 @@ class _RegisterPageState extends State<RegisterPage> {
         backgroundColor: AppColors.backgroundWhite,
         body: Container(
           width: double.infinity,
-          color: AppColors.mainColorOne,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.mainColorOne,
+                AppColors.mainColorThree,
+              ],
+              stops: [
+                0.7,
+                1,
+              ],
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -312,7 +369,21 @@ class _RegisterPageState extends State<RegisterPage> {
                           //textfield password
 
                           //addVerticalSpace(1.5),
-                          TermsOfUse(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Checkbox(
+                                value: privacyPolicyCheck,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    privacyPolicyCheck = newValue!;
+                                  });
+                                },
+                              ),
+                              TermsOfUse(),
+                            ],
+                          ),
+
                           //sign in btn
                           MyButton(
                             btn: "Sign Up",
