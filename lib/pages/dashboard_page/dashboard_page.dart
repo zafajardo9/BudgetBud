@@ -4,6 +4,7 @@ import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -115,119 +116,122 @@ class _DashboardPageState extends State<DashboardPage>
       body: Column(
         children: [
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Hello, ${userName ?? ''}',
-                            style: ThemeText.headerAuth,
+            child: ClipPath(
+              clipper: WaveClipperOne(),
+              child: Container(
+                color: AppColors.mainColorOne,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hello, ${userName ?? ''}',
+                              style: ThemeText.headerAuth,
+                            ),
+                            Text(
+                              'Your Daily Update',
+                              style: ThemeText.paragraph54,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          '₱$balance',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
-                          Text(
-                            'Your Daily Update',
-                            style: ThemeText.paragraph54,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        '\₱$balance',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Your total Income',
-                        style: ThemeText.paragraph54,
-                      ),
-                      Text(
-                        '\₱$totalIncome',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.updateButton,
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Your total Expenses',
-                        style: ThemeText.paragraph54,
-                      ),
-                      Text(
-                        '\₱$totalExpense',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.deleteButton,
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Card(
-                    color: AppColors.mainColorOne,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
+                      ],
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          IconButtonWithText(
-                            onPressed: () {
-                              // Button 1 action
-                            },
-                            icon: Icon(
-                              FontAwesomeIcons.moneyBillTransfer,
-                              size: 17.sp,
-                            ),
-                            label: 'Transactions',
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Your total Income',
+                          style: ThemeText.paragraph54,
+                        ),
+                        Text(
+                          '₱$totalIncome',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.updateButton,
                           ),
-                          IconButtonWithText(
-                            onPressed: () {
-                              // Button 1 action
-                            },
-                            icon: Icon(
-                              FontAwesomeIcons.robot,
-                              size: 17.sp,
-                            ),
-                            label: 'Suggestions',
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Your total Expenses',
+                          style: ThemeText.paragraph54,
+                        ),
+                        Text(
+                          '₱$totalExpense',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.deleteButton,
                           ),
-                          IconButtonWithText(
-                            onPressed: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => HeatMapCalendarExample(),
-                              //   ),
-                              // );
-                            },
-                            icon: Icon(
-                              FontAwesomeIcons.newspaper,
-                              size: 17.sp,
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Card(
+                      color: AppColors.mainColorOne,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            IconButtonWithText(
+                              onPressed: () {
+                                // Button 1 action
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.moneyBillTransfer,
+                                size: 17.sp,
+                              ),
+                              label: 'Transactions',
                             ),
-                            label: 'News',
-                          ),
-                        ],
+                            IconButtonWithText(
+                              onPressed: () {
+                                // Button 1 action
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.robot,
+                                size: 17.sp,
+                              ),
+                              label: 'Suggestions',
+                            ),
+                            IconButtonWithText(
+                              onPressed: () {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) => HeatMapCalendarExample(),
+                                //   ),
+                                // );
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.newspaper,
+                                size: 17.sp,
+                              ),
+                              label: 'News',
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
