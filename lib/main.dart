@@ -20,9 +20,9 @@ List<CameraDescription> cameras = [];
 const kIsHoney = bool.fromEnvironment('HONEY');
 
 Future<void> main() async {
-  if (kIsHoney) {
-    HoneyWidgetsBinding.ensureInitialized();
-  }
+  // if (kIsHoney) {
+  //   HoneyWidgetsBinding.ensureInitialized();
+  // }
 
   // Check for internet connectivity before running the app
   WidgetsFlutterBinding.ensureInitialized();

@@ -112,6 +112,36 @@ abstract class ThemeText {
     fontStyle: FontStyle.italic,
     fontSize: 15.sp,
   );
+
+  //DASHBOARDDD=====================================================
+  static TextStyle dashboardDetailsHeader = TextStyle(
+    color: Colors.white,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.bold,
+  );
+
+  static TextStyle dashboardDetailsSubHeader = TextStyle(
+    color: Colors.white60,
+    fontSize: 17.sp,
+  );
+
+  static TextStyle dashboardNumberLarge = TextStyle(
+      color: Colors.black,
+      fontStyle: FontStyle.italic,
+      fontSize: 21.sp,
+      fontWeight: FontWeight.bold);
+
+  static TextStyle dashboardNumberSmall = TextStyle(
+      color: Colors.black,
+      fontStyle: FontStyle.italic,
+      fontSize: 13.sp,
+      fontWeight: FontWeight.bold);
+
+  static TextStyle dashboardNumberMedium = TextStyle(
+      color: Colors.black,
+      fontStyle: FontStyle.italic,
+      fontSize: 15.sp,
+      fontWeight: FontWeight.bold);
 }
 
 //NOT THE BEST WAY TO CODE

@@ -32,9 +32,10 @@ class AppColors {
   //background white
   static final Color backgroundWhite = Color(0xFFf9f9f9);
 //other colors
-  static final Color onBoardingColorButton = Color(0xFF101010);
+  static final Color onBoardingColorButton = Color(0xFF4E3EC8);
   static final Color deleteButton = Color(0xFFBD0000);
   static final Color updateButton = Color(0xFF00BD03);
+  static final Color blackBtn = Color(0xFF101010);
 }
 
 MaterialColor buildMaterialColor(Color color) {
