@@ -1,0 +1,29 @@
+set $email to "zack@gmail.com"
+put "zackery1234" into $password
+
+expect that "Welcome Back" is there
+expect that "Input your email and password" is there
+
+
+tap on "Log In"
+
+expect that "Email address is required" is there
+expect that "Password is required" is there
+
+
+verify that the first word text field is "Email"
+
+
+tap on "Email"
+enter $email
+
+hit the "TextFormField" widget
+enter $password
+
+
+
+tap on "Log In"
+
+
+
+assert that "User Dashboard" is visible

@@ -1,0 +1,19 @@
+# fluttium test my_flow.yaml --watch
+
+
+description: My first Fluttium flow.
+
+- pressOn:
+    text: 'Email'
+
+- writeText: 'zack@gmail.com'
+
+- pressOn:
+    text: 'Password'
+
+- writeText: 'zackery1234'
+
+- pressOn:
+    text: 'Login'
+
+- expectVisible: 'User Dashboard'
