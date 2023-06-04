@@ -152,38 +152,39 @@ class _LoginPageState extends State<LoginPage> {
               //textfield email
 
               Expanded(
-                child: Form(
-                  key: formKey,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadiusDirectional.only(
-                          topStart: Radius.circular(25),
-                          topEnd: Radius.circular(25),
-                        )),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20.0,
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          //text welcome
-                          addVerticalSpace(2),
-                          Text(
-                            'Welcome Back',
-                            style: ThemeText.headerAuth,
-                          ),
-                          Text(
-                            'Input your email and password',
-                            style: ThemeText.subAuth,
-                          ),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadiusDirectional.only(
+                        topStart: Radius.circular(25),
+                        topEnd: Radius.circular(25),
+                      )),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 20.0,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        //text welcome
+                        addVerticalSpace(2),
+                        Text(
+                          'Welcome Back',
+                          style: ThemeText.headerAuth,
+                        ),
+                        Text(
+                          'Input your email and password',
+                          style: ThemeText.subAuth,
+                        ),
 
-                          addVerticalSpace(2),
-                          //FORM AREA =======================
-                          SizedBox(
-                            width: Adaptive.w(90),
+                        addVerticalSpace(2),
+                        //FORM AREA =======================
+                        SizedBox(
+                          width: Adaptive.w(90),
+                          child: Form(
+                            key: formKey,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
                             child: Column(
                               children: [
                                 TextFormField(
@@ -234,105 +235,105 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                           ),
+                        ),
 
-                          addVerticalSpace(1.5),
-                          //forgot password
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return ForgotPasswordPage();
-                              }));
-                            }, //function
-                            child: Text(
-                              'Forgot Password',
-                              style: ThemeText.paragraph54Bold,
-                            ),
+                        addVerticalSpace(1.5),
+                        //forgot password
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ForgotPasswordPage();
+                            }));
+                          }, //function
+                          child: Text(
+                            'Forgot Password',
+                            style: ThemeText.paragraph54Bold,
                           ),
+                        ),
 
-                          //textfield password
+                        //textfield password
 
-                          addVerticalSpace(1.5),
+                        addVerticalSpace(1.5),
 
-                          //sign in btn
-                          MyButton(
-                            btn: "Log In",
-                            onTap: signUserIn,
-                          ),
+                        //sign in btn
+                        MyButton(
+                          btn: "Log In",
+                          onTap: signUserIn,
+                        ),
 
-                          // other ways
-                          addVerticalSpace(2),
+                        // other ways
+                        addVerticalSpace(2),
 
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 25),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Divider(
-                                    thickness: 0.5,
-                                    color: Colors.red.shade300,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    'or Sign in with',
-                                    style: TextStyle(
-                                      fontSize: 15.sp,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Divider(
-                                    thickness: 0.5,
-                                    color: Colors.red.shade300,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: Row(
                             children: [
-                              SquaredTiles(
-                                onTap: () => AuthService().signInWithGoogle(),
-                                imageLocation: 'images/google.png',
-                                btnName: ' Google',
+                              Expanded(
+                                child: Divider(
+                                  thickness: 0.5,
+                                  color: Colors.red.shade300,
+                                ),
                               ),
-                              addHorizontalSpace(2),
-                              SquaredTiles(
-                                onTap: () {},
-                                imageLocation: 'images/apple.png',
-                                btnName: ' Apple',
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'New user? ',
-                                style: ThemeText.paragraph,
-                              ),
-                              GestureDetector(
-                                onTap: widget.onTap,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
-                                  'Register here',
+                                  'or Sign in with',
                                   style: TextStyle(
-                                      fontSize: 15.sp,
-                                      color: Colors.red.shade900,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: 15.sp,
+                                    color: Colors.grey.shade600,
+                                  ),
                                 ),
-                              )
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  thickness: 0.5,
+                                  color: Colors.red.shade300,
+                                ),
+                              ),
                             ],
-                          )
-                        ],
-                      ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SquaredTiles(
+                              onTap: () => AuthService().signInWithGoogle(),
+                              imageLocation: 'images/google.png',
+                              btnName: ' Google',
+                            ),
+                            addHorizontalSpace(2),
+                            SquaredTiles(
+                              onTap: () {},
+                              imageLocation: 'images/apple.png',
+                              btnName: ' Apple',
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'New user? ',
+                              style: ThemeText.paragraph,
+                            ),
+                            GestureDetector(
+                              onTap: widget.onTap,
+                              child: Text(
+                                'Register here',
+                                style: TextStyle(
+                                    fontSize: 15.sp,
+                                    color: Colors.red.shade900,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        )
+                      ],
                     ),
                   ),
                 ),
