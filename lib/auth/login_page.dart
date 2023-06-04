@@ -187,50 +187,58 @@ class _LoginPageState extends State<LoginPage> {
                                 AutovalidateMode.onUserInteraction,
                             child: Column(
                               children: [
-                                TextFormField(
-                                  controller: emailController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  style: ThemeText.textfieldInput,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.email,
-                                        color: AppColors
-                                            .mainColorOne), // kulang sa focus border color
-                                    hintText: 'Email',
-                                    contentPadding: EdgeInsets.zero,
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
+                                Semantics(
+                                  explicitChildNodes: true,
+                                  child: TextFormField(
+                                    controller: emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    style: ThemeText.textfieldInput,
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.email,
+                                          color: AppColors
+                                              .mainColorOne), // kulang sa focus border color
+                                      hintText: 'Email',
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
 
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        borderSide: BorderSide(
-                                            color: AppColors.mainColorOne)),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          borderSide: BorderSide(
+                                              color: AppColors.mainColorOne)),
+                                    ),
+                                    validator: validateEmail,
                                   ),
-                                  validator: validateEmail,
                                 ),
 
                                 addVerticalSpace(1.5),
                                 //textfield password
-                                TextFormField(
-                                  controller: pwdController,
-                                  obscureText: _isObscured,
-                                  style: ThemeText.textfieldInput,
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.lock,
-                                        color: AppColors.mainColorOne),
-                                    hintText: 'Password',
-                                    contentPadding: EdgeInsets.zero,
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(20),
-                                        borderSide: BorderSide(
-                                            color: AppColors.mainColorOne)),
+                                Semantics(
+                                  explicitChildNodes: true,
+                                  child: TextFormField(
+                                    controller: pwdController,
+                                    obscureText: _isObscured,
+                                    style: ThemeText.textfieldInput,
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.lock,
+                                          color: AppColors.mainColorOne),
+                                      hintText: 'Password',
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          borderSide: BorderSide(
+                                              color: AppColors.mainColorOne)),
+                                    ),
+                                    keyboardType: TextInputType.visiblePassword,
+                                    textInputAction: TextInputAction.done,
+                                    validator: validatePassword,
                                   ),
-                                  keyboardType: TextInputType.visiblePassword,
-                                  textInputAction: TextInputAction.done,
-                                  validator: validatePassword,
                                 ),
                               ],
                             ),

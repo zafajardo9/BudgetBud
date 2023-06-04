@@ -73,6 +73,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
 
   flutter_lints: ^2.0.0
   flutter_native_splash: ^2.2.19
@@ -82,7 +84,7 @@ dev_dependencies:
 ############################FOR SPLASH SCREEN######################
 flutter_native_splash:
   image: assets/bbLogo.png
-  color: "#0D1853"
+  color: "#4E3EC8"
 ###CLI: flutter pub run flutter_native_splash:create
 ###############################END#################################
 
