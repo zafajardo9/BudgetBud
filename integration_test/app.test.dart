@@ -4,16 +4,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'package:budget_bud/main.dart' as app;
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   group('Login Test', () {
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
     testWidgets("Introductory Screen", (tester) async {
-      await tester.pumpWidget(MyApp()); // Run the app
+      // Create a new instance of SharedPreferences
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool("isOnboarded", true); // Set isOnboarded to true
+
+      await tester
+          .pumpWidget(MyApp(prefsFuture: Future.value(prefs))); // Run the app
 
       // Wait for the onboarding screen to load
-      await tester.pumpAndSettle();
       await tester.pumpAndSettle();
 
       final btn = find.byType(OutlinedButton);

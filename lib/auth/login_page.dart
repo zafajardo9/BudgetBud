@@ -190,6 +190,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Semantics(
                                   explicitChildNodes: true,
                                   child: TextFormField(
+                                    key: Key('emailTextField'),
                                     controller: emailController,
                                     keyboardType: TextInputType.emailAddress,
                                     style: ThemeText.textfieldInput,
@@ -218,6 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                                 Semantics(
                                   explicitChildNodes: true,
                                   child: TextFormField(
+                                    key: Key('pwdTextField'),
                                     controller: pwdController,
                                     obscureText: _isObscured,
                                     style: ThemeText.textfieldInput,

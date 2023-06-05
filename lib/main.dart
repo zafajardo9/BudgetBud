@@ -64,31 +64,47 @@ Future<void> main() async {
     debugPrint('CameraError: ${e.description}');
   }
 
-  runApp(const MyApp());
+  final prefsFuture = SharedPreferences.getInstance();
+
+  runApp(MyApp(prefsFuture: prefsFuture));
 }
 
 //For Dark mode and Light Mode
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  // This widget is the root of your application.
+  final Future<SharedPreferences> prefsFuture;
+
+  const MyApp({required this.prefsFuture, Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    bool isOnboarded = prefs.getBool("isOnboarded") ?? false;
-    return ResponsiveSizer(
-      builder: (context, orientation, screenType) {
-        return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'BudgetBud',
-            theme: ThemeData(
-              scaffoldBackgroundColor: AppColors.mainColorThree,
-              primaryColor: AppColors.mainColorOne,
-              brightness: Brightness
-                  .light, //part for switching dark to light mode theme
-              primarySwatch: buildMaterialColor(Color(0xFF4E3EC8)),
-              fontFamily: GoogleFonts.montserrat().fontFamily,
-            ),
-            home: isOnboarded ? AuthPage() : OnboardingScreen());
+    return FutureBuilder<SharedPreferences>(
+      future: prefsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          final SharedPreferences prefs = snapshot.data!;
+          bool isOnboarded = prefs.getBool("isOnboarded") ?? false;
+
+          return ResponsiveSizer(
+            builder: (context, orientation, screenType) {
+              return MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: 'BudgetBud',
+                  theme: ThemeData(
+                    scaffoldBackgroundColor: AppColors.mainColorThree,
+                    primaryColor: AppColors.mainColorOne,
+                    brightness: Brightness
+                        .light, //part for switching dark to light mode theme
+                    primarySwatch: buildMaterialColor(Color(0xFF4E3EC8)),
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
+                  ),
+                  home: isOnboarded ? AuthPage() : OnboardingScreen());
+            },
+          );
+        }
+
+        // Show a loading indicator while waiting for SharedPreferences
+        return CircularProgressIndicator();
       },
     );
   }
