@@ -129,11 +129,7 @@ class _LoginPageState extends State<LoginPage> {
               end: Alignment.bottomCenter,
               colors: [
                 AppColors.mainColorOne,
-                AppColors.mainColorThree,
-              ],
-              stops: [
-                0.1,
-                1,
+                AppColors.mainColorOneSecondary,
               ],
             ),
           ),

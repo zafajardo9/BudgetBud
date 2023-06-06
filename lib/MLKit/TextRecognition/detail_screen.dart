@@ -18,8 +18,10 @@ class _DetailScreenState extends State<DetailScreen> {
   late final String _imagePath;
   late final TextRecognizer _textRecognizer;
   Size? _imageSize;
-  List<String> _listEmailStrings = [];
+  List<String> _listDateStrings = [];
   List<String> _listPriceStrings = [];
+  List<String> _listNameStrings = [];
+
   List<String> _listAllStrings = [];
   String _extractedTotalText = ""; // New variable
   List<TextElement> _elements = [];
@@ -44,55 +46,17 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
-  // To detect the email addresses present in an image
-//   void _recognizeEmails() async {
-//     _getImageSize(File(_imagePath));
-//
-//     // Creating an InputImage object using the image path
-//     final inputImage = InputImage.fromFilePath(_imagePath);
-//     // Retrieving the RecognisedText from the InputImage
-//     final RecognizedText recognizedText =
-//         await _textRecognizer.processImage(inputImage);
-//
-//     // Pattern of RegExp for matching text
-//     String emailPattern =
-//         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$";
-//     String pricePattern = r"^[1-9]\d{0,7}(?:\.\d{1,4})?|\.\d{1,4}$";
-//     RegExp regEx = RegExp(emailPattern);
-//     RegExp regExPrice = RegExp(pricePattern);
-//
-//     List<String> emailStrings = [];
-//     List<String> priceStrings = [];
-//     List<String> allStrings = [];
-//     String totalText = "";
-//
-// // Finding and storing the email addresses, prices, and Total text
-//     bool foundTotal = false;
-//     for (TextBlock block in recognizedText.blocks) {
-//       for (TextLine line in block.lines) {
-//         for (TextElement element in line.elements) {
-//           if (regEx.hasMatch(element.text)) {
-//             emailStrings.add(element.text);
-//           }
-//           if (regExPrice.hasMatch(element.text)) {
-//             priceStrings.add(element.text);
-//           }
-//           if (foundTotal) {
-//             totalText += element.text + " ";
-//           }
-//           if (element.text.toLowerCase() == "total") {
-//             foundTotal = true;
-//           }
-//         }
-//       }
-//     }
-//
-//     setState(() {
-//       _listEmailStrings = emailStrings;
-//       // Set the extracted text after "Total" to a variable for display or further processing
-//       _extractedTotalText = totalText.trim();
-//     });
-//   }
+  double _extractPriceValue(String priceString) {
+    final pricePattern = r'(?:₱|Php|PHP|P|\$)(\d+(\.\d{2})?)';
+    final priceMatch = RegExp(pricePattern).firstMatch(priceString);
+    if (priceMatch != null) {
+      final value = double.tryParse(priceMatch.group(1) ?? '');
+      if (value != null) {
+        return value;
+      }
+    }
+    return 0;
+  }
 
   void _recognizeText() async {
     _getImageSize(File(_imagePath));
@@ -103,11 +67,18 @@ class _DetailScreenState extends State<DetailScreen> {
     final RecognizedText recognizedText =
         await _textRecognizer.processImage(inputImage);
 
-    List<String> emailStrings = [];
+    List<String> dateStrings = [];
     List<String> priceStrings = [];
+    List<String> nameStrings = [];
     List<String> allStrings = [];
     String totalText = "";
     bool foundTotal = false;
+
+    // Regular expression pattern to match price texts (e.g., $10.99)
+    final priceRegex = r'(?:₱|Php|PHP|P|\$)\d+(\.\d{2})?';
+
+    final nameRegex = r'([\w\s]+)';
+    final dateRegex = r'(\d{1,2}/\d{1,2}/\d{2,4})';
 
     // Finding and storing all text and the text after "Total"
     for (TextBlock block in recognizedText.blocks) {
@@ -121,13 +92,40 @@ class _DetailScreenState extends State<DetailScreen> {
           if (element.text.toLowerCase() == "total") {
             foundTotal = true;
           }
+
+          // Checking if the element text matches the price regex pattern
+          if (RegExp(priceRegex).hasMatch(element.text)) {
+            final String previousText = line.elements
+                .takeWhile((e) => e.text != element.text)
+                .map((e) => e.text)
+                .join(" ");
+
+            if (previousText.toLowerCase().contains("total amount") ||
+                previousText.toLowerCase().contains("total")) {
+              priceStrings.add(element.text);
+            }
+          }
+
+          if (RegExp(priceRegex).hasMatch(element.text)) {
+            priceStrings.add(element.text);
+          }
+
+          if (RegExp(nameRegex).hasMatch(element.text)) {
+            nameStrings.add(element.text);
+          }
+
+          if (RegExp(dateRegex).hasMatch(element.text)) {
+            dateStrings.add(element.text);
+          }
         }
       }
     }
 
     setState(() {
-      _listEmailStrings = emailStrings;
+      _listNameStrings = nameStrings;
+      _listDateStrings = dateStrings;
       _listPriceStrings = priceStrings;
+
       _listAllStrings = allStrings;
       _extractedTotalText = totalText.trim();
     });
@@ -208,12 +206,71 @@ class _DetailScreenState extends State<DetailScreen> {
                                   height: Adaptive.h(20),
                                   child: SingleChildScrollView(
                                     child: _listAllStrings != null
-                                        ? ListView.builder(
-                                            shrinkWrap: true,
-                                            physics: BouncingScrollPhysics(),
-                                            itemCount: _listAllStrings!.length,
-                                            itemBuilder: (context, index) =>
-                                                Text(_listAllStrings![index]),
+                                        ? Column(
+                                            children: [
+                                              Text(
+                                                "Expense Name",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              ListView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    BouncingScrollPhysics(),
+                                                itemCount: _listPriceStrings!
+                                                            .length >
+                                                        2
+                                                    ? 2
+                                                    : _listPriceStrings!.length,
+                                                itemBuilder: (context, index) =>
+                                                    Text(_listPriceStrings![
+                                                        index]),
+                                              ),
+                                              SizedBox(height: 10),
+                                              Text(
+                                                "PRICE",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              ListView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    BouncingScrollPhysics(),
+                                                itemCount:
+                                                    _listPriceStrings!.length,
+                                                itemBuilder: (context, index) {
+                                                  final priceString =
+                                                      _listPriceStrings![index];
+                                                  final priceValue =
+                                                      _extractPriceValue(
+                                                          priceString);
+                                                  return Text(
+                                                      priceValue.toString());
+                                                },
+                                              ),
+                                              SizedBox(height: 10),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Text(
+                                                "DATE",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              ListView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                    BouncingScrollPhysics(),
+                                                itemCount:
+                                                    _listDateStrings!.length,
+                                                itemBuilder: (context, index) =>
+                                                    Text(_listDateStrings![
+                                                        index]),
+                                              ),
+                                            ],
                                           )
                                         : Container(),
                                   ),

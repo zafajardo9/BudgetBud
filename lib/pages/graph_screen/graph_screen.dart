@@ -9,7 +9,6 @@ enum GraphType {
   BarGraph,
   PieChart,
   LineChart,
-  //LineChart,
 }
 
 class GraphScreen extends StatefulWidget {
@@ -22,9 +21,7 @@ class _GraphScreenState extends State<GraphScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: Adaptive.w(100),
-      height: Adaptive.h(45),
+    return Expanded(
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -58,15 +55,28 @@ class GraphWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget graphWidget;
+    double aspectRatio;
+
     switch (graphType) {
       case GraphType.BarGraph:
-        return BarGraph();
+        graphWidget = BarGraph();
+        aspectRatio = 1.4; // Adjust the aspect ratio for the BarGraph
+        break;
       case GraphType.PieChart:
-        return PieChart();
-
+        graphWidget = PieChart();
+        aspectRatio = 2.5; // Adjust the aspect ratio for the PieChart
+        break;
       case GraphType.LineChart:
-        return LineChart();
+        graphWidget = LineChart();
+        aspectRatio = 1.5; // Adjust the aspect ratio for the LineChart
+        break;
     }
+
+    return AspectRatio(
+      aspectRatio: aspectRatio,
+      child: graphWidget,
+    );
   }
 }
 
@@ -89,17 +99,7 @@ class PieChart extends StatelessWidget {
 class LineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Build the Pie Chart widget
+    // Build the Line Chart widget
     return LineGraph();
   }
 }
-
-// class LineChart extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     // Build the Line Chart widget
-//     return Container(
-//       child: Text('Line Chart'),
-//     );
-//   }
-// }

@@ -37,6 +37,12 @@ class BarGraphWidget extends StatelessWidget {
           final String transactionType = document['TransactionType'];
 
           final int dayOfWeek = transactionDate.weekday;
+          if (documents.isEmpty) {
+            return Text('No data available.');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
 
           if (transactionType == 'Income') {
             if (totalIncomePerDay.containsKey(dayOfWeek)) {

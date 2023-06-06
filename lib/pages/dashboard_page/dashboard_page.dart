@@ -14,6 +14,8 @@ import '../../components/btn_icons_text.dart';
 import '../../data/expense_data.dart';
 import '../../data/transaction_data_summary.dart';
 import '../../misc/custom_clipper/custom_clipper.dart';
+import '../../misc/custom_clipper/custom_wave_left.dart';
+import '../../misc/custom_clipper/custom_wave_left_two.dart';
 import 'dashboard_tabs/dashboard_expense_tab.dart';
 import 'dashboard_tabs/dashboard_income_tab.dart';
 
@@ -105,141 +107,144 @@ class _DashboardPageState extends State<DashboardPage>
       ),
       body: Column(
         children: [
-          Container(
-            width: Adaptive.w(100),
-            height: Adaptive.h(10),
-            color: AppColors.mainColorOne,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    'Hello, ${userName ?? ''}',
-                    style: ThemeText.dashboardDetailsHeader,
-                  ),
-                  Text(
-                    'Your Daily Update',
-                    style: ThemeText.dashboardDetailsSubHeader,
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            width: Adaptive.w(100),
-            height: Adaptive.h(25),
+          Expanded(
             child: Stack(
               children: [
                 ClipPath(
-                  clipper: WaveClipperTwo(),
+                  clipper: WaveLeft() /*WaveClipperTwo()*/,
                   child: Container(
                     color: AppColors.mainColorOne,
                   ),
                 ),
                 Positioned(
                   top: 0,
-                  right: 0,
-                  child: Card(
-                    elevation: 0,
-                    color: Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Row(
+                  left: 0,
+                  bottom: 0,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: Adaptive.h(10),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              IconButtonCircle(
-                                onPressed: () {},
-                                icon: Icon(Icons.settings),
+                              Text(
+                                'Hello, ${userName ?? ''}',
+                                style: ThemeText.dashboardDetailsHeader,
                               ),
-                              IconButtonCircle(
-                                onPressed: () {},
-                                icon: Icon(Icons.newspaper),
-                              ),
+                              Text(
+                                'Your Daily Update',
+                                style: ThemeText.dashboardDetailsSubHeader,
+                              )
                             ],
                           ),
-                          addVerticalSpace(1),
-                          Row(
-                            children: [
-                              IconButtonCircle(
-                                onPressed: () {},
-                                icon: Icon(Icons.wallet),
-                              ),
-                              IconButtonCircle(
-                                onPressed: () {},
-                                icon: Icon(Icons.currency_exchange),
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.mainColorTwo,
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 16),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Balance',
+                                        style: ThemeText.paragraph54,
+                                      ),
+                                      Text(
+                                        '₱$balance',
+                                        style: ThemeText.dashboardNumberLarge,
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Transactions',
+                                        style: ThemeText.paragraph54,
+                                      ),
+                                      Text(
+                                        '₱$totalIncome',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.updateButton,
+                                          fontSize: 15.sp,
+                                        ),
+                                      ),
+                                      Text(
+                                        '₱$totalExpense',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.deleteButton,
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Positioned(
                   top: 0,
-                  left: 0,
+                  right: 0,
                   bottom: 0,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: Adaptive.w(45),
-                      decoration: BoxDecoration(
-                        color: AppColors.mainColorTwo,
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Balance',
-                                  style: ThemeText.paragraph54,
-                                ),
-                                Text(
-                                  '₱$balance',
-                                  style: ThemeText.dashboardNumberLarge,
-                                ),
-                              ],
+                            IconButtonCircle(
+                              onPressed: () {},
+                              icon: Icon(Icons.settings),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Transactions',
-                                  style: ThemeText.paragraph54,
-                                ),
-                                Text(
-                                  '₱$totalIncome',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.updateButton,
-                                    fontSize: 15.sp,
-                                  ),
-                                ),
-                                Text(
-                                  '₱$totalExpense',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.deleteButton,
-                                  ),
-                                )
-                              ],
-                            )
+                            IconButtonCircle(
+                              onPressed: () {},
+                              icon: Icon(Icons.newspaper),
+                            ),
                           ],
                         ),
-                      ),
+                        addVerticalSpace(1),
+                        Row(
+                          children: [
+                            IconButtonCircle(
+                              onPressed: () {},
+                              icon: Icon(Icons.wallet),
+                            ),
+                            IconButtonCircle(
+                              onPressed: () {},
+                              icon: Icon(Icons.currency_exchange),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),

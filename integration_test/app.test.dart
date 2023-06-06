@@ -1,3 +1,5 @@
+import 'package:budget_bud/auth/auth_page.dart';
+import 'package:budget_bud/auth/login_page.dart';
 import 'package:budget_bud/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -31,6 +33,9 @@ void main() {
     testWidgets("Button Test", (tester) async {
       app.main();
       await tester.pumpAndSettle();
+      await tester.pumpWidget(LoginPage(
+        onTap: () {},
+      ));
 
       final button = find.byWidgetPredicate(
         (widget) => widget is GestureDetector && widget.child is Text,

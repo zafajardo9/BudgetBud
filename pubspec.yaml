@@ -65,6 +65,9 @@ dependencies:
 #testing
   honey: any
 
+  #updater:
+  upgrader: ^7.0.2
+
 
 
 
@@ -78,6 +81,7 @@ dev_dependencies:
 
   flutter_lints: ^2.0.0
   flutter_native_splash: ^2.2.19
+
 
 
 

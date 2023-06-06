@@ -43,13 +43,8 @@ class OnBoardingPagesWidget extends StatelessWidget {
               ),
             ],
           ),
-          Text(
-            model.counterText,
-            style: TextStyle(
-                fontSize: 14.sp, color: model.fg, fontWeight: FontWeight.bold),
-          ),
           SizedBox(
-            height: 50.0,
+            height: Adaptive.h(20),
           ),
         ],
       ),

@@ -1,0 +1,28 @@
+{
+  "scenario": {
+    "roboDirectives": [
+      {
+        "actionType": "VIEW",
+        "text": "Press the button"
+      },
+      {
+        "actionType": "WAIT",
+        "duration": "2s"
+      },
+      {
+        "actionType": "SET_TEXT",
+        "text": "zack@gmail.com",
+        "resourceId": "com.example.app:id/emailTextField"
+      },
+      {
+        "actionType": "SET_TEXT",
+        "text": "zackery1234",
+        "resourceId": "com.example.app:id/passwordTextField"
+      },
+      {
+        "actionType": "VIEW",
+        "text": "Log In"
+      }
+    ]
+  }
+}

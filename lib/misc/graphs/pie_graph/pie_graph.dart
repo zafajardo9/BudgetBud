@@ -54,23 +54,25 @@ class PieGraphWidget extends StatelessWidget {
             title: '$category\n₱${amount.toStringAsFixed(2)}',
             color:
                 getRandomColor(), // Generate a random color for each category
-            radius: 100,
+            radius: 40,
             titleStyle: TextStyle(
                 fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
           );
         }).toList();
 
-        return AspectRatio(
-          aspectRatio: 1,
-          child: PieChart(
-            PieChartData(
-              sections: pieChartSections,
-              centerSpaceRadius: 50,
-              startDegreeOffset: -90,
-              borderData: FlBorderData(show: false),
-              sectionsSpace: 0,
-              //pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {}),
-              // You can customize other properties of the pie chart here
+        return Expanded(
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: PieChart(
+              PieChartData(
+                sections: pieChartSections,
+                centerSpaceRadius: 50,
+                startDegreeOffset: -90,
+                borderData: FlBorderData(show: false),
+                sectionsSpace: 0,
+                //pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {}),
+                // You can customize other properties of the pie chart here
+              ),
             ),
           ),
         );

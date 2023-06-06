@@ -7,6 +7,7 @@ import 'package:honey/honey.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:upgrader/upgrader.dart';
 
 // ignore: unused_import
 import 'firebase_options.dart';
@@ -78,34 +79,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SharedPreferences>(
-      future: prefsFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final SharedPreferences prefs = snapshot.data!;
-          bool isOnboarded = prefs.getBool("isOnboarded") ?? false;
+    return UpgradeAlert(
+      child: FutureBuilder<SharedPreferences>(
+        future: prefsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            final SharedPreferences prefs = snapshot.data!;
+            bool isOnboarded = prefs.getBool("isOnboarded") ?? false;
 
-          return ResponsiveSizer(
-            builder: (context, orientation, screenType) {
-              return MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  title: 'BudgetBud',
-                  theme: ThemeData(
-                    scaffoldBackgroundColor: AppColors.mainColorThree,
-                    primaryColor: AppColors.mainColorOne,
-                    brightness: Brightness
-                        .light, //part for switching dark to light mode theme
-                    primarySwatch: buildMaterialColor(Color(0xFF4E3EC8)),
-                    fontFamily: GoogleFonts.montserrat().fontFamily,
-                  ),
-                  home: isOnboarded ? AuthPage() : OnboardingScreen());
-            },
-          );
-        }
+            return ResponsiveSizer(
+              builder: (context, orientation, screenType) {
+                return MaterialApp(
+                    debugShowCheckedModeBanner: false,
+                    title: 'BudgetBud',
+                    theme: ThemeData(
+                      scaffoldBackgroundColor: AppColors.mainColorThree,
+                      primaryColor: AppColors.mainColorOne,
+                      brightness: Brightness
+                          .light, //part for switching dark to light mode theme
+                      primarySwatch: buildMaterialColor(Color(0xFF4E3EC8)),
+                      fontFamily: GoogleFonts.montserrat().fontFamily,
+                    ),
+                    home: isOnboarded ? AuthPage() : OnboardingScreen());
+              },
+            );
+          }
 
-        // Show a loading indicator while waiting for SharedPreferences
-        return CircularProgressIndicator();
-      },
+          // Show a loading indicator while waiting for SharedPreferences
+          return CircularProgressIndicator();
+        },
+      ),
     );
   }
 }
