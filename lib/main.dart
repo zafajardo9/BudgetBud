@@ -8,6 +8,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 // ignore: unused_import
 import 'firebase_options.dart';
@@ -24,6 +25,21 @@ Future<void> main() async {
   // if (kIsHoney) {
   //   HoneyWidgetsBinding.ensureInitialized();
   // }
+
+  //For notification
+  AwesomeNotifications().initialize(
+    'resource://drawable-hdpi/splash.png',
+    [
+      NotificationChannel(
+        channelKey: 'basic_channel',
+        channelName: 'Basic Notifications',
+        defaultColor: AppColors.mainColorOne,
+        importance: NotificationImportance.High,
+        channelShowBadge: true,
+        channelDescription: 'Try Notification',
+      )
+    ],
+  );
 
   // Check for internet connectivity before running the app
   WidgetsFlutterBinding.ensureInitialized();

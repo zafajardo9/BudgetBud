@@ -1,15 +1,16 @@
 import 'package:budget_bud/misc/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
 class IconButtonCircle extends StatelessWidget {
   final VoidCallback? onPressed;
+  final ElevatedButton? button;
   final Icon icon;
 
   const IconButtonCircle({
     Key? key,
     this.onPressed,
     required this.icon,
+    this.button,
   }) : super(key: key);
 
   @override
@@ -26,8 +27,7 @@ class IconButtonCircle extends StatelessWidget {
       child: Icon(
         icon.icon,
         size: icon.size,
-        color: Colors.white
-            .withOpacity(0.5), // Set the desired opacity color for the icon
+        color: icon.color, // Set the desired opacity color for the icon
       ),
     );
   }

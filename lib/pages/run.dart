@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budget_bud/pages/dashboard_page/dashboard_page.dart';
 import 'package:budget_bud/pages/profile_page/profile_page.dart';
 import 'package:budget_bud/pages/user_budget_goals/user_budgets.dart';
@@ -37,6 +38,47 @@ class _RunState extends State<Run> {
     UserBudgetGoals(),
     ProfilePage(),
   ];
+
+  // @override
+  // void initState() {
+  //
+  //   super.initState();
+  //   AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
+  //         if (!isAllowed)
+  //           {
+  //             showDialog(
+  //               context: context,
+  //               builder: (context) => AlertDialog(
+  //                 title: Text('Allow Notification'),
+  //                 content: Text(
+  //                     'Our App would like to send you notifications so that we can help.'),
+  //                 actions: [
+  //                   TextButton(
+  //                     onPressed: () {
+  //                       Navigator.pop(context);
+  //                     },
+  //                     child: Text(
+  //                       'Close',
+  //                       style: TextStyle(color: AppColors.deleteButton),
+  //                     ),
+  //                   ),
+  //                   TextButton(
+  //                     onPressed: () => AwesomeNotifications()
+  //                         .requestPermissionToSendNotifications()
+  //                         .then((_) => Navigator.pop(context)),
+  //                     child: Text(
+  //                       'Allow',
+  //                       style: TextStyle(
+  //                           color: AppColors.updateButton,
+  //                           fontWeight: FontWeight.bold),
+  //                     ),
+  //                   )
+  //                 ],
+  //               ),
+  //             )
+  //           }
+  //       });
+  // }
 
   ShapeBorder? bottomBarShape = const RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(20)),

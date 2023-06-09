@@ -1,6 +1,9 @@
+import 'package:budget_bud/misc/colors.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../components/btn_icon_circle.dart';
 import '../../main.dart';
 import 'detail_screen.dart';
 
@@ -75,41 +78,72 @@ class _CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.mainColorOne,
       appBar: AppBar(
-        title: Text('Image Scanner v 1'),
+        title: Text('Receipt Scanner v 1'),
+        elevation: 0,
       ),
       body: _controller.value.isInitialized
-          ? Stack(
+          ? Column(
               children: <Widget>[
-                CameraPreview(_controller),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
+                Expanded(
+                  flex: 8,
+                  child: FractionallySizedBox(
+                    widthFactor: 0.8,
+                    child: CameraPreview(_controller),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
                   child: Container(
+                    color: AppColors.mainColorOne,
                     alignment: Alignment.bottomCenter,
-                    child: ElevatedButton.icon(
-                      icon: Icon(Icons.camera),
-                      label: Text("Click"),
-                      onPressed: () async {
-                        // If the returned path is not null navigate
-                        // to the DetailScreen
-                        await _takePicture().then((String? path) {
-                          if (path != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailScreen(
-                                  imagePath: path,
-                                ),
-                              ),
-                            );
-                          } else {
-                            print('Image path not found!');
-                          }
-                        });
-                      },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            // If the returned path is not null, navigate to the DetailScreen
+                            await _takePicture().then((String? path) {
+                              if (path != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailScreen(
+                                      imagePath: path,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                print('Image path not found!');
+                              }
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: CircleBorder(),
+                            padding: EdgeInsets.all(16),
+                            primary: AppColors
+                                .mainColorFour, // Set the desired opacity background color
+                            elevation:
+                                0, // Remove the shadow by setting the elevation to 0
+                          ),
+                          child: Icon(
+                            Icons.camera,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          'Tip: For long receipts, just snap the total amount section of the bill',
+                          style: TextStyle(
+                            color: AppColors.backgroundWhite,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
                   ),
-                )
+                ),
               ],
             )
           : Container(

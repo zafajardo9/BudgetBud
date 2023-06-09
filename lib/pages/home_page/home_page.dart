@@ -1,11 +1,11 @@
-import 'package:budget_bud/dataModels/transaction_model.dart';
-
 import 'package:budget_bud/misc/colors.dart';
+import 'package:budget_bud/misc/txtStyles.dart';
+import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../misc/graphs/pie_graph/pie_graph.dart';
 import '../graph_screen/graph_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -40,157 +40,86 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(20),
-            child: Container(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
               padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: GraphScreen(),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadiusDirectional.only(
-                  topStart: Radius.circular(25),
-                  topEnd: Radius.circular(25),
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                child: GraphScreen(),
               ),
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      'Transactions',
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.bold,
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Your Top Expenses',
+                      style: ThemeText.transactionAmount,
+                      //style
+                    ),
+                    Text(
+                      'Chart showing top expenses by category',
+                      style: ThemeText.paragraph54,
+                    ),
+                    SizedBox(
+                      width: Adaptive.w(100),
+                      height: Adaptive.h(40),
+                      child: PieGraphWidget(
+                        transactionType: TransactionType.expense,
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: _reference
-                          .where('UserEmail', isEqualTo: user.email)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Center(
-                            child: Text('Something went wrong'),
-                          );
-                        }
-                        if (snapshot.hasData) {
-                          QuerySnapshot querySnapshot = snapshot.data!;
-                          List<QueryDocumentSnapshot> documents =
-                              querySnapshot.docs;
-
-                          List<TransactionData> transactions = documents
-                              .map(
-                                (e) => TransactionData(
-                                  userEmail: e['UserEmail'],
-                                  transactionName: e['TransactionName'],
-                                  transactionType: e["TransactionType"],
-                                  description: e["TransactionDescription"],
-                                  amount: e["TransactionAmount"],
-                                  category: e["TransactionCategory"],
-                                  transactionDate:
-                                      DateTime.parse(e["TransactionDate"])
-                                          .toLocal(),
-                                  documentId: '',
-                                ),
-                              )
-                              .toList();
-
-                          return _getBody(transactions);
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Your Top Income',
+                      style: ThemeText.transactionAmount,
+                      //style
+                    ),
+                    Text(
+                      'Chart showing top income by category',
+                      style: ThemeText.paragraph54,
+                    ),
+                    SizedBox(
+                      width: Adaptive.w(100),
+                      height: Adaptive.h(40),
+                      child: PieGraphWidget(
+                        transactionType: TransactionType.income,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            addVerticalSpace(20),
+          ],
+        ),
       ),
     );
   }
-}
-
-Widget _getBody(List<TransactionData> transactions) {
-  // Sort transactions by date in descending order
-  transactions.sort((a, b) => b.transactionDate.compareTo(a.transactionDate));
-
-  return transactions.isEmpty
-      ? Center(
-          child: Text('No Transactions Yet'),
-        )
-      : ListView.builder(
-          shrinkWrap: true,
-          itemCount: transactions.length,
-          itemBuilder: (context, index) => Container(
-            child: transactions[index].transactionType == "Income"
-                ? ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                    title: Text(
-                      transactions[index].transactionName,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    leading: RotatedBox(
-                      quarterTurns: 3,
-                      child: SvgPicture.asset(
-                        'assets/pointer/dark.svg',
-                        width: Adaptive.w(5),
-                        height: Adaptive.h(5),
-                        semanticsLabel: 'Income',
-                      ),
-                    ),
-                    trailing: Text(
-                      '\₱${transactions[index].amount.toString()}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
-                    ),
-                  )
-                : ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                    title: Text(
-                      transactions[index].transactionName,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    leading: SvgPicture.asset(
-                      'assets/pointer/dark.svg',
-                      width: Adaptive.w(5),
-                      height: Adaptive.h(5),
-                      semanticsLabel: 'Expense',
-                    ),
-                    trailing: Text(
-                      '\₱${transactions[index].amount.toString()}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-          ),
-        );
 }

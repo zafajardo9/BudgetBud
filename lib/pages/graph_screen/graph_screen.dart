@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../misc/colors.dart';
 import '../../misc/graphs/bar_graph/bar_graph.dart';
 import '../../misc/graphs/line_graph/line_graph.dart';
 import '../../misc/graphs/pie_graph/pie_graph.dart';
@@ -21,28 +22,46 @@ class _GraphScreenState extends State<GraphScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            DropdownButton<GraphType>(
-              value: selectedGraph,
-              onChanged: (GraphType? newValue) {
-                setState(() {
-                  selectedGraph = newValue!;
-                });
-              },
-              items: GraphType.values.map((GraphType graphType) {
-                return DropdownMenuItem<GraphType>(
-                  value: graphType,
-                  child: Text(graphType.toString().split('.').last),
-                );
-              }).toList(),
+    return Container(
+      width: Adaptive.w(100),
+      height: Adaptive.h(55),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.mainColorOne, // Custom color for the border
+                  width: 2.0, // Custom border thickness
+                ),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: DropdownButton<GraphType>(
+                value: selectedGraph,
+                onChanged: (GraphType? newValue) {
+                  setState(() {
+                    selectedGraph = newValue!;
+                  });
+                },
+                underline: SizedBox(),
+                items: GraphType.values.map((GraphType graphType) {
+                  return DropdownMenuItem<GraphType>(
+                    value: graphType,
+                    child: Text(graphType.toString().split('.').last),
+                  );
+                }).toList(),
+              ),
             ),
-            GraphWidget(graphType: selectedGraph),
-          ],
-        ),
+          ),
+          Expanded(
+            // Place Expanded directly inside Column
+            flex: 1,
+            child: GraphWidget(graphType: selectedGraph),
+          ),
+        ],
       ),
     );
   }
@@ -61,7 +80,7 @@ class GraphWidget extends StatelessWidget {
     switch (graphType) {
       case GraphType.BarGraph:
         graphWidget = BarGraph();
-        aspectRatio = 1.4; // Adjust the aspect ratio for the BarGraph
+        aspectRatio = 2.5; // Adjust the aspect ratio for the BarGraph
         break;
       case GraphType.PieChart:
         graphWidget = PieChart();
@@ -92,7 +111,9 @@ class PieChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Build the Pie Chart widget
-    return PieGraphWidget();
+    return PieGraphWidget(
+      transactionType: TransactionType.all,
+    );
   }
 }
 

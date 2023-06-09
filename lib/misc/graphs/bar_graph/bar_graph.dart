@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../colors.dart';
 
@@ -20,7 +21,11 @@ class BarGraphWidget extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Padding(
+            padding: EdgeInsets.all(100),
+            child: LoadingAnimationWidget.fourRotatingDots(
+                color: AppColors.mainColorOne, size: 50),
+          );
         }
 
         final List<DocumentSnapshot> documents = snapshot.data!.docs;
@@ -41,7 +46,11 @@ class BarGraphWidget extends StatelessWidget {
             return Text('No data available.');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Padding(
+              padding: EdgeInsets.all(100),
+              child: LoadingAnimationWidget.fourRotatingDots(
+                  color: AppColors.mainColorOne, size: 50),
+            );
           }
 
           if (transactionType == 'Income') {

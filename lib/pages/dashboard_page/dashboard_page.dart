@@ -1,12 +1,18 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budget_bud/data/income_data.dart';
 import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
+import 'package:budget_bud/pages/dashboard_page/parts/news_dashboard/dashboard_news.dart';
+import 'package:budget_bud/pages/dashboard_page/parts/transaction_dashboard/dashboard_transactions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:loop_page_view/loop_page_view.dart';
+import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../components/btn_icon_circle.dart';
@@ -16,12 +22,18 @@ import '../../data/transaction_data_summary.dart';
 import '../../misc/custom_clipper/custom_clipper.dart';
 import '../../misc/custom_clipper/custom_wave_left.dart';
 import '../../misc/custom_clipper/custom_wave_left_two.dart';
+import 'component/carousel_display.dart';
 import 'dashboard_tabs/dashboard_expense_tab.dart';
 import 'dashboard_tabs/dashboard_income_tab.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
   _DashboardPageState createState() => _DashboardPageState();
+}
+
+enum TransactionMode {
+  monthly,
+  overall,
 }
 
 class _DashboardPageState extends State<DashboardPage>
@@ -48,6 +60,43 @@ class _DashboardPageState extends State<DashboardPage>
     super.initState();
     getUserName();
     fetchBalance();
+    //FOR NOTIFICATIONS++++++++++++++++++++++++
+
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
+          if (!isAllowed)
+            {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Allow Notification'),
+                  content: Text(
+                      'Our App would like to send you notifications so that we can help.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Close',
+                        style: TextStyle(color: AppColors.deleteButton),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => AwesomeNotifications()
+                          .requestPermissionToSendNotifications()
+                          .then((_) => Navigator.pop(context)),
+                      child: Text(
+                        'Allow',
+                        style: TextStyle(
+                            color: AppColors.updateButton,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
+                ),
+              )
+            }
+        });
   }
 
   String? userName;
@@ -92,6 +141,10 @@ class _DashboardPageState extends State<DashboardPage>
       totalExpense = summary.totalExpense;
     });
   }
+
+  final PageController _pageController = PageController();
+  final _currentPageNotifier = ValueNotifier<int>(0);
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +279,14 @@ class _DashboardPageState extends State<DashboardPage>
                               icon: Icon(Icons.settings),
                             ),
                             IconButtonCircle(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DashBoardNews()),
+                                );
+                              },
                               icon: Icon(Icons.newspaper),
                             ),
                           ],
@@ -235,8 +295,15 @@ class _DashboardPageState extends State<DashboardPage>
                         Row(
                           children: [
                             IconButtonCircle(
-                              onPressed: () {},
-                              icon: Icon(Icons.wallet),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DashboardTransactions()),
+                                );
+                              },
+                              icon: Icon(Icons.history),
                             ),
                             IconButtonCircle(
                               onPressed: () {},
@@ -252,6 +319,7 @@ class _DashboardPageState extends State<DashboardPage>
             ),
           ),
           //---------HEADER DASHBOARD-------
+
           //---------BODY DASHBOARD-------
           Card(
             shape:

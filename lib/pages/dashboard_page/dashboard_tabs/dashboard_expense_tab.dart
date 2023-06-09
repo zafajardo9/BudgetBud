@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../dataModels/transaction_model.dart';
 import '../../../misc/colors.dart';
@@ -153,7 +154,10 @@ class _DashBoardExpenseState extends State<DashBoardExpense> {
               }
 
               return Center(
-                child: CircularProgressIndicator(),
+                child: LoadingAnimationWidget.waveDots(
+                  color: AppColors.mainColorOne,
+                  size: 40,
+                ),
               );
             },
           ),

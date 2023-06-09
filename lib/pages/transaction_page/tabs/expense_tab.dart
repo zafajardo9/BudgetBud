@@ -338,7 +338,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                                     builder: (context) => CameraScreen()),
                               );
                             },
-                            child: Icon(Icons.camera_alt_outlined),
+                            child: Icon(Icons.document_scanner_outlined),
                           ),
                         ],
                       )

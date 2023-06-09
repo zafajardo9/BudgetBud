@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -20,11 +21,10 @@ class _DetailScreenState extends State<DetailScreen> {
   Size? _imageSize;
   List<String> _listDateStrings = [];
   List<String> _listPriceStrings = [];
-  List<String> _listNameStrings = [];
-
   List<String> _listAllStrings = [];
-  String _extractedTotalText = ""; // New variable
-  List<TextElement> _elements = [];
+
+  late final int priceTotalFinal;
+  late final String dateFinal;
 
   // Fetching the image size from the image file
   Future<void> _getImageSize(File imageFile) async {
@@ -46,17 +46,17 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
-  double _extractPriceValue(String priceString) {
-    final pricePattern = r'(?:₱|Php|PHP|P|\$)(\d+(\.\d{2})?)';
-    final priceMatch = RegExp(pricePattern).firstMatch(priceString);
-    if (priceMatch != null) {
-      final value = double.tryParse(priceMatch.group(1) ?? '');
-      if (value != null) {
-        return value;
-      }
-    }
-    return 0;
-  }
+  // double _extractPriceValue(String priceString) {
+  //   final pricePattern = r'(?:₱|Php|PHP|P|\$)(\d+(\.\d{2})?)';
+  //   final priceMatch = RegExp(pricePattern).firstMatch(priceString);
+  //   if (priceMatch != null) {
+  //     final value = double.tryParse(priceMatch.group(1) ?? '');
+  //     if (value != null) {
+  //       return value;
+  //     }
+  //   }
+  //   return 0;
+  // }
 
   void _recognizeText() async {
     _getImageSize(File(_imagePath));
@@ -67,67 +67,42 @@ class _DetailScreenState extends State<DetailScreen> {
     final RecognizedText recognizedText =
         await _textRecognizer.processImage(inputImage);
 
-    List<String> dateStrings = [];
-    List<String> priceStrings = [];
-    List<String> nameStrings = [];
-    List<String> allStrings = [];
-    String totalText = "";
-    bool foundTotal = false;
+    String? date;
 
-    // Regular expression pattern to match price texts (e.g., $10.99)
+    String noData = 'No Data. Can be a Problem on our side or not clear photo';
+
+    final totalExp = RegExp(r"([Tt][Oo][Tt][Aa][Ll])");
     final priceRegex = r'(?:₱|Php|PHP|P|\$)\d+(\.\d{2})?';
-
-    final nameRegex = r'([\w\s]+)';
     final dateRegex = r'(\d{1,2}/\d{1,2}/\d{2,4})';
 
-    // Finding and storing all text and the text after "Total"
+    List<String> priceMatches = [];
+
+// Finding and storing the total price
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
-        for (TextElement element in line.elements) {
-          allStrings.add(element.text);
+        final String text = line.text;
 
-          if (foundTotal) {
-            totalText += element.text + " ";
+        // Check for total price
+        if (totalExp.hasMatch(text)) {
+          final Iterable<RegExpMatch> matches =
+              RegExp(priceRegex).allMatches(text);
+          for (RegExpMatch match in matches) {
+            priceMatches.add(match.group(0)!);
           }
-          if (element.text.toLowerCase() == "total") {
-            foundTotal = true;
-          }
+        }
 
-          // Checking if the element text matches the price regex pattern
-          if (RegExp(priceRegex).hasMatch(element.text)) {
-            final String previousText = line.elements
-                .takeWhile((e) => e.text != element.text)
-                .map((e) => e.text)
-                .join(" ");
-
-            if (previousText.toLowerCase().contains("total amount") ||
-                previousText.toLowerCase().contains("total")) {
-              priceStrings.add(element.text);
-            }
-          }
-
-          if (RegExp(priceRegex).hasMatch(element.text)) {
-            priceStrings.add(element.text);
-          }
-
-          if (RegExp(nameRegex).hasMatch(element.text)) {
-            nameStrings.add(element.text);
-          }
-
-          if (RegExp(dateRegex).hasMatch(element.text)) {
-            dateStrings.add(element.text);
-          }
+        // Check for date
+        final dateMatch = RegExp(dateRegex).firstMatch(text);
+        if (dateMatch != null) {
+          date = dateMatch.group(0);
         }
       }
     }
+    String? totalPrice = priceMatches.isNotEmpty ? priceMatches.last : null;
 
     setState(() {
-      _listNameStrings = nameStrings;
-      _listDateStrings = dateStrings;
-      _listPriceStrings = priceStrings;
-
-      _listAllStrings = allStrings;
-      _extractedTotalText = totalText.trim();
+      _listPriceStrings = totalPrice != null ? [totalPrice] : [noData];
+      _listDateStrings = date != null ? [date] : [noData];
     });
   }
 
@@ -152,7 +127,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Image Details"),
+        title: Text("Receipt Details"),
       ),
       body: _imageSize != null
           ? Stack(
@@ -160,17 +135,27 @@ class _DetailScreenState extends State<DetailScreen> {
                 Container(
                   width: double.maxFinite,
                   color: Colors.black,
-                  child: CustomPaint(
-                    foregroundPainter: TextDetectorPainter(
-                      _imageSize!,
-                      _elements,
-                    ),
-                    child: AspectRatio(
-                      aspectRatio: _imageSize!.aspectRatio,
-                      child: Image.file(
-                        File(_imagePath),
+                  child: Stack(
+                    children: [
+                      AspectRatio(
+                        aspectRatio: _imageSize!.aspectRatio,
+                        child: Image.file(
+                          File(_imagePath),
+                        ),
                       ),
-                    ),
+                      Positioned.fill(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(
+                              sigmaX: 5,
+                              sigmaY:
+                                  5), // Adjust the sigma values for the desired blur effect
+                          child: Container(
+                            color: Colors.black.withOpacity(
+                                0), // Adjust the opacity for the desired blur effect
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Align(
@@ -203,31 +188,11 @@ class _DetailScreenState extends State<DetailScreen> {
                                   ),
                                 ),
                                 Container(
-                                  height: Adaptive.h(20),
+                                  height: Adaptive.h(50),
                                   child: SingleChildScrollView(
                                     child: _listAllStrings != null
                                         ? Column(
                                             children: [
-                                              Text(
-                                                "Expense Name",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    BouncingScrollPhysics(),
-                                                itemCount: _listPriceStrings!
-                                                            .length >
-                                                        2
-                                                    ? 2
-                                                    : _listPriceStrings!.length,
-                                                itemBuilder: (context, index) =>
-                                                    Text(_listPriceStrings![
-                                                        index]),
-                                              ),
-                                              SizedBox(height: 10),
                                               Text(
                                                 "PRICE",
                                                 style: TextStyle(
@@ -240,15 +205,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                                     BouncingScrollPhysics(),
                                                 itemCount:
                                                     _listPriceStrings!.length,
-                                                itemBuilder: (context, index) {
-                                                  final priceString =
-                                                      _listPriceStrings![index];
-                                                  final priceValue =
-                                                      _extractPriceValue(
-                                                          priceString);
-                                                  return Text(
-                                                      priceValue.toString());
-                                                },
+                                                itemBuilder: (context, index) =>
+                                                    Text(_listPriceStrings![
+                                                        index]),
                                               ),
                                               SizedBox(height: 10),
                                               SizedBox(
@@ -308,52 +267,5 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
             ),
     );
-  }
-}
-
-// Helps in painting the bounding boxes around the recognized
-// email addresses in the picture
-class TextDetectorPainter extends CustomPainter {
-  TextDetectorPainter(this.absoluteImageSize, this.elements);
-
-  final Size absoluteImageSize;
-  final List<TextElement> elements;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double scaleX = size.width / absoluteImageSize.width;
-    final double scaleY = size.height / absoluteImageSize.height;
-
-    Rect scaleRect(TextElement container) {
-      return Rect.fromLTRB(
-        container.boundingBox.left * scaleX,
-        container.boundingBox.top * scaleY,
-        container.boundingBox.right * scaleX,
-        container.boundingBox.bottom * scaleY,
-      );
-    }
-
-    final Paint paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..color = Colors.red
-      ..strokeWidth = 2.0;
-
-    for (TextElement element in elements) {
-      canvas.drawRect(scaleRect(element), paint);
-    }
-
-    // Add a box around the text
-    final boxPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = Colors.blue;
-
-    for (TextElement element in elements) {
-      canvas.drawRect(scaleRect(element), boxPaint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(TextDetectorPainter oldDelegate) {
-    return true;
   }
 }
