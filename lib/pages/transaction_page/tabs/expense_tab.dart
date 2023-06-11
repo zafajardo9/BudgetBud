@@ -237,6 +237,17 @@ class _ExpenseTabState extends State<ExpenseTab> {
                               width: 2,
                             ),
                           ),
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons
+                                .document_scanner_rounded), // Replace with your desired button icon
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CameraScreen()),
+                              );
+                            },
+                          ),
                         ),
                       ),
                       addVerticalSpace(2),
@@ -324,21 +335,6 @@ class _ExpenseTabState extends State<ExpenseTab> {
                               setState(() => _dateTime = newDate);
                             },
                             child: Text('Select a Date'),
-                          ),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all(CircleBorder()),
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsets.all(2.h)), // <-- Button color
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CameraScreen()),
-                              );
-                            },
-                            child: Icon(Icons.document_scanner_outlined),
                           ),
                         ],
                       )

@@ -24,6 +24,8 @@ dependencies:
   flutter_svg: ^2.0.5
   flutter_custom_clippers: ^2.1.0
 
+  showcaseview:
+
   flutter_snake_navigationbar: ^0.6.1
 
   google_fonts: ^4.0.3

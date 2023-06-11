@@ -36,12 +36,33 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     // TODO: implement dispose
     emailController.dispose();
-    confirmPwdController.dispose();
+    pwdController.dispose();
     confirmPwdController.dispose();
     super.dispose();
   }
 
-  //Login user
+  // Error handler message
+  void showErrorMessage(String message) {
+    final snackBar = SnackBar(
+      /// Need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Error!',
+        message: message,
+
+        /// Change contentType to ContentType.success, ContentType.warning, or ContentType.help for variants
+        contentType: ContentType.failure,
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+
+  //SignUp user
   void signUserUp() async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (!privacyPolicyCheck) {
@@ -78,27 +99,6 @@ class _RegisterPageState extends State<RegisterPage> {
         );
       },
     );
-
-    // Error handler message
-    void showErrorMessage(String message) {
-      final snackBar = SnackBar(
-        /// Need to set following properties for best effect of awesome_snackbar_content
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: message,
-
-          /// Change contentType to ContentType.success, ContentType.warning, or ContentType.help for variants
-          contentType: ContentType.failure,
-        ),
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-    }
 
     try {
       // Check if user accepts T&C and Privacy Policy

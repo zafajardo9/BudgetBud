@@ -1,3 +1,4 @@
+import 'package:budget_bud/steps/shared_pref_steps.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,6 +8,7 @@ import 'package:honey/honey.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
@@ -116,7 +118,19 @@ class MyApp extends StatelessWidget {
                       primarySwatch: buildMaterialColor(Color(0xFF4E3EC8)),
                       fontFamily: GoogleFonts.montserrat().fontFamily,
                     ),
-                    home: isOnboarded ? AuthPage() : OnboardingScreen());
+                    home: ShowCaseWidget(
+                      onFinish: () {
+                        SharedPreferencesUtils.initializeSharedPreferences()
+                            .then((sharedPreferences) {
+                          SharedPreferencesUtils.setFinishedShowcaseSteps(
+                              sharedPreferences);
+                        });
+                      },
+                      builder: Builder(
+                        builder: (_) =>
+                            isOnboarded ? AuthPage() : OnboardingScreen(),
+                      ),
+                    ));
               },
             );
           }

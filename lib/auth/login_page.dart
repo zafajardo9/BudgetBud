@@ -34,70 +34,69 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  //error handler message
+  void showErrorMessage(String message) {
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Error',
+        message: message,
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.failure,
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+
   //Login user
+
   void signUserIn() async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-    }
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: pwdController.text,
         );
-      },
-    );
-
-    //error handler message
-    void showErrorMessage(String message) {
-      final snackBar = SnackBar(
-        /// need to set following properties for best effect of awesome_snackbar_content
-        elevation: 0,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        content: AwesomeSnackbarContent(
-          title: 'Error',
-          message: message,
-
-          /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
-          contentType: ContentType.failure,
-        ),
-      );
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-    }
-
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: pwdController.text,
-      );
-      //pop Loading Circle
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      if (e.code == 'network-request-failed') {
-        showErrorMessage("There is a problem on internet connection");
-        //devtools.log('No Internet Connection');
-      } else if (e.code == "wrong-password") {
-        showErrorMessage('Please enter correct password');
-      } else if (e.code == 'user-not-found') {
-        showErrorMessage('Email not found, Please Sign-Up!');
-        // print('Email not found');
-      } else if (e.code == 'too-many-requests') {
-        showErrorMessage('Too many attempts please try later');
-      } else if (e.code == 'invalid-email') {
-        showErrorMessage('You inputted a wrong email!');
-      } else if (e.code == 'unknown') {
-        showErrorMessage('Email and Password Fields are required');
-        //print(e.code);
-      } else {
-        showErrorMessage(e.code);
+        // Pop Loading Circle
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        if (e.code == 'network-request-failed') {
+          showErrorMessage("There is a problem with the internet connection");
+        } else if (e.code == "wrong-password") {
+          showErrorMessage('Please enter the correct password');
+        } else if (e.code == 'user-not-found') {
+          showErrorMessage('Email not found, please Sign Up!');
+        } else if (e.code == 'too-many-requests') {
+          showErrorMessage('Too many attempts, please try again later');
+        } else if (e.code == 'invalid-email') {
+          showErrorMessage('You entered an incorrect email');
+        } else if (e.code == 'unknown') {
+          showErrorMessage('Email and Password fields are required');
+        } else {
+          showErrorMessage(e.code);
+        }
       }
+
       emailController.clear();
       pwdController.clear();
     }
