@@ -11,6 +11,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../data/transaction_data_summary.dart';
 import '../../../../dataModels/transaction_model.dart';
+import '../../../../dateTime/date_info.dart';
 import 'component/transactions_card.dart';
 
 class DashboardTransactions extends StatefulWidget {
@@ -37,6 +38,8 @@ class _DashboardTransactionsState extends State<DashboardTransactions> {
       totalExpense = summary.totalExpense;
     });
   }
+
+  final dateInfo = DateInfo();
 
   @override
   Widget build(BuildContext context) {
@@ -121,15 +124,17 @@ class _DashboardTransactionsState extends State<DashboardTransactions> {
                     child: TabBarView(
                       children: [
                         TransactionCardSummary(
-                          cardName: 'Daily',
+                          cardName:
+                              '${dateInfo.getCurrentWeekday()} ${dateInfo.getCurrentDay()}',
                           timePeriod: TimePeriod.Daily,
                         ),
                         TransactionCardSummary(
-                          cardName: 'Week',
+                          cardName: dateInfo.getCurrentWeek(),
                           timePeriod: TimePeriod.Weekly,
                         ),
                         TransactionCardSummary(
-                          cardName: 'Monthly',
+                          cardName:
+                              dateInfo.getCurrentMonthFromDate(DateTime.now()),
                           timePeriod: TimePeriod.Monthly,
                         ),
                         TransactionCardSummary(

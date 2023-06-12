@@ -84,7 +84,6 @@ class _IncomeTabState extends State<IncomeTab> {
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
-      margin: EdgeInsets.only(bottom: Adaptive.px(60)),
 
       content: AwesomeSnackbarContent(
         title: 'Success',

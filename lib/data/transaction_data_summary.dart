@@ -41,41 +41,40 @@ Future<TransactionSummary> calculateTransactionSummary(
   double totalIncome = 0.0;
   double totalExpense = 0.0;
 
+  final now = DateTime.now();
+
   data.forEach((transaction) {
     final transactionType = transaction['TransactionType'];
     final transactionAmount = transaction['TransactionAmount'];
+    final transactionDateStr = transaction['TransactionDate'] as String;
+    final transactionDateTime = DateTime.parse(transactionDateStr).toLocal();
 
     if (transactionType == 'Income') {
-      totalIncome += transactionAmount;
+      if (period == TimePeriod.Overall ||
+          (period == TimePeriod.Daily && isSameDay(transactionDateTime, now)) ||
+          (period == TimePeriod.Weekly &&
+              isSameWeek(transactionDateTime, now)) ||
+          (period == TimePeriod.Monthly &&
+              isSameMonth(transactionDateTime, now)) ||
+          (period == TimePeriod.Yearly &&
+              isSameYear(transactionDateTime, now))) {
+        totalIncome += transactionAmount;
+      }
     } else if (transactionType == 'Expense') {
-      totalExpense += transactionAmount;
+      if (period == TimePeriod.Overall ||
+          (period == TimePeriod.Daily && isSameDay(transactionDateTime, now)) ||
+          (period == TimePeriod.Weekly &&
+              isSameWeek(transactionDateTime, now)) ||
+          (period == TimePeriod.Monthly &&
+              isSameMonth(transactionDateTime, now)) ||
+          (period == TimePeriod.Yearly &&
+              isSameYear(transactionDateTime, now))) {
+        totalExpense += transactionAmount;
+      }
     }
   });
 
   final balance = totalIncome - totalExpense;
-
-  // Apply period-specific filtering if not "Overall"
-  if (period != TimePeriod.Overall) {
-    final now = DateTime.now();
-
-    data.retainWhere((transaction) {
-      final transactionDateStr = transaction['TransactionDate'] as String;
-      final transactionDateTime = DateTime.parse(transactionDateStr).toLocal();
-
-      switch (period) {
-        case TimePeriod.Daily:
-          return isSameDay(transactionDateTime, now);
-        case TimePeriod.Weekly:
-          return isSameWeek(transactionDateTime, now);
-        case TimePeriod.Monthly:
-          return isSameMonth(transactionDateTime, now);
-        case TimePeriod.Yearly:
-          return isSameYear(transactionDateTime, now);
-        default:
-          return false;
-      }
-    });
-  }
 
   return TransactionSummary(
     totalIncome: totalIncome,
@@ -84,22 +83,26 @@ Future<TransactionSummary> calculateTransactionSummary(
   );
 }
 
-bool isSameDay(DateTime dateTime1, DateTime dateTime2) {
-  return dateTime1.year == dateTime2.year &&
-      dateTime1.month == dateTime2.month &&
-      dateTime1.day == dateTime2.day;
+bool isSameDay(DateTime date1, DateTime date2) {
+  return date1.year == date2.year &&
+      date1.month == date2.month &&
+      date1.day == date2.day;
 }
 
-bool isSameWeek(DateTime dateTime1, DateTime dateTime2) {
-  final startOfWeek = dateTime2.subtract(Duration(days: dateTime2.weekday - 1));
-  final endOfWeek = startOfWeek.add(Duration(days: 6));
-  return dateTime1.isAfter(startOfWeek) && dateTime1.isBefore(endOfWeek);
+bool isSameWeek(DateTime date1, DateTime date2) {
+  final week1 = date1.weekday;
+  final week2 = date2.weekday;
+
+  final beginningOfWeek1 = date1.subtract(Duration(days: week1));
+  final beginningOfWeek2 = date2.subtract(Duration(days: week2));
+
+  return isSameDay(beginningOfWeek1, beginningOfWeek2);
 }
 
-bool isSameMonth(DateTime dateTime1, DateTime dateTime2) {
-  return dateTime1.year == dateTime2.year && dateTime1.month == dateTime2.month;
+bool isSameMonth(DateTime date1, DateTime date2) {
+  return date1.year == date2.year && date1.month == date2.month;
 }
 
-bool isSameYear(DateTime dateTime1, DateTime dateTime2) {
-  return dateTime1.year == dateTime2.year;
+bool isSameYear(DateTime date1, DateTime date2) {
+  return date1.year == date2.year;
 }

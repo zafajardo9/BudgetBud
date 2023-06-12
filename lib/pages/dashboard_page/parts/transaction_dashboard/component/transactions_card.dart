@@ -74,7 +74,7 @@ class _TransactionCardSummaryState extends State<TransactionCardSummary> {
                   children: [
                     Text('Expense'),
                     Text(
-                      totalIncome.toString(),
+                      totalExpense.toString(),
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: AppColors.deleteButton),
@@ -85,7 +85,7 @@ class _TransactionCardSummaryState extends State<TransactionCardSummary> {
                   children: [
                     Text('Income'),
                     Text(
-                      totalExpense.toString(),
+                      totalIncome.toString(),
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: AppColors.updateButton),
