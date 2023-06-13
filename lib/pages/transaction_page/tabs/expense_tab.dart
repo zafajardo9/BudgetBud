@@ -44,22 +44,43 @@ class _ExpenseTabState extends State<ExpenseTab> {
     var expenseDescription = newExpenseDescriptionController.text.trim();
     var expenseAmount = double.parse(newExpenseAmountController.text.trim());
 
-    var transaction = TransactionData(
-      userEmail: user.email!,
-      transactionName: expenseName,
-      transactionType: 'Expense',
-      description: expenseDescription,
-      amount: expenseAmount,
-      category: selectedItem,
-      transactionDate: _dateTime,
-      documentId: '',
-    );
-    FirebaseFirestore.instance
-        .collection('Transactions')
-        .add(transaction.toJson());
+    if (selectedItem.isNotEmpty &&
+        expenseName.isNotEmpty &&
+        expenseAmount > 0) {
+      var transaction = TransactionData(
+        userEmail: user.email!,
+        transactionName: expenseName,
+        transactionType: 'Expense',
+        description: expenseDescription,
+        amount: expenseAmount,
+        category: selectedItem,
+        transactionDate: _dateTime,
+        documentId: '',
+      );
+      FirebaseFirestore.instance
+          .collection('Transactions')
+          .add(transaction.toJson());
 
-    messageBar();
-    _clearTextFields();
+      messageBar();
+      _clearTextFields();
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Missing Information'),
+            content: Text(
+                'Please fill in all the required fields and select a category.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   void messageBar() {
@@ -128,7 +149,8 @@ class _ExpenseTabState extends State<ExpenseTab> {
                           title: Text(
                             item,
                             style: TextStyle(
-                              color: isSelected ? Colors.blue : null,
+                              color:
+                                  isSelected ? AppColors.mainColorFour : null,
                             ),
                           ),
                           onTap: () {
@@ -137,7 +159,8 @@ class _ExpenseTabState extends State<ExpenseTab> {
                             });
                           },
                           trailing: isSelected
-                              ? Icon(Icons.check_circle, color: Colors.blue)
+                              ? Icon(Icons.check_circle,
+                                  color: AppColors.mainColorFour)
                               : null,
                         );
                       },
@@ -146,6 +169,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                   SizedBox(height: 16.0),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      primary: AppColors.mainColorFour,
                       shape: RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.circular(20), // Rounded corners

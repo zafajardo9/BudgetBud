@@ -64,6 +64,8 @@ class _LoginPageState extends State<LoginPage> {
 
       showDialog(
         context: context,
+        barrierDismissible:
+            false, // Prevent dismissing the dialog by tapping outside
         builder: (context) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -76,10 +78,18 @@ class _LoginPageState extends State<LoginPage> {
           email: emailController.text,
           password: pwdController.text,
         );
-        // Pop Loading Circle
+
+        // Dismiss the dialog
         Navigator.pop(context);
+
+        // Clear the text fields
+        emailController.clear();
+        pwdController.clear();
       } on FirebaseAuthException catch (e) {
+        // Dismiss the dialog
         Navigator.pop(context);
+
+        // Handle the different exception cases
         if (e.code == 'network-request-failed') {
           showErrorMessage("There is a problem with the internet connection");
         } else if (e.code == "wrong-password") {
@@ -96,9 +106,6 @@ class _LoginPageState extends State<LoginPage> {
           showErrorMessage(e.code);
         }
       }
-
-      emailController.clear();
-      pwdController.clear();
     }
   }
 

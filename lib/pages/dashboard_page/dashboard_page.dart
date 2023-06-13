@@ -3,6 +3,7 @@ import 'package:budget_bud/data/income_data.dart';
 import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
+import 'package:budget_bud/pages/dashboard_page/parts/convert_dashboard/convert_currency.dart';
 import 'package:budget_bud/pages/dashboard_page/parts/news_dashboard/dashboard_news.dart';
 import 'package:budget_bud/pages/dashboard_page/parts/transaction_dashboard/dashboard_transactions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,10 +66,10 @@ class _DashboardPageState extends State<DashboardPage>
   void initState() {
     super.initState();
     getUserName();
-    fetchBalance();
 
-//FOR NOTIFICATIONS++++++++++++++++++++++++
+    //fetchBalance();
 
+    //FOR NOTIFICATIONS++++++++++++++++++++++++
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
           if (!isAllowed)
             {
@@ -161,15 +162,15 @@ class _DashboardPageState extends State<DashboardPage>
   double totalIncome = 0.0;
   double totalExpense = 0.0;
 
-  Future<void> fetchBalance() async {
-    TransactionSummary summary =
-        await calculateTransactionSummary(TimePeriod.Overall);
-    setState(() {
-      balance = summary.balance;
-      totalIncome = summary.totalIncome;
-      totalExpense = summary.totalExpense;
-    });
-  }
+  // Future<void> fetchBalance() async {
+  //   TransactionSummary summary =
+  //       await calculateTransactionSummary(TimePeriod.Overall);
+  //   setState(() {
+  //     balance = summary.balance;
+  //     totalIncome = summary.totalIncome;
+  //     totalExpense = summary.totalExpense;
+  //   });
+  // }
 
   int currentPageIndex = 0;
 
@@ -223,83 +224,105 @@ class _DashboardPageState extends State<DashboardPage>
                                   Text(
                                     'Your Daily Update',
                                     style: ThemeText.dashboardDetailsSubHeader,
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                        Expanded(
-                          child: Showcase(
-                            key: userCard,
-                            description: 'Your Balance and Transactions',
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.mainColorTwo,
-                                  borderRadius: BorderRadius.circular(16.0),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 16),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Balance',
-                                            style: ThemeText.paragraph54,
-                                          ),
-                                          Text(
-                                            '₱$balance',
-                                            style:
-                                                ThemeText.dashboardNumberLarge,
-                                          ),
-                                        ],
+                        StreamBuilder<TransactionSummary>(
+                          stream: Stream.fromFuture(
+                              calculateTransactionSummary(TimePeriod.Overall)),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final transactionSummary = snapshot.data!;
+
+                              return Expanded(
+                                child: Showcase(
+                                  key: userCard,
+                                  description: 'Your Balance and Transactions',
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.mainColorTwo,
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Transactions',
-                                            style: ThemeText.paragraph54,
-                                          ),
-                                          Text(
-                                            '₱$totalIncome',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.updateButton,
-                                              fontSize: 15.sp,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 16),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Balance',
+                                                  style: ThemeText.paragraph54,
+                                                ),
+                                                Text(
+                                                  '₱${transactionSummary.balance}',
+                                                  style: ThemeText
+                                                      .dashboardNumberLarge,
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                          Text(
-                                            '₱$totalExpense',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.deleteButton,
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Transactions',
+                                                  style: ThemeText.paragraph54,
+                                                ),
+                                                Text(
+                                                  '₱${transactionSummary.totalIncome}',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        AppColors.updateButton,
+                                                    fontSize: 15.sp,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '₱${transactionSummary.totalExpense}',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color:
+                                                        AppColors.deleteButton,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          )
-                                        ],
-                                      )
-                                    ],
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ),
+                              );
+                            } else if (snapshot.hasError) {
+                              // Handle error case
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              // Display loading state
+                              return CircularProgressIndicator();
+                            }
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -376,7 +399,14 @@ class _DashboardPageState extends State<DashboardPage>
                                   targetShapeBorder: const CircleBorder(),
                                   targetPadding: EdgeInsets.all(8),
                                   child: IconButtonCircle(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const CurrencyConverter()),
+                                      );
+                                    },
                                     icon: Icon(Icons.currency_exchange),
                                   ),
                                 ),

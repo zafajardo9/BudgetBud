@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../colors.dart';
 
 class TransactionData {
   final DateTime date;
@@ -20,8 +23,8 @@ class LineGraph extends StatefulWidget {
 class _LineGraphState extends State<LineGraph> {
   final user = FirebaseAuth.instance.currentUser!;
   List<Color> gradientColors = [
-    Colors.cyan,
-    Colors.blue,
+    AppColors.mainColorOneSecondary,
+    AppColors.mainColorOne,
   ];
 
   List<FlSpot> transactionSpots = [];
@@ -57,75 +60,84 @@ class _LineGraphState extends State<LineGraph> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: LineChart(
-        LineChartData(
-          gridData: FlGridData(
-            show: true,
-            horizontalInterval: 1,
-            verticalInterval: 1,
-            getDrawingHorizontalLine: (value) {
-              return FlLine(
-                color: Colors.white,
-                strokeWidth: 1,
-              );
-            },
-            getDrawingVerticalLine: (value) {
-              return FlLine(
-                color: Colors.white,
-                strokeWidth: 1,
-              );
-            },
-          ),
-          titlesData: FlTitlesData(
-            show: true,
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
+    if (transactionSpots.isEmpty) {
+      return Center(
+        child: SvgPicture.asset(
+          'assets/no_data_found/nd1.1 (2).svg', // Replace with your actual image path
+          fit: BoxFit.cover,
+        ),
+      );
+    } else {
+      return AspectRatio(
+        aspectRatio: 1,
+        child: LineChart(
+          LineChartData(
+            gridData: FlGridData(
+              show: true,
+              horizontalInterval: 1,
+              verticalInterval: 1,
+              getDrawingHorizontalLine: (value) {
+                return FlLine(
+                  color: Colors.white,
+                  strokeWidth: 1,
+                );
+              },
+              getDrawingVerticalLine: (value) {
+                return FlLine(
+                  color: Colors.white,
+                  strokeWidth: 1,
+                );
+              },
             ),
-            topTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-          ),
-          borderData: FlBorderData(
-            show: false,
-            border: Border.all(color: const Color(0xFF37434D)),
-          ),
-          minX: 0,
-          maxX: transactionSpots.length.toDouble() - 1,
-          minY: 0,
-          maxY: getMaxTransactionAmount(),
-          lineBarsData: [
-            LineChartBarData(
-              spots: transactionSpots,
-              isCurved: true,
-              gradient: LinearGradient(
-                colors: gradientColors,
+            titlesData: FlTitlesData(
+              show: true,
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
               ),
-              barWidth: 5,
-              isStrokeCapRound: true,
-              dotData: FlDotData(
-                show: false,
+              topTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
               ),
-              belowBarData: BarAreaData(
-                show: true,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(showTitles: false),
+              ),
+            ),
+            borderData: FlBorderData(
+              show: false,
+              border: Border.all(color: const Color(0xFF37434D)),
+            ),
+            minX: 0,
+            maxX: transactionSpots.length.toDouble() - 1,
+            minY: 0,
+            maxY: getMaxTransactionAmount(),
+            lineBarsData: [
+              LineChartBarData(
+                spots: transactionSpots,
+                isCurved: true,
                 gradient: LinearGradient(
-                  colors: gradientColors
-                      .map((color) => color.withOpacity(0.3))
-                      .toList(),
+                  colors: gradientColors,
+                ),
+                barWidth: 5,
+                isStrokeCapRound: true,
+                dotData: FlDotData(
+                  show: false,
+                ),
+                belowBarData: BarAreaData(
+                  show: true,
+                  gradient: LinearGradient(
+                    colors: gradientColors
+                        .map((color) => color.withOpacity(0.3))
+                        .toList(),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   List<FlSpot> convertTransactionsToSpots(List<TransactionData> transactions) {

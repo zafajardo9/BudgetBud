@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../../../api_keys_handler.dart';
 import 'model/news_model.dart';
 
 class DashBoardNews extends StatefulWidget {
@@ -31,7 +31,7 @@ class _DashBoardNewsState extends State<DashBoardNews> {
     });
 
     try {
-      final String apiKey = '81cf656878534b15aa5b5ef0898add0d';
+      final String? apiKey = APIKeys().newsAPI;
       final String apiUrl =
           'https://newsapi.org/v2/everything?q=trending+products&language=en&apiKey=$apiKey';
 

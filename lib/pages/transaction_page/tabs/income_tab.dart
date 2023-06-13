@@ -33,7 +33,6 @@ class _IncomeTabState extends State<IncomeTab> {
   final newIncomeAmountController = TextEditingController();
   String selectedItem = '';
 
-  //save
 //save
   saveIncome() {
     //getting values
@@ -144,7 +143,8 @@ class _IncomeTabState extends State<IncomeTab> {
                           title: Text(
                             item,
                             style: TextStyle(
-                              color: isSelected ? Colors.blue : null,
+                              color:
+                                  isSelected ? AppColors.mainColorFour : null,
                             ),
                           ),
                           onTap: () {
@@ -153,7 +153,8 @@ class _IncomeTabState extends State<IncomeTab> {
                             });
                           },
                           trailing: isSelected
-                              ? Icon(Icons.check_circle, color: Colors.blue)
+                              ? Icon(Icons.check_circle,
+                                  color: AppColors.mainColorFour)
                               : null,
                         );
                       },
@@ -162,9 +163,9 @@ class _IncomeTabState extends State<IncomeTab> {
                   SizedBox(height: 16.0),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      primary: AppColors.mainColorFour,
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(20), // Rounded corners
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       minimumSize: Size(50.w, 5.h),
                     ),

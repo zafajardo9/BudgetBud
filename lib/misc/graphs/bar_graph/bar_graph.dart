@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../colors.dart';
@@ -43,7 +44,10 @@ class BarGraphWidget extends StatelessWidget {
 
           final int dayOfWeek = transactionDate.weekday;
           if (documents.isEmpty) {
-            return Text('No data available.');
+            return SvgPicture.asset(
+              'assets/no_data_found/nd1.1 (2).svg', // Replace with your actual image path
+              fit: BoxFit.cover,
+            );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Padding(

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../graphs_widget/graph_indicator.dart';
 
@@ -41,7 +42,10 @@ class PieGraphWidget extends StatelessWidget {
         final documents = snapshot.data!.docs;
 
         if (documents.isEmpty) {
-          return Text('No data available.');
+          return SvgPicture.asset(
+            'assets/no_data_found/nd1.1 (2).svg', // Replace with your actual image path
+            fit: BoxFit.cover,
+          );
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
