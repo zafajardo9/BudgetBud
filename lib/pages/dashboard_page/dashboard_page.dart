@@ -56,7 +56,7 @@ class _DashboardPageState extends State<DashboardPage>
   GlobalKey userDisplay = GlobalKey();
   GlobalKey userCard = GlobalKey();
   GlobalKey features = GlobalKey();
-  GlobalKey settings = GlobalKey();
+  GlobalKey suggestions = GlobalKey();
   GlobalKey featureNews = GlobalKey();
   GlobalKey featureConvert = GlobalKey();
   GlobalKey transactions = GlobalKey();
@@ -114,7 +114,7 @@ class _DashboardPageState extends State<DashboardPage>
             userDisplay,
             userCard,
             features,
-            settings,
+            suggestions,
             featureNews,
             featureConvert,
             transactions,
@@ -342,13 +342,14 @@ class _DashboardPageState extends State<DashboardPage>
                             Row(
                               children: [
                                 Showcase(
-                                  key: settings,
-                                  description: 'Change some settings for you!',
+                                  key: suggestions,
+                                  description:
+                                      'Know various suggestions for you to increase your savings and organize your expenditures',
                                   targetShapeBorder: const CircleBorder(),
                                   targetPadding: EdgeInsets.all(8),
                                   child: IconButtonCircle(
                                     onPressed: () {},
-                                    icon: Icon(Icons.settings),
+                                    icon: Icon(Icons.lightbulb_outline_rounded),
                                   ),
                                 ),
                                 Showcase(

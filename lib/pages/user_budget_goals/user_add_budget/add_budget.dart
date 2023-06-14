@@ -9,6 +9,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../data/budget_goal_data.dart';
+import '../../../misc/colors.dart';
+import '../../category_page/category_budget_goal.dart';
+import '../../category_page/category_list/category_lists.dart';
 import '../../category_page/category_page.dart';
 
 class AddBudget extends StatefulWidget {
@@ -75,23 +78,35 @@ class _AddBudgetState extends State<AddBudget> {
     newBudgetAmountController.clear();
   }
 
+  List<String> _frequency = [
+    'Daily',
+    'Weekly',
+    'Monthly',
+  ]; // Option 2
+  String _selectedFrequency = "Daily";
+
+  String selectedBudgetcategory = '';
+  bool isPressed = false;
+
   @override
   Widget build(BuildContext context) {
     final startDate = dateTimeRange.start;
     final endDate = dateTimeRange.end;
     return Scaffold(
+      backgroundColor: AppColors.backgroundWhite,
       appBar: AppBar(
         title: Text('Create a budget'),
         elevation: 0,
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserCategory()),
-                );
-              },
-              icon: Icon(Icons.category))
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CategoriesBudget()),
+              );
+            },
+            icon: Icon(FontAwesomeIcons.circleQuestion),
+          )
         ],
       ),
       body: SingleChildScrollView(
@@ -100,60 +115,137 @@ class _AddBudgetState extends State<AddBudget> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
-                'Add new Budget',
-                style: ThemeText.headerAuth,
+                'Choose Category',
+                style: ThemeText.subHeader2,
+              ),
+            ),
+            Container(
+              height: Adaptive.h(20),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: budgetingGoals.map((goal) {
+                    final category = goal['category'];
+                    bool isPressed = selectedBudgetcategory == category;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedBudgetcategory = (isPressed ? '' : category)!;
+                          print(selectedBudgetcategory);
+                        });
+                      },
+                      child: Container(
+                        width: Adaptive.w(30),
+                        margin: EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(17),
+                        decoration: BoxDecoration(
+                          color: isPressed
+                              ? AppColors.mainColorOne
+                              : AppColors.backgroundWhite,
+                          borderRadius: BorderRadius.circular(25),
+                          border: isPressed
+                              ? Border.all(
+                                  color: AppColors.mainColorOne,
+                                  width: 2,
+                                )
+                              : null,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.mainColorOne.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.safety_check,
+                              color: isPressed ? Colors.white : Colors.black54,
+                            ),
+                            SizedBox(height: 8.0),
+                            Text(
+                              textAlign: TextAlign.left,
+                              category ?? '',
+                              style: TextStyle(
+                                color:
+                                    isPressed ? Colors.white : Colors.black54,
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
             ),
             Text('Pick your dates!'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                  child: SizedBox(
-                    height: Adaptive.h(20),
-                    child: ElevatedButton(
-                      onPressed: pickDateRange,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            'Your Start Date',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17.sp,
-                            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: Adaptive.h(10),
+                      child: ElevatedButton(
+                        onPressed: pickDateRange,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
                           ),
-                          Text(
-                              '${startDate.month}/${startDate.day}/${startDate.year}'),
-                        ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              'Your Start Date',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17.sp,
+                              ),
+                            ),
+                            Text(
+                                '${startDate.month}/${startDate.day}/${startDate.year}'),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                addHorizontalSpace(1),
-                Expanded(
-                  child: SizedBox(
-                    height: Adaptive.h(20),
-                    child: ElevatedButton(
-                      onPressed: pickDateRange,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            'Your End Date',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17.sp,
-                            ),
+                  addHorizontalSpace(1),
+                  Expanded(
+                    child: SizedBox(
+                      height: Adaptive.h(10),
+                      child: ElevatedButton(
+                        onPressed: pickDateRange,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
                           ),
-                          Text(
-                              '${endDate.month}/${endDate.day}/${endDate.year}'),
-                        ],
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text(
+                              'Your End Date',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17.sp,
+                              ),
+                            ),
+                            Text(
+                                '${endDate.month}/${endDate.day}/${endDate.year}'),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
             Form(
               child: Padding(
@@ -213,6 +305,38 @@ class _AddBudgetState extends State<AddBudget> {
                             .digitsOnly // Only allow digits
                       ],
                       controller: newBudgetAmountController,
+                    ),
+                    addVerticalSpace(2),
+                    Text(
+                      'Frequency',
+                      style: ThemeText.paragraph54,
+                    ),
+                    Container(
+                      width: Adaptive.w(100),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: DropdownButton(
+                        underline: Container(),
+                        isExpanded: true,
+                        hint:
+                            Text('Please choose'), // Not necessary for Option 1
+                        value: _selectedFrequency,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedFrequency = newValue ?? '';
+                          });
+                        },
+
+                        items: _frequency.map((location) {
+                          return DropdownMenuItem(
+                            child: new Text(location),
+                            value: location,
+                          );
+                        }).toList(),
+                      ),
                     ),
                     addVerticalSpace(2),
                   ],

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+
+import 'colors.dart';
 
 abstract class ThemeText {
   static TextStyle textHeader1 = TextStyle(
@@ -142,6 +145,24 @@ abstract class ThemeText {
       fontStyle: FontStyle.italic,
       fontSize: 15.sp,
       fontWeight: FontWeight.bold);
+
+  //CATEGORIES PAGE =========================
+
+  static TextStyle categoriesTitle = GoogleFonts.montserrat(
+    color: Colors.black,
+    fontSize: 16.sp,
+  );
+
+  static TextStyle categoriesDescription = GoogleFonts.montserrat(
+    color: Colors.black54,
+    fontSize: 14.sp,
+  );
+
+  static TextStyle categoriesDescripTitle = GoogleFonts.montserrat(
+    color: Colors.black54,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.bold,
+  );
 }
 
 //NOT THE BEST WAY TO CODE

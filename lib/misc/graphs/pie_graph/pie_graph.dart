@@ -115,10 +115,6 @@ class PieGraphWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                'Your daily Transactions',
-                style: ThemeText.paragraph54,
-              ),
               AspectRatio(
                 aspectRatio: 1,
                 child: PieChart(

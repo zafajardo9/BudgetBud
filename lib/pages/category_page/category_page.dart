@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../misc/colors.dart';
+import '../../misc/txtStyles.dart';
+import 'category_list/category_lists.dart';
 
 class UserCategory extends StatelessWidget {
   const UserCategory({Key? key}) : super(key: key);
@@ -8,51 +10,77 @@ class UserCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.mainColorOne,
-      appBar: AppBar(
-        title: Text('Category List'),
-        elevation: 0,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadiusDirectional.only(
-                  topStart: Radius.circular(25),
-                  topEnd: Radius.circular(25),
-                ),
-              ),
-              child: ListView(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      print('asdfasdf');
-                    },
-                    child: ListTile(
-                      title: Text('Item 1'),
-                      subtitle: Text('Description for Item 1'),
-                      leading: Icon(Icons.ac_unit),
+        backgroundColor: AppColors.backgroundWhite,
+        appBar: AppBar(
+          title: Text('Category List'),
+          elevation: 0,
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: incomeCategories.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(25),
+                        color: AppColors.backgroundWhite,
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.mainColorOne.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(
+                                0, 3), // changes the position of the shadow
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              incomeCategoriesWithDescrip[index]['category']!,
+                              style: ThemeText.categoriesTitle,
+                            ),
+                            leading: Icon(Icons.attach_money),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 6),
+                            child: ExpansionTile(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25))),
+                              collapsedShape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25))),
+                              textColor: Colors.black54,
+                              title: Text(
+                                'Description',
+                                style: ThemeText.categoriesDescripTitle,
+                              ),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Text(
+                                    incomeCategoriesWithDescrip[index]
+                                        ['description']!,
+                                    style: ThemeText.categoriesDescription,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    title: Text('Item 2'),
-                    subtitle: Text('Description for Item 2'),
-                    leading: Icon(Icons.access_alarm),
-                  ),
-                  ListTile(
-                    title: Text('Item 3'),
-                    subtitle: Text('Description for Item 3'),
-                    leading: Icon(Icons.accessibility),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ));
   }
 }

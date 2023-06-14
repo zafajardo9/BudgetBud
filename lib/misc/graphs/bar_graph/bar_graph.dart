@@ -1,3 +1,4 @@
+import 'package:budget_bud/misc/graphs/graphs_widget/graph_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -98,6 +99,11 @@ class BarGraphWidget extends StatelessWidget {
             BarChartData(
               gridData: FlGridData(show: false),
               barGroups: barChartData,
+              barTouchData: BarTouchData(
+                touchTooltipData: BarTouchTooltipData(
+                  tooltipBgColor: AppColors.mainColorFour,
+                ),
+              ),
               titlesData: FlTitlesData(
                 show: true,
                 rightTitles:
