@@ -1,9 +1,12 @@
 import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/pages/user_budget_goals/user_add_budget/add_budget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../data/budget_goal_data.dart';
 import '../../data/transaction_data_summary.dart';
 
 class UserBudgetGoals extends StatefulWidget {
@@ -17,6 +20,8 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
   CollectionReference _budgetGoalsRef =
       FirebaseFirestore.instance.collection('BudgetGoals');
 
+  List<QueryDocumentSnapshot> budgetGoals = [];
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +31,7 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
   double balance = 0.0;
   double totalIncome = 0.0;
   double totalExpense = 0.0;
+  double totalBudgetAmount = 0.0;
 
   Future<void> fetchBalance() async {
     TransactionSummary summary =
@@ -34,6 +40,23 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
       balance = summary.balance;
       totalIncome = summary.totalIncome;
       totalExpense = summary.totalExpense;
+    });
+
+    // Fetch budgetGoals data
+    QuerySnapshot snapshot = await _budgetGoalsRef.get();
+    setState(() {
+      budgetGoals = snapshot.docs;
+    });
+
+    // Calculate total budget amount
+    double calculatedTotalBudgetAmount = budgetGoals
+        .map((snapshot) =>
+            BudgetGoal.fromJson(snapshot.data() as Map<String, dynamic>))
+        .map((goal) => goal.budgetAmount)
+        .fold(0, (sum, amount) => sum + amount);
+
+    setState(() {
+      totalBudgetAmount = calculatedTotalBudgetAmount;
     });
   }
 
@@ -87,7 +110,7 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                     children: [
                       Text('My Budgets'),
                       Text(
-                        '1212:P',
+                        '\₱$totalBudgetAmount',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20.sp),
                       ),
@@ -123,11 +146,14 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
 
                 if (!snapshot.hasData) {
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: LoadingAnimationWidget.waveDots(
+                      size: 200,
+                      color: AppColors.mainColorOne,
+                    ),
                   );
                 }
 
-                List<DocumentSnapshot> budgetGoals = snapshot.data!.docs;
+                List<QueryDocumentSnapshot> budgetGoals = snapshot.data!.docs;
 
                 return GridView.builder(
                   itemCount: budgetGoals.length,
@@ -138,21 +164,41 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                     childAspectRatio: 1,
                   ),
                   itemBuilder: (BuildContext context, int index) {
-                    DocumentSnapshot doc = budgetGoals[index];
-                    String title = doc['BudgetName'];
-                    double amount = doc['BudgetAmount'];
+                    Map<String, dynamic> goalData =
+                        budgetGoals[index].data() as Map<String, dynamic>;
+                    BudgetGoal goal = BudgetGoal.fromJson(goalData);
+                    String title = goal.budgetName;
+                    double amount = goal.budgetAmount;
+                    String startDate = goal.getFormattedStartDate();
+                    String endDate = goal.getFormattedEndDate();
+
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Something went wrong'),
+                      );
+                    }
+
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
 
                     return Card(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                          side: BorderSide(
-                              width: 1, color: AppColors.mainColorOne)),
+                        borderRadius: BorderRadius.circular(16.0),
+                        side:
+                            BorderSide(width: 1, color: AppColors.mainColorOne),
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(title),
                           SizedBox(height: 8),
                           Text('Amount: \₱$amount'),
+                          SizedBox(height: 8),
+                          Text(
+                              '${startDate.toString()} - ${endDate.toString()}'),
                         ],
                       ),
                     );
