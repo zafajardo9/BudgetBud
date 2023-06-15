@@ -8,7 +8,7 @@ BudgetGoal goalFromJson(String str) => BudgetGoal.fromJson(json.decode(str));
 String goalToJson(BudgetGoal data) => json.encode(data.toJson());
 
 class BudgetGoal {
-  final String documentId;
+  late final String documentId;
   final String budgetName;
   final double budgetAmount;
   final String budgetFrequency;
@@ -29,7 +29,7 @@ class BudgetGoal {
   });
 
   factory BudgetGoal.fromJson(Map<String, dynamic> json) => BudgetGoal(
-        documentId: '',
+        documentId: json["documentId"],
         budgetName: json["BudgetName"],
         budgetAmount: json["BudgetAmount"],
         budgetFrequency: json["BudgetFrequency"],
@@ -40,6 +40,7 @@ class BudgetGoal {
       );
 
   Map<String, dynamic> toJson() => {
+        "documentId": documentId,
         "UserEmail": userEmail,
         "BudgetName": budgetName,
         "BudgetAmount": budgetAmount,

@@ -33,7 +33,7 @@ class _AddBudgetState extends State<AddBudget> {
       DateTimeRange(start: DateTime.now(), end: DateTime.now());
 
   ///Validation
-  saveBudgetGoal() {
+  saveBudgetGoal() async {
     if (selectedBudgetcategory.isEmpty) {
       error('Please select a budget category.');
       return;
@@ -61,7 +61,7 @@ class _AddBudgetState extends State<AddBudget> {
 
     // Rest of the code for creating and saving the budget goal
     var budgetGoal = BudgetGoal(
-      documentId: '',
+      documentId: '', // Remove the empty string here
       budgetName: budgetName,
       budgetAmount: budgetAmount,
       budgetFrequency: _selectedFrequency,
@@ -70,9 +70,14 @@ class _AddBudgetState extends State<AddBudget> {
       endDate: dateTimeRange.end,
       userEmail: user.email!,
     );
-    FirebaseFirestore.instance
+
+    var documentReference = await FirebaseFirestore.instance
         .collection('BudgetGoals')
         .add(budgetGoal.toJson());
+
+// Store the document ID
+    var documentId = documentReference.id;
+    budgetGoal.documentId = documentId;
 
     messageBar();
     _clearTextFields();

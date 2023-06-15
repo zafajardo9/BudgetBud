@@ -1,5 +1,7 @@
 import 'package:budget_bud/misc/colors.dart';
+import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:budget_bud/pages/user_budget_goals/user_add_budget/add_budget.dart';
+import 'package:budget_bud/pages/user_budget_goals/user_add_budget/budget_record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -134,77 +136,102 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
             ),
           ),
           Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: _budgetGoalsRef.snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Something went wrong'),
-                  );
-                }
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _budgetGoalsRef.snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Something went wrong'),
+                    );
+                  }
 
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: LoadingAnimationWidget.waveDots(
-                      size: 200,
-                      color: AppColors.mainColorOne,
-                    ),
-                  );
-                }
-
-                List<QueryDocumentSnapshot> budgetGoals = snapshot.data!.docs;
-
-                return GridView.builder(
-                  itemCount: budgetGoals.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12.0,
-                    mainAxisSpacing: 12.0,
-                    childAspectRatio: 1,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    Map<String, dynamic> goalData =
-                        budgetGoals[index].data() as Map<String, dynamic>;
-                    BudgetGoal goal = BudgetGoal.fromJson(goalData);
-                    String title = goal.budgetName;
-                    double amount = goal.budgetAmount;
-                    String startDate = goal.getFormattedStartDate();
-                    String endDate = goal.getFormattedEndDate();
-
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Something went wrong'),
-                      );
-                    }
-
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                        side:
-                            BorderSide(width: 1, color: AppColors.mainColorOne),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(title),
-                          SizedBox(height: 8),
-                          Text('Amount: \₱$amount'),
-                          SizedBox(height: 8),
-                          Text(
-                              '${startDate.toString()} - ${endDate.toString()}'),
-                        ],
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: LoadingAnimationWidget.waveDots(
+                        size: 200,
+                        color: AppColors.mainColorOne,
                       ),
                     );
-                  },
-                );
-              },
+                  }
+
+                  List<QueryDocumentSnapshot> budgetGoals = snapshot.data!.docs;
+
+                  return GridView.builder(
+                    itemCount: budgetGoals.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12.0,
+                      mainAxisSpacing: 12.0,
+                      childAspectRatio: 1,
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      Map<String, dynamic> goalData =
+                          budgetGoals[index].data() as Map<String, dynamic>;
+                      BudgetGoal goal = BudgetGoal.fromJson(goalData);
+                      String title = goal.budgetName;
+                      double amount = goal.budgetAmount;
+                      String startDate = goal.getFormattedStartDate();
+                      String endDate = goal.getFormattedEndDate();
+
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Something went wrong'),
+                        );
+                      }
+
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => BudgetRecords(
+                              documentId: budgetGoals[index].id,
+                            ),
+                          ));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.backgroundWhite,
+                            borderRadius: BorderRadius.circular(25),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.mainColorOne.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                title,
+                                style: TextStyle(
+                                    fontSize: 17.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 8),
+                              Text('Amount: \₱$amount'),
+                              SizedBox(height: 8),
+                              Text(startDate.toString()),
+                              Icon(Icons.arrow_downward_rounded),
+                              Text(endDate.toString()),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ],
