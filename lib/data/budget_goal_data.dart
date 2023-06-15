@@ -8,6 +8,8 @@ class BudgetGoal {
   final String documentId;
   final String budgetName;
   final double budgetAmount;
+  final String budgetFrequency;
+  final String budgetCategory;
   final DateTime startDate;
   final DateTime endDate;
   final String userEmail;
@@ -15,7 +17,9 @@ class BudgetGoal {
   BudgetGoal({
     required this.documentId,
     required this.budgetName,
+    required this.budgetFrequency,
     required this.budgetAmount,
+    required this.budgetCategory,
     required this.startDate,
     required this.endDate,
     required this.userEmail,
@@ -25,6 +29,8 @@ class BudgetGoal {
         documentId: '',
         budgetName: json["BudgetName"],
         budgetAmount: json["BudgetAmount"],
+        budgetFrequency: json["BudgetFrequency"],
+        budgetCategory: json['BudgetCategory'],
         startDate: json["StartDate"],
         endDate: json["EndDate"],
         userEmail: json["UserEmail"],
@@ -34,6 +40,8 @@ class BudgetGoal {
         "UserEmail": userEmail,
         "BudgetName": budgetName,
         "BudgetAmount": budgetAmount,
+        "BudgetFrequency": budgetFrequency,
+        "BudgetCategory": budgetCategory,
         "StartDate": startDate.toIso8601String(),
         "EndDate": endDate.toIso8601String(),
       };

@@ -105,6 +105,7 @@ flutter:
     - assets/pointer/
     - assets/category/
     - assets/no_data_found/
+    - assets/budgetCategory/
     - images/onboarding_page/
     - .env
 

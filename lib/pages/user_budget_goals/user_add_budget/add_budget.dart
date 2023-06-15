@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -31,16 +32,40 @@ class _AddBudgetState extends State<AddBudget> {
   DateTimeRange dateTimeRange =
       DateTimeRange(start: DateTime.now(), end: DateTime.now());
 
+  ///Validation
   saveBudgetGoal() {
-    //getting values
-    var budgetName = newBudgetNameController.text.trim();
-    //var budgetDescription = newBudgetDescriptionController.text.trim();
-    var budgetAmount = double.parse(newBudgetAmountController.text.trim());
+    if (selectedBudgetcategory.isEmpty) {
+      error('Please select a budget category.');
+      return;
+    }
 
+    var budgetName = newBudgetNameController.text.trim();
+    if (budgetName.isEmpty) {
+      error('Please enter a budget name.');
+      return;
+    }
+
+    // var budgetDescription = newBudgetDescriptionController.text.trim();
+    // Add validation for budget description if needed
+
+    var budgetAmountText = newBudgetAmountController.text.trim();
+    if (budgetAmountText.isEmpty) {
+      error('Please enter a budget amount.');
+      return;
+    }
+    var budgetAmount = double.tryParse(budgetAmountText);
+    if (budgetAmount == null || budgetAmount <= 0) {
+      error('Please enter a valid budget amount.');
+      return;
+    }
+
+    // Rest of the code for creating and saving the budget goal
     var budgetGoal = BudgetGoal(
       documentId: '',
       budgetName: budgetName,
       budgetAmount: budgetAmount,
+      budgetFrequency: _selectedFrequency,
+      budgetCategory: selectedBudgetcategory,
       startDate: dateTimeRange.start,
       endDate: dateTimeRange.end,
       userEmail: user.email!,
@@ -65,6 +90,26 @@ class _AddBudgetState extends State<AddBudget> {
 
         /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
         contentType: ContentType.success,
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
+
+  void error(String message) {
+    final snackBar = SnackBar(
+      /// need to set following properties for best effect of awesome_snackbar_content
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Error',
+        message: message,
+
+        /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+        contentType: ContentType.failure,
       ),
     );
 
@@ -111,6 +156,7 @@ class _AddBudgetState extends State<AddBudget> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
@@ -124,13 +170,15 @@ class _AddBudgetState extends State<AddBudget> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: budgetingGoals.map((goal) {
+                  children: budgetingGoals.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final goal = entry.value;
                     final category = goal['category'];
                     bool isPressed = selectedBudgetcategory == category;
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          selectedBudgetcategory = (isPressed ? '' : category)!;
+                          selectedBudgetcategory = isPressed ? '' : category!;
                           print(selectedBudgetcategory);
                         });
                       },
@@ -161,13 +209,12 @@ class _AddBudgetState extends State<AddBudget> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Icon(
-                              Icons.safety_check,
+                            SvgPicture.asset(
+                              'assets/budgetCategory/${index + 1}.svg',
+                              height: 3.5.h,
                               color: isPressed ? Colors.white : Colors.black54,
                             ),
-                            SizedBox(height: 8.0),
                             Text(
-                              textAlign: TextAlign.left,
                               category ?? '',
                               style: TextStyle(
                                 color:
@@ -183,7 +230,13 @@ class _AddBudgetState extends State<AddBudget> {
                 ),
               ),
             ),
-            Text('Pick your dates!'),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                'How Long?',
+                style: ThemeText.subHeader2,
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
@@ -343,7 +396,6 @@ class _AddBudgetState extends State<AddBudget> {
                 ),
               ),
             ),
-            addVerticalSpace(2),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Row(

@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../data/transaction_data_summary.dart';
+
 class UserBudgetGoals extends StatefulWidget {
   const UserBudgetGoals({Key? key}) : super(key: key);
 
@@ -14,6 +16,27 @@ class UserBudgetGoals extends StatefulWidget {
 class _UserBudgetGoalsState extends State<UserBudgetGoals> {
   CollectionReference _budgetGoalsRef =
       FirebaseFirestore.instance.collection('BudgetGoals');
+
+  @override
+  void initState() {
+    super.initState();
+    fetchBalance();
+  }
+
+  double balance = 0.0;
+  double totalIncome = 0.0;
+  double totalExpense = 0.0;
+
+  Future<void> fetchBalance() async {
+    TransactionSummary summary =
+        await calculateTransactionSummary(TimePeriod.Overall);
+    setState(() {
+      balance = summary.balance;
+      totalIncome = summary.totalIncome;
+      totalExpense = summary.totalExpense;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +68,7 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
               children: [
                 Text('Total Balance'),
                 Text(
-                  '1,000',
+                  balance.toString(),
                   style:
                       TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
                 ),
@@ -64,7 +87,7 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                     children: [
                       Text('My Budgets'),
                       Text(
-                        '1,000',
+                        '1212:P',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20.sp),
                       ),
