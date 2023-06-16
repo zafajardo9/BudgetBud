@@ -30,7 +30,7 @@ class AppColors {
   static final Color second4 = Color(0xFFf68059);
 
   //background white
-  static final Color backgroundWhite = Color(0xFFf9f9f9);
+  static final Color backgroundWhite = Color(0xfffcfcff);
 //other colors
   static final Color onBoardingColorButton = Color(0xFFf68059);
   static final Color deleteButton = Color(0xFFBD0000);

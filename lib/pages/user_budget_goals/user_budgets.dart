@@ -5,6 +5,7 @@ import 'package:budget_bud/pages/user_budget_goals/user_add_budget/budget_record
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -21,6 +22,7 @@ class UserBudgetGoals extends StatefulWidget {
 class _UserBudgetGoalsState extends State<UserBudgetGoals> {
   CollectionReference _budgetGoalsRef =
       FirebaseFirestore.instance.collection('BudgetGoals');
+  final user = FirebaseAuth.instance.currentUser!;
 
   List<QueryDocumentSnapshot> budgetGoals = [];
 
@@ -44,22 +46,29 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
       totalExpense = summary.totalExpense;
     });
 
-    // Fetch budgetGoals data
-    QuerySnapshot snapshot = await _budgetGoalsRef.get();
-    setState(() {
-      budgetGoals = snapshot.docs;
-    });
+    if (user != null) {
+      String userEmail = user.email ?? '';
 
-    // Calculate total budget amount
-    double calculatedTotalBudgetAmount = budgetGoals
-        .map((snapshot) =>
-            BudgetGoal.fromJson(snapshot.data() as Map<String, dynamic>))
-        .map((goal) => goal.budgetAmount)
-        .fold(0, (sum, amount) => sum + amount);
+      // Fetch budgetGoals data
+      QuerySnapshot? snapshot =
+          await _budgetGoalsRef.where('UserEmail', isEqualTo: userEmail).get();
+      if (snapshot != null) {
+        setState(() {
+          budgetGoals = snapshot.docs;
+        });
+      }
 
-    setState(() {
-      totalBudgetAmount = calculatedTotalBudgetAmount;
-    });
+      // Calculate total budget amount
+      double calculatedTotalBudgetAmount = budgetGoals
+          .map((snapshot) =>
+              BudgetGoal.fromJson(snapshot.data() as Map<String, dynamic>))
+          .map((goal) => goal.budgetAmount)
+          .fold(0, (sum, amount) => sum + amount);
+
+      setState(() {
+        totalBudgetAmount = calculatedTotalBudgetAmount;
+      });
+    }
   }
 
   @override
@@ -139,7 +148,9 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: StreamBuilder<QuerySnapshot>(
-                stream: _budgetGoalsRef.snapshots(),
+                stream: _budgetGoalsRef
+                    .where('UserEmail', isEqualTo: user?.email ?? '')
+                    .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
@@ -147,14 +158,16 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                       child: Text('Something went wrong'),
                     );
                   }
+                  final documents = snapshot.data?.docs ?? [];
 
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: LoadingAnimationWidget.waveDots(
-                        size: 200,
-                        color: AppColors.mainColorOne,
-                      ),
+                  if (documents.isEmpty) {
+                    return SvgPicture.asset(
+                      'assets/no_data_found/nd1.1 (2).svg', // Replace with your actual image path
+                      fit: BoxFit.scaleDown,
                     );
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
                   }
 
                   List<QueryDocumentSnapshot> budgetGoals = snapshot.data!.docs;

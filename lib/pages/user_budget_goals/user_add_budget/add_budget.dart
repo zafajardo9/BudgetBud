@@ -61,7 +61,6 @@ class _AddBudgetState extends State<AddBudget> {
 
     // Rest of the code for creating and saving the budget goal
     var budgetGoal = BudgetGoal(
-      documentId: '', // Remove the empty string here
       budgetName: budgetName,
       budgetAmount: budgetAmount,
       budgetFrequency: _selectedFrequency,
@@ -69,15 +68,12 @@ class _AddBudgetState extends State<AddBudget> {
       startDate: dateTimeRange.start,
       endDate: dateTimeRange.end,
       userEmail: user.email!,
+      documentId: '',
     );
 
-    var documentReference = await FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('BudgetGoals')
         .add(budgetGoal.toJson());
-
-// Store the document ID
-    var documentId = documentReference.id;
-    budgetGoal.documentId = documentId;
 
     messageBar();
     _clearTextFields();

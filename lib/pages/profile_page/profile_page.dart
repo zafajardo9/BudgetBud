@@ -3,10 +3,12 @@ import 'package:budget_bud/pages/user_wallet/wallet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../components/my_button.dart';
 import '../../misc/colors.dart';
 import '../../misc/txtStyles.dart';
+import '../app_settings/app_settings.dart';
 import 'components/profile_page_details.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -25,9 +27,16 @@ class _ProfilePageState extends State<ProfilePage> {
     getUserName();
   }
 
-  //sign out
-  void signUserOut() {
-    FirebaseAuth.instance.signOut();
+  void signUserOut() async {
+    // Sign out from Firebase
+    await FirebaseAuth.instance.signOut();
+
+    // Sign out from Google Sign-In
+    await GoogleSignIn().signOut();
+
+    // Perform any additional operations after sign out
+
+    print('User signed out successfully');
   }
 
   getProfilePic() {
@@ -77,7 +86,13 @@ class _ProfilePageState extends State<ProfilePage> {
           'Profile',
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.settings))
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AppSettings(),
+                ));
+              },
+              icon: const Icon(Icons.settings))
         ],
       ),
       body: Container(
