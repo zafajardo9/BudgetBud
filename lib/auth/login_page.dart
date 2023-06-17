@@ -56,9 +56,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //Login user
-
   void signUserIn() async {
     FocusManager.instance.primaryFocus?.unfocus();
+
+    // Validate
+    if (emailController.text.isEmpty) {
+      showErrorMessage("Please input your Email");
+      return;
+    }
+    if (pwdController.text.isEmpty) {
+      showErrorMessage("Please input your Password");
+      return;
+    }
+
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
 

@@ -13,7 +13,6 @@ import '../../../data/budget_goal_data.dart';
 import '../../../misc/colors.dart';
 import '../../category_page/category_budget_goal.dart';
 import '../../category_page/category_list/category_lists.dart';
-import '../../category_page/category_page.dart';
 
 class AddBudget extends StatefulWidget {
   const AddBudget({Key? key}) : super(key: key);
@@ -31,6 +30,23 @@ class _AddBudgetState extends State<AddBudget> {
 
   DateTimeRange dateTimeRange =
       DateTimeRange(start: DateTime.now(), end: DateTime.now());
+
+  double calculateBudgetPerDay(
+      double budgetAmount, DateTimeRange dateTimeRange) {
+    final startDate = dateTimeRange.start;
+    final endDate = dateTimeRange.end;
+    final duration = endDate.difference(startDate);
+    final numberOfDays = duration.inDays;
+
+    if (numberOfDays == 0) {
+      // Avoid division by zero if start and end dates are the same
+      return budgetAmount;
+    } else {
+      final budgetPerDay = budgetAmount / numberOfDays;
+      final roundedBudgetPerDay = double.parse(budgetPerDay.toStringAsFixed(2));
+      return roundedBudgetPerDay;
+    }
+  }
 
   ///Validation
   saveBudgetGoal() async {
@@ -69,6 +85,7 @@ class _AddBudgetState extends State<AddBudget> {
       endDate: dateTimeRange.end,
       userEmail: user.email!,
       documentId: '',
+      amountToSave: calculateBudgetPerDay(budgetAmount, dateTimeRange),
     );
 
     FirebaseFirestore.instance
@@ -238,7 +255,7 @@ class _AddBudgetState extends State<AddBudget> {
                 style: ThemeText.subHeader2,
               ),
             ),
-            Padding(
+            Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -257,47 +274,19 @@ class _AddBudgetState extends State<AddBudget> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
-                              'Your Start Date',
+                              'Your Goal Date',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17.sp,
                               ),
                             ),
                             Text(
-                                '${startDate.month}/${startDate.day}/${startDate.year}'),
+                                '${startDate.month}/${startDate.day}/${startDate.year} - ${endDate.month}/${endDate.day}/${endDate.year}'),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  addHorizontalSpace(1),
-                  Expanded(
-                    child: SizedBox(
-                      height: Adaptive.h(10),
-                      child: ElevatedButton(
-                        onPressed: pickDateRange,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              'Your End Date',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17.sp,
-                              ),
-                            ),
-                            Text(
-                                '${endDate.month}/${endDate.day}/${endDate.year}'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
@@ -432,6 +421,19 @@ class _AddBudgetState extends State<AddBudget> {
     );
     if (newDateRange == null) return;
 
-    setState(() => dateTimeRange = newDateRange);
+    // Add 1 day to the initial end date
+    DateTime newEndDate = newDateRange.end.add(Duration(days: 1));
+
+    // Check if the new end date is the same as the start date
+    if (newEndDate.isBefore(newDateRange.start)) {
+      newEndDate = newDateRange.start.add(Duration(days: 1));
+    }
+
+    setState(() {
+      dateTimeRange = DateTimeRange(
+        start: newDateRange.start,
+        end: newEndDate,
+      );
+    });
   }
 }

@@ -7,6 +7,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../colors.dart';
 import '../graphs_widget/graph_indicator.dart';
 
 class PieGraphWidget extends StatelessWidget {
@@ -82,7 +83,8 @@ class PieGraphWidget extends StatelessWidget {
             value: percentage,
             title:
                 '${percentage.toStringAsFixed(1)}%', // Display the percentage
-            color: getRandomColor(),
+            color: colors[categoryPercentages.keys.toList().indexOf(entry.key) %
+                colors.length],
             radius: 40,
             titleStyle: TextStyle(
               fontSize: 14,
@@ -104,7 +106,9 @@ class PieGraphWidget extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4.0),
             child: Indicator(
-              color: getRandomColor(),
+              color: colors[
+                  categoryPercentages.keys.toList().indexOf(entry.key) %
+                      colors.length],
               text: '$category (${percentage.toStringAsFixed(1)}%)',
               isSquare: false,
             ),
@@ -144,12 +148,17 @@ class PieGraphWidget extends StatelessWidget {
   // Helper function to generate a random color
   Color getRandomColor() {
     final random = Random();
-    return Color.fromARGB(
-      255,
-      random.nextInt(256),
-      random.nextInt(256),
-      random.nextInt(256),
-    );
+    final baseColor = Color(0xFFF68059); // Specify your base color here
+    final redOffset = random.nextInt(51) -
+        25; // Generate a random offset within the range of -25 to 25
+    final greenOffset = random.nextInt(51) - 25;
+    final blueOffset = random.nextInt(51) - 25;
+
+    final red = (baseColor.red + redOffset).clamp(0, 255);
+    final green = (baseColor.green + greenOffset).clamp(0, 255);
+    final blue = (baseColor.blue + blueOffset).clamp(0, 255);
+
+    return Color.fromARGB(255, red, green, blue);
   }
 
   // Helper function to convert TransactionType enum to string

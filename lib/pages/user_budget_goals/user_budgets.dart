@@ -10,6 +10,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../data/budget_goal_data.dart';
+import '../../data/budget_record_data.dart';
 import '../../data/transaction_data_summary.dart';
 
 class UserBudgetGoals extends StatefulWidget {
@@ -30,12 +31,14 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
   void initState() {
     super.initState();
     fetchBalance();
+    reloadScreen();
   }
 
   double balance = 0.0;
   double totalIncome = 0.0;
   double totalExpense = 0.0;
   double totalBudgetAmount = 0.0;
+  double totalRecordAmount = 0.0;
 
   Future<void> fetchBalance() async {
     TransactionSummary summary =
@@ -49,7 +52,7 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
     if (user != null) {
       String userEmail = user.email ?? '';
 
-      // Fetch budgetGoals data
+// Fetch budgetGoals data
       QuerySnapshot? snapshot =
           await _budgetGoalsRef.where('UserEmail', isEqualTo: userEmail).get();
       if (snapshot != null) {
@@ -58,7 +61,7 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
         });
       }
 
-      // Calculate total budget amount
+// Calculate total budget amount
       double calculatedTotalBudgetAmount = budgetGoals
           .map((snapshot) =>
               BudgetGoal.fromJson(snapshot.data() as Map<String, dynamic>))
@@ -68,6 +71,60 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
       setState(() {
         totalBudgetAmount = calculatedTotalBudgetAmount;
       });
+    }
+  }
+
+// Fetch total recorded amount from the BudgetRecords collection of the current budget goal
+  Future<double> getTotalRecordedAmount(String documentId) async {
+    double totalAmount = 0;
+
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('BudgetGoals')
+        .doc(documentId)
+        .collection('records')
+        .get();
+
+    List<QueryDocumentSnapshot> records = querySnapshot.docs;
+
+    records.forEach((record) {
+      Record recordData =
+          Record.fromJson(record.data() as Map<String, dynamic>);
+      totalAmount += recordData.amount;
+    });
+
+    return totalAmount;
+  }
+
+// Calculate progress bar text based on the total recorded amount and budget amount
+  Future<String> calculateProgressBarText(int index) async {
+    double totalRecordedAmount =
+        await getTotalRecordedAmount(budgetGoals[index].id);
+    double budgetAmount =
+        (budgetGoals[index].data() as Map<String, dynamic>)['BudgetAmount'] ??
+            0.0;
+
+    String formattedRecordedAmount =
+        '\₱${totalRecordedAmount.toStringAsFixed(2)}';
+    String formattedBudgetAmount = '\₱${budgetAmount.toStringAsFixed(2)}';
+
+    return '$formattedRecordedAmount / $formattedBudgetAmount';
+  }
+
+  Future<void> reloadScreen() async {
+    await fetchBalance();
+    setState(() {}); // Trigger rebuild
+  }
+
+  void deleteBudgetGoal(String documentId) async {
+    print(documentId);
+    try {
+      await FirebaseFirestore.instance
+          .collection('BudgetGoals')
+          .doc(documentId)
+          .delete();
+      print('BudgetGoal deleted successfully');
+    } catch (e) {
+      print('Error deleting budgetGoal: $e');
     }
   }
 
@@ -209,6 +266,33 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                             ),
                           ));
                         },
+                        onLongPress: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Delete Confirmation'),
+                                content: Text(
+                                    'Are you sure you want to delete this budget goal?'),
+                                actions: [
+                                  TextButton(
+                                    child: Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('Delete'),
+                                    onPressed: () {
+                                      deleteBudgetGoal(budgetGoals[index].id);
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         child: Container(
                           decoration: BoxDecoration(
                             color: AppColors.backgroundWhite,
@@ -233,10 +317,70 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                               ),
                               SizedBox(height: 8),
                               Text('Amount: \₱$amount'),
-                              SizedBox(height: 8),
-                              Text(startDate.toString()),
-                              Icon(Icons.arrow_downward_rounded),
-                              Text(endDate.toString()),
+                              Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: FutureBuilder<double>(
+                                  future: getTotalRecordedAmount(
+                                      budgetGoals[index].id),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      double recordedAmount = snapshot.data!;
+                                      return Container(
+                                        height:
+                                            10, // Adjust the height of the progress bar
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: AppColors.mainColorFour
+                                              .withOpacity(
+                                                  .2), // Set the background color of the progress bar
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          child: LinearProgressIndicator(
+                                            value: recordedAmount /
+                                                amount, // Replace with your desired progress value
+                                            backgroundColor: Colors
+                                                .transparent, // Set the background color of the indicator (transparent to see the container's background color)
+                                            valueColor: AlwaysStoppedAnimation<
+                                                    Color>(
+                                                AppColors
+                                                    .mainColorFour), // Set the color of the indicator
+                                          ),
+                                        ),
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      return Text(
+                                          'Error fetching recorded amount');
+                                    } else {
+                                      return CircularProgressIndicator();
+                                    }
+                                  },
+                                ),
+                              ),
+                              FutureBuilder<double>(
+                                future: getTotalRecordedAmount(
+                                    budgetGoals[index].id),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<double> snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    double recordedAmount = snapshot.data!;
+                                    return Text(
+                                      "${recordedAmount.toStringAsFixed(2)} / $amount",
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
                             ],
                           ),
                         ),
