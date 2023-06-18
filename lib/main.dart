@@ -1,3 +1,4 @@
+import 'package:budget_bud/notification_api/firebase_api.dart';
 import 'package:budget_bud/steps/shared_pref_steps.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseApi().initNotification();
 
   //await FlutterConfig.loadEnvVariables();
   await dotenv.load();
@@ -122,13 +124,6 @@ class MyApp extends StatelessWidget {
                       fontFamily: GoogleFonts.montserrat().fontFamily,
                     ),
                     home: ShowCaseWidget(
-                      onFinish: () {
-                        SharedPreferencesUtils.initializeSharedPreferences()
-                            .then((sharedPreferences) {
-                          SharedPreferencesUtils.setFinishedShowcaseSteps(
-                              sharedPreferences);
-                        });
-                      },
                       builder: Builder(
                         builder: (_) =>
                             isOnboarded ? AuthPage() : OnboardingScreen(),

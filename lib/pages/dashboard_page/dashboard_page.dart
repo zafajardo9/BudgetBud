@@ -16,7 +16,6 @@ import 'package:showcaseview/showcaseview.dart';
 import '../../components/btn_icon_circle.dart';
 import '../../data/expense_data.dart';
 import '../../data/transaction_data_summary.dart';
-import '../../keysToBeInherited.dart';
 import '../../misc/custom_clipper/custom_wave_left.dart';
 import '../../steps/shared_pref_steps.dart';
 import 'dashboard_tabs/dashboard_expense_tab.dart';
@@ -25,11 +24,6 @@ import 'dashboard_tabs/dashboard_income_tab.dart';
 class DashboardPage extends StatefulWidget {
   @override
   _DashboardPageState createState() => _DashboardPageState();
-}
-
-enum TransactionMode {
-  monthly,
-  overall,
 }
 
 class _DashboardPageState extends State<DashboardPage>
@@ -61,8 +55,8 @@ class _DashboardPageState extends State<DashboardPage>
   GlobalKey featureNews = GlobalKey();
   GlobalKey featureConvert = GlobalKey();
   GlobalKey transactions = GlobalKey();
-  GlobalKey userIncome = GlobalKey();
-  GlobalKey userExpense = GlobalKey();
+  GlobalKey userTransactions = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -74,9 +68,9 @@ class _DashboardPageState extends State<DashboardPage>
       });
     });
 
-    //fetchBalance();
+//fetchBalance();
 
-    //FOR NOTIFICATIONS++++++++++++++++++++++++
+//FOR NOTIFICATIONS++++++++++++++++++++++++
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
           if (!isAllowed)
             {
@@ -112,28 +106,7 @@ class _DashboardPageState extends State<DashboardPage>
               )
             }
         });
-
-    SharedPreferencesUtils.initializeSharedPreferences()
-        .then((sharedPreferences) {
-      if (!SharedPreferencesUtils.hasFinishedShowcaseSteps(sharedPreferences)) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
-          ShowCaseWidget.of(context).startShowCase([
-            userDisplay,
-            userCard,
-            features,
-            suggestions,
-            featureNews,
-            featureConvert,
-            transactions,
-            userIncome,
-            userExpense,
-          ]);
-        });
-      }
-    });
   }
-
-  // Add your remaining methods here
 
   String? userName;
 
@@ -141,7 +114,6 @@ class _DashboardPageState extends State<DashboardPage>
     final userEmail = FirebaseAuth.instance.currentUser?.email;
 
     if (userEmail == null) {
-// Handle the case when the user is not signed in.
       return;
     }
 
@@ -180,313 +152,337 @@ class _DashboardPageState extends State<DashboardPage>
         child: CircularProgressIndicator(), // Show a loading indicator
       );
     } else {
-      return Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            title: Text(
-              'User Dashboard',
-              style: ThemeText.appBarTitle,
-            ),
-          ),
-          body: Column(
-            children: [
-              Flexible(
-                child: Stack(
-                  children: [
-                    ClipPath(
-                      clipper: WaveLeft() /*WaveClipperTwo()*/,
-                      child: Container(
-                        color: AppColors.mainColorOne,
-                      ),
+      return ShowCaseWidget(
+        builder: Builder(
+          builder: (context) => Scaffold(
+              appBar: AppBar(
+                elevation: 0,
+                title: Text(
+                  'User Dashboard',
+                  style: ThemeText.appBarTitle,
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () => setState(() {
+                      ShowCaseWidget.of(context)!.startShowCase([
+                        userDisplay,
+                        userCard,
+                        features,
+                        suggestions,
+                        featureNews,
+                        featureConvert,
+                        transactions,
+                        userTransactions,
+                      ]);
+                    }),
+                    icon: const Icon(
+                      Icons.help_rounded,
+                      size: 20,
                     ),
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      bottom: 0,
-                      child: Column(
-                        children: [
-                          Showcase(
-                            key: userDisplay,
-                            title: 'You!',
-                            description: 'User Details on the Go!',
-                            child: Container(
-                              height: Adaptive.h(10),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      'Hello, ${userName ?? ''}',
-                                      style: ThemeText.dashboardDetailsHeader,
+                  ),
+                ],
+              ),
+              body: Column(
+                children: [
+                  Flexible(
+                    child: Stack(
+                      children: [
+                        ClipPath(
+                          clipper: WaveLeft() /*WaveClipperTwo()*/,
+                          child: Container(
+                            color: AppColors.mainColorOne,
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          bottom: 0,
+                          child: Column(
+                            children: [
+                              Showcase(
+                                key: userDisplay,
+                                title: 'You!',
+                                description: 'User Details on the Go!',
+                                child: Container(
+                                  height: Adaptive.h(10),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          'Hello, ${userName ?? ''}',
+                                          style:
+                                              ThemeText.dashboardDetailsHeader,
+                                        ),
+                                        Text(
+                                          'Your Daily Update',
+                                          style: ThemeText
+                                              .dashboardDetailsSubHeader,
+                                        ),
+                                      ],
                                     ),
-                                    Text(
-                                      'Your Daily Update',
-                                      style:
-                                          ThemeText.dashboardDetailsSubHeader,
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          StreamBuilder<TransactionSummary>(
-                            stream: Stream.fromFuture(
-                                calculateTransactionSummary(
-                                    TimePeriod.Overall)),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                final transactionSummary = snapshot.data!;
+                              StreamBuilder<TransactionSummary>(
+                                stream: Stream.fromFuture(
+                                    calculateTransactionSummary(
+                                        TimePeriod.Overall)),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    final transactionSummary = snapshot.data!;
 
-                                return Expanded(
-                                  child: Showcase(
-                                    key: userCard,
-                                    description:
-                                        'Your Balance and Transactions',
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 16),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.mainColorTwo,
-                                          borderRadius:
-                                              BorderRadius.circular(16.0),
-                                        ),
+                                    return Expanded(
+                                      child: Showcase(
+                                        key: userCard,
+                                        description:
+                                            'Your Balance and Transactions',
                                         child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 16),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: AppColors.mainColorTwo,
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 16),
+                                              child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
-                                                        .spaceBetween,
+                                                        .spaceEvenly,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
-                                                  Text(
-                                                    'Balance',
-                                                    style:
-                                                        ThemeText.paragraph54,
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        'Balance',
+                                                        style: ThemeText
+                                                            .paragraph54,
+                                                      ),
+                                                      Text(
+                                                        '₱${transactionSummary.balance}',
+                                                        style: ThemeText
+                                                            .dashboardNumberLarge,
+                                                      ),
+                                                    ],
                                                   ),
-                                                  Text(
-                                                    '₱${transactionSummary.balance}',
-                                                    style: ThemeText
-                                                        .dashboardNumberLarge,
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        'Transactions',
+                                                        style: ThemeText
+                                                            .paragraph54,
+                                                      ),
+                                                      Text(
+                                                        '₱${transactionSummary.totalIncome}',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: AppColors
+                                                              .updateButton,
+                                                          fontSize: 15.sp,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '₱${transactionSummary.totalExpense}',
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: AppColors
+                                                              .deleteButton,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    'Transactions',
-                                                    style:
-                                                        ThemeText.paragraph54,
-                                                  ),
-                                                  Text(
-                                                    '₱${transactionSummary.totalIncome}',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: AppColors
-                                                          .updateButton,
-                                                      fontSize: 15.sp,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    '₱${transactionSummary.totalExpense}',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: AppColors
-                                                          .deleteButton,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                );
-                              } else if (snapshot.hasError) {
-                                // Handle error case
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                // Display loading state
-                                return CircularProgressIndicator();
-                              }
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Showcase(
-                        key: features,
-                        title: 'Features on the go',
-                        description: 'More features to help you!',
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Showcase(
-                                    key: suggestions,
-                                    description:
-                                        'Know various suggestions for you to increase your savings and organize your expenditures',
-                                    targetShapeBorder: const CircleBorder(),
-                                    targetPadding: EdgeInsets.all(8),
-                                    child: IconButtonCircle(
-                                      onPressed: () {},
-                                      icon:
-                                          Icon(Icons.lightbulb_outline_rounded),
-                                    ),
-                                  ),
-                                  Showcase(
-                                    key: featureNews,
-                                    description:
-                                        'Browse some hot topics about Finance and Budgeting around the world!',
-                                    targetShapeBorder: const CircleBorder(),
-                                    targetPadding: EdgeInsets.all(8),
-                                    child: IconButtonCircle(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const DashBoardNews()),
-                                        );
-                                      },
-                                      icon: Icon(Icons.newspaper),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              addVerticalSpace(1),
-                              Row(
-                                children: [
-                                  Showcase(
-                                    key: transactions,
-                                    description:
-                                        'Now your Transactions History more!',
-                                    targetShapeBorder: const CircleBorder(),
-                                    targetPadding: EdgeInsets.all(8),
-                                    child: IconButtonCircle(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const DashboardTransactions()),
-                                        );
-                                      },
-                                      icon: Icon(Icons.history),
-                                    ),
-                                  ),
-                                  Showcase(
-                                    key: featureConvert,
-                                    description:
-                                        'Know the latest exhange rate in your country',
-                                    targetShapeBorder: const CircleBorder(),
-                                    targetPadding: EdgeInsets.all(8),
-                                    child: IconButtonCircle(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const CurrencyConverter()),
-                                        );
-                                      },
-                                      icon: Icon(Icons.currency_exchange),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                    );
+                                  } else if (snapshot.hasError) {
+// Handle error case
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+// Display loading state
+                                    return CircularProgressIndicator();
+                                  }
+                                },
+                              )
                             ],
                           ),
                         ),
-                      ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Showcase(
+                            key: features,
+                            title: 'Features on the go',
+                            description: 'More features to help you!',
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Showcase(
+                                        key: suggestions,
+                                        description:
+                                            'Know various suggestions for you to increase your savings and organize your expenditures',
+                                        targetShapeBorder: const CircleBorder(),
+                                        targetPadding: EdgeInsets.all(8),
+                                        child: IconButtonCircle(
+                                          onPressed: () {},
+                                          icon: Icon(
+                                              Icons.lightbulb_outline_rounded),
+                                        ),
+                                      ),
+                                      Showcase(
+                                        key: featureNews,
+                                        description:
+                                            'Browse some hot topics about Finance and Budgeting around the world!',
+                                        targetShapeBorder: const CircleBorder(),
+                                        targetPadding: EdgeInsets.all(8),
+                                        child: IconButtonCircle(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const DashBoardNews()),
+                                            );
+                                          },
+                                          icon: Icon(Icons.newspaper),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  addVerticalSpace(1),
+                                  Row(
+                                    children: [
+                                      Showcase(
+                                        key: transactions,
+                                        description:
+                                            'Now your Transactions History more!',
+                                        targetShapeBorder: const CircleBorder(),
+                                        targetPadding: EdgeInsets.all(8),
+                                        child: IconButtonCircle(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const DashboardTransactions()),
+                                            );
+                                          },
+                                          icon: Icon(Icons.history),
+                                        ),
+                                      ),
+                                      Showcase(
+                                        key: featureConvert,
+                                        description:
+                                            'Know the latest exhange rate in your country',
+                                        targetShapeBorder: const CircleBorder(),
+                                        targetPadding: EdgeInsets.all(8),
+                                        child: IconButtonCircle(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const CurrencyConverter()),
+                                            );
+                                          },
+                                          icon: Icon(Icons.currency_exchange),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
 //---------HEADER DASHBOARD-------
 
 //---------BODY DASHBOARD-------
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                elevation: 3,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.13),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: TabBar(
-                    labelColor: AppColors.backgroundWhite,
-                    unselectedLabelColor: AppColors.mainColorOne,
-                    indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColors.mainColorOne),
-                    controller: tabController,
-                    isScrollable: true,
-                    tabs: [
-                      Showcase(
-                        key: userIncome,
-                        description: 'Know your recent Income Transactions',
-                        targetPadding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Tab(
-                          child: Text(
-                            'Income',
-                          ),
+                  Showcase(
+                    key: userTransactions,
+                    description:
+                        'Know your recent Income and Expenses Transactions, just click and we\'ll display your recent transactions',
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12)),
+                      elevation: 3,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.13),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: TabBar(
+                          labelColor: AppColors.backgroundWhite,
+                          unselectedLabelColor: AppColors.mainColorOne,
+                          indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: AppColors.mainColorOne),
+                          controller: tabController,
+                          isScrollable: true,
+                          tabs: [
+                            Tab(
+                              child: Text(
+                                'Income',
+                              ),
+                            ),
+                            Tab(
+                              child: Text(
+                                'Expense',
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Showcase(
-                        key: userExpense,
-                        description: 'Know your recent Expense Transactions',
-                        targetPadding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Tab(
-                          child: Text(
-                            'Expense',
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: tabController,
-                  children: [
-                    DashBoardIncome(),
-                    DashBoardExpense(),
-                  ],
-                ),
-              ),
-            ],
-          ));
+                  Expanded(
+                    child: TabBarView(
+                      controller: tabController,
+                      children: [
+                        DashBoardIncome(),
+                        DashBoardExpense(),
+                      ],
+                    ),
+                  ),
+                ],
+              )),
+        ),
+      );
     }
   }
 }

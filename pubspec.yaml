@@ -17,14 +17,14 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.4.0
-  firebase_core: ^2.7.1
+  firebase_core:
   firebase_auth: ^4.3.0
   google_sign_in: ^6.0.2
   cloud_firestore: ^4.8.1
   flutter_svg: ^2.0.5
   flutter_custom_clippers: ^2.1.0
 
-  showcaseview:
+  showcaseview: ^2.0.3
 
   flutter_snake_navigationbar: ^0.6.1
 
