@@ -1,6 +1,7 @@
 import 'package:budget_bud/notification_api/firebase_api.dart';
 import 'package:budget_bud/steps/shared_pref_steps.dart';
 import 'package:camera/camera.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'firebase_options.dart';
 import 'misc/colors.dart';
 import 'auth/auth_page.dart';
+import 'notification_api/forground_local_notification.dart';
 import 'pages/onBoarding_page/onBoarding_screen.dart';
 
 late SharedPreferences prefs;
@@ -102,6 +104,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LocalNotification.initialize();
+    // For Forground State
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      LocalNotification.showNotification(message);
+    });
+
     return UpgradeAlert(
       child: FutureBuilder<SharedPreferences>(
         future: prefsFuture,
