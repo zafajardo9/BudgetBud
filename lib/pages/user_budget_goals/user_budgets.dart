@@ -5,6 +5,7 @@ import 'package:budget_bud/pages/user_budget_goals/user_add_budget/budget_record
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -12,6 +13,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../data/budget_goal_data.dart';
 import '../../data/budget_record_data.dart';
 import '../../data/transaction_data_summary.dart';
+import '../../misc/custom_clipper/notch_clip.dart';
 
 class UserBudgetGoals extends StatefulWidget {
   const UserBudgetGoals({Key? key}) : super(key: key);
@@ -149,42 +151,53 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
       ),
       body: Column(
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
-            width: double.infinity,
-            height: Adaptive.h(10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Stack(
               children: [
-                Text('Total Balance'),
-                Text(
-                  balance.toString(),
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('My Budgets'),
-                      Text(
-                        '\₱$totalBudgetAmount',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.sp),
-                      ),
-                    ],
+                ClipPath(
+                  clipper: NotchClipper(),
+                  child: Container(
+                    padding: EdgeInsets.all(40),
+                    width: Adaptive.w(100),
+                    decoration: BoxDecoration(
+                      color: AppColors.mainColorOne,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Total Balance',
+                          style: TextStyle(color: AppColors.backgroundWhite),
+                        ),
+                        Text(
+                          '\₱${balance.toString()}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
+                              color: AppColors.backgroundWhite),
+                        ),
+                        Text(
+                          'Total Budgets Balance',
+                          style: TextStyle(color: AppColors.backgroundWhite),
+                        ),
+                        Text(
+                          '\₱$totalBudgetAmount',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.sp,
+                              color: AppColors.backgroundWhite),
+                        ),
+                      ],
+                    ),
                   ),
-                  ElevatedButton(
+                ),
+                Positioned(
+                  right: 5.px, // Adjust the position as needed
+                  top: 75.px, // Adjust the position as needed
+                  child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -194,11 +207,12 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                     style: ElevatedButton.styleFrom(
                       shape: CircleBorder(),
                       padding: EdgeInsets.all(10),
+                      primary: AppColors.mainColorFour,
                     ),
                     child: Icon(Icons.add, color: Colors.white),
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(

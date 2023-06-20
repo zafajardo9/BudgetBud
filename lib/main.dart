@@ -74,7 +74,14 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseApi().initNotification();
+
+  try {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    await FirebaseApi().initNotification();
+  } catch (e) {
+    print('Firebase initialization error: $e');
+  }
 
   //await FlutterConfig.loadEnvVariables();
   await dotenv.load();

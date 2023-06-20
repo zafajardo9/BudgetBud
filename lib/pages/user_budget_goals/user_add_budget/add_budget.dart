@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
@@ -168,7 +169,9 @@ class _AddBudgetState extends State<AddBudget> {
                 MaterialPageRoute(builder: (context) => CategoriesBudget()),
               );
             },
-            icon: Icon(FontAwesomeIcons.circleQuestion),
+            icon: Icon(
+              Icons.help_rounded,
+            ),
           )
         ],
       ),
@@ -201,7 +204,7 @@ class _AddBudgetState extends State<AddBudget> {
                         });
                       },
                       child: Container(
-                        width: Adaptive.w(30),
+                        width: Adaptive.w(35),
                         margin: EdgeInsets.all(8.0),
                         padding: EdgeInsets.all(17),
                         decoration: BoxDecoration(
@@ -232,13 +235,16 @@ class _AddBudgetState extends State<AddBudget> {
                               height: 3.5.h,
                               color: isPressed ? Colors.white : Colors.black54,
                             ),
-                            Text(
+                            AutoSizeText(
                               category ?? '',
                               style: TextStyle(
                                 color:
                                     isPressed ? Colors.white : Colors.black54,
-                                fontSize: 15.sp,
+                                fontSize: 13.sp,
                               ),
+                              maxLines: 3,
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),

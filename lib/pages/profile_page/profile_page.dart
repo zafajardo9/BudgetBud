@@ -223,15 +223,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           'Details',
                           style: ThemeText.subHeader2Bold,
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.edit_note,
-                            size: 30,
-                          ),
-                          onPressed: () {
-                            //to be made
-                          },
-                        ),
                       ],
                     ),
                   ),

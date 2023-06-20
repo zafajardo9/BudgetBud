@@ -2,7 +2,6 @@ import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../misc/graphs/pie_graph/pie_graph.dart';
@@ -25,9 +24,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppColors.mainColorOne,
       appBar: AppBar(
         elevation: 0,
-        title: Center(
-          child: Text('Analytics'),
-        ),
+        title: Text('Analytics'),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 20.0),

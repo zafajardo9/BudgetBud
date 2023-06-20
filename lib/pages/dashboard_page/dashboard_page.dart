@@ -177,7 +177,6 @@ class _DashboardPageState extends State<DashboardPage>
                     }),
                     icon: const Icon(
                       Icons.help_rounded,
-                      size: 20,
                     ),
                   ),
                 ],
@@ -311,6 +310,7 @@ class _DashboardPageState extends State<DashboardPage>
                                                               FontWeight.bold,
                                                           color: AppColors
                                                               .deleteButton,
+                                                          fontSize: 15.sp,
                                                         ),
                                                       ),
                                                     ],
@@ -437,36 +437,31 @@ class _DashboardPageState extends State<DashboardPage>
                     key: userTransactions,
                     description:
                         'Know your recent Income and Expenses Transactions, just click and we\'ll display your recent transactions',
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      elevation: 3,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.13),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TabBar(
-                          labelColor: AppColors.backgroundWhite,
-                          unselectedLabelColor: AppColors.mainColorOne,
-                          indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              color: AppColors.mainColorOne),
-                          controller: tabController,
-                          isScrollable: true,
-                          tabs: [
-                            Tab(
-                              child: Text(
-                                'Income',
-                              ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.13),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: TabBar(
+                        labelColor: AppColors.backgroundWhite,
+                        unselectedLabelColor: AppColors.mainColorOne,
+                        indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: AppColors.mainColorOne),
+                        controller: tabController,
+                        isScrollable: true,
+                        tabs: [
+                          Tab(
+                            child: Text(
+                              'Income',
                             ),
-                            Tab(
-                              child: Text(
-                                'Expense',
-                              ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'Expense',
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

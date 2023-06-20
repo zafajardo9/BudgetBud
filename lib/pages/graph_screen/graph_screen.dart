@@ -50,7 +50,12 @@ class _GraphScreenState extends State<GraphScreen> {
                 items: GraphType.values.map((GraphType graphType) {
                   return DropdownMenuItem<GraphType>(
                     value: graphType,
-                    child: Text(graphType.toString().split('.').last),
+                    child: Text(
+                        graphType.toString().split('.').last.replaceAllMapped(
+                              RegExp(r'([a-z])([A-Z])'),
+                              (Match match) =>
+                                  '${match.group(1)} ${match.group(2)}',
+                            )),
                   );
                 }).toList(),
               ),
