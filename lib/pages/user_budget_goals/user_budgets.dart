@@ -151,7 +151,7 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
       ),
       body: Column(
         children: [
-          Padding(
+          Container(
             padding: const EdgeInsets.all(16),
             child: Stack(
               children: [
@@ -194,25 +194,64 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                     ),
                   ),
                 ),
-                Positioned(
-                  right: 5.px, // Adjust the position as needed
-                  top: 75.px, // Adjust the position as needed
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AddBudget()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: CircleBorder(),
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
                       padding: EdgeInsets.all(10),
-                      primary: AppColors.mainColorFour,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddBudget()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: CircleBorder(),
+                          padding: EdgeInsets.all(10),
+                          primary: AppColors.mainColorFour,
+                        ),
+                        child: Icon(Icons.add, color: Colors.white),
+                      ),
                     ),
-                    child: Icon(Icons.add, color: Colors.white),
                   ),
                 ),
               ],
+            ),
+          ),
+          SizedBox(
+            width: Adaptive.w(100),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your Budget Goals',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                  Text(
+                    'Click on the created goal to view',
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13.sp,
+                    ),
+                  ),
+                  Text(
+                    'and long press to delete',
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13.sp,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -232,11 +271,18 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                   final documents = snapshot.data?.docs ?? [];
 
                   if (documents.isEmpty) {
-                    return SvgPicture.asset(
-                      'assets/no_data_found/nd1.1 (2).svg', // Replace with your actual image path
-                      fit: BoxFit.scaleDown,
+                    return Transform.scale(
+                      scale: Adaptive.px(.5),
+                      child: Opacity(
+                        opacity: 0.5,
+                        child: SvgPicture.asset(
+                          'assets/Pie Graph/7.svg',
+                          fit: BoxFit.scaleDown,
+                        ),
+                      ),
                     );
                   }
+
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
                   }
@@ -296,7 +342,12 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                                     },
                                   ),
                                   TextButton(
-                                    child: Text('Delete'),
+                                    child: Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.deleteButton),
+                                    ),
                                     onPressed: () {
                                       deleteBudgetGoal(budgetGoals[index].id);
                                       Navigator.of(context).pop();

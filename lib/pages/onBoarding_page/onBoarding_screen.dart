@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -141,6 +142,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Text(
                 currentIndex == pages.length - 1 ? 'Done' : 'Skip',
                 style: TextStyle(
+                    fontSize: 17.sp,
                     color: currentIndex == pages.length % 2
                         ? Colors.black
                         : AppColors.backgroundWhite),

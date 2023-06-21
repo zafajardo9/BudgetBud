@@ -245,78 +245,73 @@ class _DashboardPageState extends State<DashboardPage>
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 16),
                                           child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 16),
                                             decoration: BoxDecoration(
                                               color: AppColors.mainColorTwo,
                                               borderRadius:
-                                                  BorderRadius.circular(16.0),
+                                                  BorderRadius.circular(25),
                                             ),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 20, vertical: 16),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'Balance',
-                                                        style: ThemeText
-                                                            .paragraph54,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Balance',
+                                                      style:
+                                                          ThemeText.paragraph54,
+                                                    ),
+                                                    Text(
+                                                      '₱${transactionSummary.balance}',
+                                                      style: ThemeText
+                                                          .dashboardNumberLarge,
+                                                    ),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Transactions',
+                                                      style:
+                                                          ThemeText.paragraph54,
+                                                    ),
+                                                    Text(
+                                                      '₱${transactionSummary.totalIncome}',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: AppColors
+                                                            .updateButton,
+                                                        fontSize: 15.sp,
                                                       ),
-                                                      Text(
-                                                        '₱${transactionSummary.balance}',
-                                                        style: ThemeText
-                                                            .dashboardNumberLarge,
+                                                    ),
+                                                    Text(
+                                                      '₱${transactionSummary.totalExpense}',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: AppColors
+                                                            .deleteButton,
+                                                        fontSize: 15.sp,
                                                       ),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Text(
-                                                        'Transactions',
-                                                        style: ThemeText
-                                                            .paragraph54,
-                                                      ),
-                                                      Text(
-                                                        '₱${transactionSummary.totalIncome}',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: AppColors
-                                                              .updateButton,
-                                                          fontSize: 15.sp,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        '₱${transactionSummary.totalExpense}',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: AppColors
-                                                              .deleteButton,
-                                                          fontSize: 15.sp,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),

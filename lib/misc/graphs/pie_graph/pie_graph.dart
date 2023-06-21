@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../colors.dart';
 import '../graphs_widget/graph_indicator.dart';
@@ -43,11 +44,18 @@ class PieGraphWidget extends StatelessWidget {
         final documents = snapshot.data!.docs;
 
         if (documents.isEmpty) {
-          return SvgPicture.asset(
-            'assets/no_data_found/nd1.1 (2).svg', // Replace with your actual image path
-            fit: BoxFit.cover,
+          return Transform.scale(
+            scale: Adaptive.px(.5),
+            child: Opacity(
+              opacity: 0.5,
+              child: SvgPicture.asset(
+                'assets/Pie Graph/17.svg',
+                fit: BoxFit.scaleDown,
+              ),
+            ),
           );
         }
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }

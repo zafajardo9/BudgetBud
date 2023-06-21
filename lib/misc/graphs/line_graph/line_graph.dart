@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../colors.dart';
 
@@ -61,10 +62,14 @@ class _LineGraphState extends State<LineGraph> {
   @override
   Widget build(BuildContext context) {
     if (transactionSpots.isEmpty) {
-      return Center(
-        child: SvgPicture.asset(
-          'assets/no_data_found/nd1.1 (2).svg', // Replace with your actual image path
-          fit: BoxFit.cover,
+      return Transform.scale(
+        scale: Adaptive.px(.5),
+        child: Opacity(
+          opacity: 0.5,
+          child: SvgPicture.asset(
+            'assets/Line Graph/43.svg',
+            fit: BoxFit.scaleDown,
+          ),
         ),
       );
     } else {

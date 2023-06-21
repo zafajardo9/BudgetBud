@@ -46,7 +46,7 @@ class BarGraphWidget extends StatelessWidget {
           final int dayOfWeek = transactionDate.weekday;
           if (documents.isEmpty) {
             return SvgPicture.asset(
-              'assets/no_data_found/nd1.1 (2).svg', // Replace with your actual image path
+              'assets/Line Graph/36.svg', // Replace with your actual image path
               fit: BoxFit.cover,
             );
           }
