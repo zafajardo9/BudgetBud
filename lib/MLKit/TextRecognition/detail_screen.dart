@@ -19,12 +19,12 @@ class _DetailScreenState extends State<DetailScreen> {
   late final String _imagePath;
   late final TextRecognizer _textRecognizer;
   Size? _imageSize;
-  List<String> _listDateStrings = [];
-  List<String> _listPriceStrings = [];
   List<String> _listAllStrings = [];
-
+  List<String> _listPriceStrings = [];
   late final int priceTotalFinal;
   late final String dateFinal;
+
+  String? totalAmount;
 
   // Fetching the image size from the image file
   Future<void> _getImageSize(File imageFile) async {
@@ -46,18 +46,6 @@ class _DetailScreenState extends State<DetailScreen> {
     });
   }
 
-  // double _extractPriceValue(String priceString) {
-  //   final pricePattern = r'(?:₱|Php|PHP|P|\$)(\d+(\.\d{2})?)';
-  //   final priceMatch = RegExp(pricePattern).firstMatch(priceString);
-  //   if (priceMatch != null) {
-  //     final value = double.tryParse(priceMatch.group(1) ?? '');
-  //     if (value != null) {
-  //       return value;
-  //     }
-  //   }
-  //   return 0;
-  // }
-
   void _recognizeText() async {
     _getImageSize(File(_imagePath));
 
@@ -67,58 +55,46 @@ class _DetailScreenState extends State<DetailScreen> {
     final RecognizedText recognizedText =
         await _textRecognizer.processImage(inputImage);
 
-    String? date;
+    // Variables
+    String? totalAmount;
 
-    String noData = 'No Data. Can be a Problem on our side or not clear photo';
-
-    final totalExp = RegExp(r"([Tt][Oo][Tt][Aa][Ll])");
-    final priceRegex = r'(?:₱|Php|PHP|P|\$)\d+(\.\d{2})?';
-    final dateRegex = r'(\d{1,2}/\d{1,2}/\d{2,4})';
-
-    List<String> priceMatches = [];
-
-// Finding and storing the total price
+    // Finding and storing the total amount
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
         final String text = line.text;
 
-        // Check for total price
-        if (totalExp.hasMatch(text)) {
-          final Iterable<RegExpMatch> matches =
-              RegExp(priceRegex).allMatches(text);
-          for (RegExpMatch match in matches) {
-            priceMatches.add(match.group(0)!);
+        final totalAmountMatch =
+            RegExp(r'\btotal\b', caseSensitive: false).firstMatch(text);
+        if (totalAmountMatch != null) {
+          final numericValueMatch = RegExp(r'(\d+(\.\d+)?)').firstMatch(text);
+          if (numericValueMatch != null) {
+            totalAmount = numericValueMatch.group(0);
+            break; // Stop iterating if total amount is found
           }
         }
+      }
 
-        // Check for date
-        final dateMatch = RegExp(dateRegex).firstMatch(text);
-        if (dateMatch != null) {
-          date = dateMatch.group(0);
-        }
+      if (totalAmount != null) {
+        break; // Stop iterating if total amount is found
       }
     }
-    String? totalPrice = priceMatches.isNotEmpty ? priceMatches.last : null;
 
     setState(() {
-      _listPriceStrings = totalPrice != null ? [totalPrice] : [noData];
-      _listDateStrings = date != null ? [date] : [noData];
+      _listPriceStrings =
+          totalAmount != null ? [totalAmount] : ['Total Amount not found'];
     });
   }
 
   @override
   void initState() {
     _imagePath = widget.imagePath;
-    // Initializing the text recognizer
     _textRecognizer = TextRecognizer();
-    //_recognizeEmails();
     _recognizeText();
     super.initState();
   }
 
   @override
   void dispose() {
-    // Disposing the text recognizer when not used anymore
     _textRecognizer.close();
     super.dispose();
   }
@@ -199,16 +175,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    BouncingScrollPhysics(),
-                                                itemCount:
-                                                    _listPriceStrings!.length,
-                                                itemBuilder: (context, index) =>
-                                                    Text(_listPriceStrings![
-                                                        index]),
-                                              ),
+                                              Text(totalAmount!),
                                               SizedBox(height: 10),
                                               SizedBox(
                                                 height: 10,
@@ -218,16 +185,6 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
-                                              ),
-                                              ListView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                    BouncingScrollPhysics(),
-                                                itemCount:
-                                                    _listDateStrings!.length,
-                                                itemBuilder: (context, index) =>
-                                                    Text(_listDateStrings![
-                                                        index]),
                                               ),
                                             ],
                                           )

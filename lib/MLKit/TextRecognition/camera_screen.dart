@@ -80,7 +80,7 @@ class _CameraScreenState extends State<CameraScreen> {
     return Scaffold(
       backgroundColor: AppColors.mainColorOne,
       appBar: AppBar(
-        title: Text('Receipt Scanner v 1'),
+        title: Text('Receipt Scanner v 0.2'),
         elevation: 0,
       ),
       body: _controller.value.isInitialized

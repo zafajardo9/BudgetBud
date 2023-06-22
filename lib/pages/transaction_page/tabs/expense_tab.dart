@@ -231,10 +231,6 @@ class _ExpenseTabState extends State<ExpenseTab> {
             color: AppColors.mainColorTwo,
           ),
           addVerticalSpace(3),
-          Text(
-            'Input your Expense',
-            style: ThemeText.subHeader1Bold,
-          ),
           Form(
             child: SizedBox(
               width: Adaptive.w(90),
@@ -255,7 +251,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 1.w, horizontal: 4.h),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(25),
                             borderSide: BorderSide(
                               color: Colors.grey.shade400,
                               width: 2,
@@ -290,7 +286,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                             size: 15,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(25),
                             borderSide: BorderSide(
                               color: Colors.grey.shade400,
                               width: 2,
@@ -365,36 +361,32 @@ class _ExpenseTabState extends State<ExpenseTab> {
                     ],
                   ),
                   addVerticalSpace(2.5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Column(
                     children: [
                       ElevatedButton.icon(
                         onPressed: onTextFieldTap,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(20), // Rounded corners
+                                BorderRadius.circular(25), // Rounded corners
                           ),
-                          minimumSize: Size(40.w, 6.h),
+                          minimumSize: Size(100.w, 6.h),
                         ),
                         icon: Icon(Icons.category), // Button icon
                         label: Text('Categories'), // Button label
                       ),
+                      addVerticalSpace(2.5),
                       ElevatedButton(
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(CircleBorder()),
-                          padding: MaterialStateProperty.all(
-                              EdgeInsets.all(2.h)), // <-- Button color
-                          overlayColor:
-                              MaterialStateProperty.resolveWith<Color?>(
-                                  (states) {
-                            if (states.contains(MaterialState.pressed)) {
-                              return AppColors.mainColorTwo; // <-- Splash color
-                            }
-                          }),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.mainColorFour,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(25), // Rounded corners
+                          ),
+                          minimumSize: Size(100.w, 6.h),
                         ),
                         onPressed: saveExpense,
-                        child: Icon(Icons.arrow_forward),
+                        child: Text('Save'),
                       ),
                     ],
                   )

@@ -199,10 +199,6 @@ class _IncomeTabState extends State<IncomeTab> {
             color: AppColors.mainColorTwo,
           ),
           addVerticalSpace(3),
-          Text(
-            'Input your Income',
-            style: ThemeText.subHeader1Bold,
-          ),
           Form(
             child: SizedBox(
               width: Adaptive.w(90),
@@ -223,7 +219,7 @@ class _IncomeTabState extends State<IncomeTab> {
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 1.w, horizontal: 4.h),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(25),
                             borderSide: BorderSide(
                               color: Colors.grey.shade400,
                               width: 2,
@@ -247,7 +243,7 @@ class _IncomeTabState extends State<IncomeTab> {
                             size: 15,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(25),
                             borderSide: BorderSide(
                               color: Colors.grey.shade400,
                               width: 2,
@@ -277,7 +273,7 @@ class _IncomeTabState extends State<IncomeTab> {
                             size: 15,
                           ),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(25),
                             borderSide: BorderSide(
                               color: Colors.grey.shade400,
                               width: 2,
@@ -322,36 +318,35 @@ class _IncomeTabState extends State<IncomeTab> {
                     ],
                   ),
                   addVerticalSpace(2.5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  Column(
                     children: [
                       ElevatedButton.icon(
                         onPressed: onTextFieldTap,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(20), // Rounded corners
+                                BorderRadius.circular(25), // Rounded corners
                           ),
-                          minimumSize: Size(40.w, 6.h),
+                          minimumSize: Size(100.w, 6.h),
                         ),
                         icon: Icon(Icons.category), // Button icon
                         label: Text('Categories'), // Button label
                       ),
+                      addVerticalSpace(2.5),
                       ElevatedButton(
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(CircleBorder()),
-                          padding: MaterialStateProperty.all(
-                              EdgeInsets.all(2.h)), // <-- Button color
-                          overlayColor:
-                              MaterialStateProperty.resolveWith<Color?>(
-                                  (states) {
-                            if (states.contains(MaterialState.pressed)) {
-                              return AppColors.mainColorTwo; // <-- Splash color
-                            }
-                          }),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.mainColorFour,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(25), // Rounded corners
+                          ),
+                          minimumSize: Size(100.w, 6.h),
                         ),
                         onPressed: saveIncome,
-                        child: Icon(Icons.arrow_forward),
+                        child: Text(
+                          'Save',
+                          style: TextStyle(fontWeight: FontWeight.w800),
+                        ),
                       ),
                     ],
                   )
