@@ -74,6 +74,7 @@ dependencies:
   awesome_notifications:
   flutter_local_notifications: ^14.1.1
   auto_size_text: ^3.0.0
+  percent_indicator: ^4.2.3
 
 
 

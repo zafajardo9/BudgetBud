@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../misc/graphs/pie_graph/pie_graph.dart';
 import '../graph_screen/graph_screen.dart';
+import '../user_budget_goals/survey/step_survey.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -29,7 +30,12 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.only(right: 20.0),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const StepSurvey()),
+                );
+              },
               child: Icon(Icons.sort),
             ),
           ),

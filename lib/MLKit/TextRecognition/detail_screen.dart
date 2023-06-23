@@ -5,6 +5,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+
+import '../../pages/transaction_page/tabs/expense_tab.dart';
+import 'highlight_selected.dart';
 
 class DetailScreen extends StatefulWidget {
   final String imagePath;
@@ -20,9 +25,10 @@ class _DetailScreenState extends State<DetailScreen> {
   late final TextRecognizer _textRecognizer;
   Size? _imageSize;
   List<String> _listAllStrings = [];
-  List<String> _listPriceStrings = [];
   late final int priceTotalFinal;
   late final String dateFinal;
+
+  List<Rect> _textRects = [];
 
   String? totalAmount;
 
@@ -56,32 +62,28 @@ class _DetailScreenState extends State<DetailScreen> {
         await _textRecognizer.processImage(inputImage);
 
     // Variables
-    String? totalAmount;
+    num scanTotal = 0;
+    RegExp moneyExp = RegExp(r"([0-9]{1,3}\.[0-9]{2})");
 
-    // Finding and storing the total amount
+    // Finding and storing the scanTotal (largest number)
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
         final String text = line.text;
-
-        final totalAmountMatch =
-            RegExp(r'\btotal\b', caseSensitive: false).firstMatch(text);
-        if (totalAmountMatch != null) {
-          final numericValueMatch = RegExp(r'(\d+(\.\d+)?)').firstMatch(text);
-          if (numericValueMatch != null) {
-            totalAmount = numericValueMatch.group(0);
-            break; // Stop iterating if total amount is found
+        final moneyMatch = moneyExp.firstMatch(text);
+        if (moneyMatch != null) {
+          final num lineCost = num.parse(moneyMatch.group(0)!);
+          if (lineCost > scanTotal) {
+            scanTotal = lineCost;
+            _textRects.add(line.boundingBox!);
+            print('Got rects');
           }
         }
-      }
-
-      if (totalAmount != null) {
-        break; // Stop iterating if total amount is found
       }
     }
 
     setState(() {
-      _listPriceStrings =
-          totalAmount != null ? [totalAmount] : ['Total Amount not found'];
+      totalAmount =
+          scanTotal > 0 ? scanTotal.toString() : 'Total Amount not found';
     });
   }
 
@@ -104,6 +106,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Receipt Details"),
+        elevation: 0,
       ),
       body: _imageSize != null
           ? Stack(
@@ -113,6 +116,10 @@ class _DetailScreenState extends State<DetailScreen> {
                   color: Colors.black,
                   child: Stack(
                     children: [
+                      CustomPaint(
+                        painter: HighlightPainter(_textRects),
+                        size: _imageSize!,
+                      ),
                       AspectRatio(
                         aspectRatio: _imageSize!.aspectRatio,
                         child: Image.file(
@@ -120,15 +127,9 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                       ),
                       Positioned.fill(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(
-                              sigmaX: 5,
-                              sigmaY:
-                                  5), // Adjust the sigma values for the desired blur effect
-                          child: Container(
-                            color: Colors.black.withOpacity(
-                                0), // Adjust the opacity for the desired blur effect
-                          ),
+                        child: Container(
+                          color: Colors.black.withOpacity(
+                              0), // Adjust the opacity for the desired blur effect
                         ),
                       ),
                     ],
@@ -149,49 +150,24 @@ class _DetailScreenState extends State<DetailScreen> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Text(
-                                    "Identified fields",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: Adaptive.h(50),
-                                  child: SingleChildScrollView(
-                                    child: _listAllStrings != null
-                                        ? Column(
-                                            children: [
-                                              Text(
-                                                "PRICE",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              Text(totalAmount!),
-                                              SizedBox(height: 10),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Text(
-                                                "DATE",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ],
-                                          )
-                                        : Container(),
-                                  ),
-                                ),
-                              ],
+                            child: Container(
+                              width: Adaptive.w(90),
+                              height: Adaptive.h(15),
+                              child: SingleChildScrollView(
+                                child: _listAllStrings != null
+                                    ? Column(
+                                        children: [
+                                          Text(
+                                            "Total Amount Detected",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(height: 10),
+                                          Text(totalAmount ?? ''),
+                                        ],
+                                      )
+                                    : Container(),
+                              ),
                             ),
                           ),
                           Positioned(
@@ -205,7 +181,14 @@ class _DetailScreenState extends State<DetailScreen> {
                                     EdgeInsets.all(2.h)), // <-- Button color
                               ),
                               onPressed: () {
-                                // Button action
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ExpenseTab(),
+                                    settings: RouteSettings(
+                                        arguments: totalAmount ?? ''),
+                                  ),
+                                );
                               },
                               child: Icon(Icons.send_rounded),
                             ),

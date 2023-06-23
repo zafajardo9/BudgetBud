@@ -35,7 +35,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
 //controllers
   final newExpenseNameController = TextEditingController();
   final newExpenseDescriptionController = TextEditingController();
-  final newExpenseAmountController = TextEditingController();
+  late var newExpenseAmountController = TextEditingController();
   String selectedItem = '';
 
   saveExpense() {
@@ -223,6 +223,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
   //Widget ITSELF
   @override
   Widget build(BuildContext context) {
+    final String? value = ModalRoute.of(context)?.settings.arguments as String?;
     return SingleChildScrollView(
       child: Column(
         children: [

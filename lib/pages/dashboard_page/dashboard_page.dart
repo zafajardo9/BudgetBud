@@ -18,6 +18,7 @@ import '../../data/expense_data.dart';
 import '../../data/transaction_data_summary.dart';
 import '../../misc/custom_clipper/custom_wave_left.dart';
 import '../../steps/shared_pref_steps.dart';
+import '../suggestions/suggestions_page.dart';
 import 'dashboard_tabs/dashboard_expense_tab.dart';
 import 'dashboard_tabs/dashboard_income_tab.dart';
 
@@ -351,7 +352,14 @@ class _DashboardPageState extends State<DashboardPage>
                                         targetShapeBorder: const CircleBorder(),
                                         targetPadding: EdgeInsets.all(8),
                                         child: IconButtonCircle(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const SuggestionPage()),
+                                            );
+                                          },
                                           icon: Icon(
                                               Icons.lightbulb_outline_rounded),
                                         ),
