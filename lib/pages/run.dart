@@ -1,6 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:budget_bud/pages/dashboard_page/dashboard_page.dart';
 import 'package:budget_bud/pages/profile_page/profile_page.dart';
+import 'package:budget_bud/pages/user_budget_goals/survey/step_survey.dart';
 import 'package:budget_bud/pages/user_budget_goals/user_budgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
@@ -35,50 +36,9 @@ class _RunState extends State<Run> {
     DashboardPage(),
     HomePage(),
     TransactionPage(),
-    UserBudgetGoals(),
+    StepSurvey(),
     ProfilePage(),
   ];
-
-  // @override
-  // void initState() {
-  //
-  //   super.initState();
-  //   AwesomeNotifications().isNotificationAllowed().then((isAllowed) => {
-  //         if (!isAllowed)
-  //           {
-  //             showDialog(
-  //               context: context,
-  //               builder: (context) => AlertDialog(
-  //                 title: Text('Allow Notification'),
-  //                 content: Text(
-  //                     'Our App would like to send you notifications so that we can help.'),
-  //                 actions: [
-  //                   TextButton(
-  //                     onPressed: () {
-  //                       Navigator.pop(context);
-  //                     },
-  //                     child: Text(
-  //                       'Close',
-  //                       style: TextStyle(color: AppColors.deleteButton),
-  //                     ),
-  //                   ),
-  //                   TextButton(
-  //                     onPressed: () => AwesomeNotifications()
-  //                         .requestPermissionToSendNotifications()
-  //                         .then((_) => Navigator.pop(context)),
-  //                     child: Text(
-  //                       'Allow',
-  //                       style: TextStyle(
-  //                           color: AppColors.updateButton,
-  //                           fontWeight: FontWeight.bold),
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //             )
-  //           }
-  //       });
-  // }
 
   ShapeBorder? bottomBarShape = const RoundedRectangleBorder(
     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -126,14 +86,15 @@ class _RunState extends State<Run> {
 
         currentIndex: _SelectedTab.values.indexOf(_selectedTab),
         onTap: _handleIndexChanged,
-        items: const [
+        items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '1'),
           BottomNavigationBarItem(
               icon: Icon(Icons.auto_graph_outlined), label: '2'),
           BottomNavigationBarItem(icon: Icon(Icons.add), label: '3'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month_outlined), label: '4'),
-          BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.user), label: '5')
+              icon: Icon(FontAwesomeIcons.piggyBank, size: 19.sp), label: '4'),
+          BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.user, size: 19.sp), label: '5')
         ],
         selectedLabelStyle: const TextStyle(fontSize: 14),
         unselectedLabelStyle: const TextStyle(fontSize: 10),

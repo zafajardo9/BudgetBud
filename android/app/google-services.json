@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "718638126645",
+    "project_id": "budgetbud-19654",
+    "storage_bucket": "budgetbud-19654.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:718638126645:android:68a25fa14298f3b844c37c",
+        "android_client_info": {
+          "package_name": "com.example.budget_bud"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "718638126645-1h865rldnfaj6atam9rsegtfs5vgncsn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.budget_bud",
+            "certificate_hash": "8f9d08de0cb93066e04c27a4881da4fb321feda2"
+          }
+        },
+        {
+          "client_id": "718638126645-gpeh4hkergenq0c5pm40tfsrdtgrtqga.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.budget_bud",
+            "certificate_hash": "38cf30dc5903acc7a48857cdd349624dc5bf97cb"
+          }
+        },
+        {
+          "client_id": "718638126645-i3r9s0p1dh3lsj16ve141cjp4o7ku0eb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.budget_bud",
+            "certificate_hash": "85c2772d5e895ec042d6ccdea65b79e1d737e021"
+          }
+        },
+        {
+          "client_id": "718638126645-ivoa1cjoq7am65h6f9iv28oe7s383ptp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZgpk2Y0Gk0ZlPDSu01WG0leyWD4sYjDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "718638126645-41a21eukuu6s0fg7128kgrdeifec3tcu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "718638126645-hcmb4dq61qhqdm0su72bf51fot7ogd2t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.budgetBud"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
