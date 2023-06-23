@@ -26,9 +26,9 @@ class Run extends StatefulWidget {
 class _RunState extends State<Run> {
   var _selectedTab = _SelectedTab.homePage;
 
-  void _handleIndexChanged(int i) {
+  void _handleIndexChanged(int index) {
     setState(() {
-      _selectedTab = _SelectedTab.values[i];
+      _selectedTab = _SelectedTab.values[index];
     });
   }
 
@@ -36,7 +36,7 @@ class _RunState extends State<Run> {
     DashboardPage(),
     HomePage(),
     TransactionPage(),
-    StepSurvey(),
+    UserBudgetGoals(),
     ProfilePage(),
   ];
 

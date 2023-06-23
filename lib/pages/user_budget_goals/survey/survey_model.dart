@@ -4,9 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 Future<void> addSurveyDataToFirestore({
   required String budgetSchedule,
   required double totalBudget,
-  required double wantsValue,
-  required double needsValue,
-  required double savingsValue,
+  double? wantsValue, // Make the wantsValue parameter nullable
+  double? needsValue, // Make the needsValue parameter nullable
+  double? savingsValue, // Make the savingsValue parameter nullable
 }) async {
   try {
     // Get the current user
@@ -19,16 +19,27 @@ Future<void> addSurveyDataToFirestore({
       // Create a new document in the "surveys" collection
       final DocumentReference surveyRef = firestore.collection('surveys').doc();
 
-      // Set the survey data along with the user information
-      await surveyRef.set({
+      // Prepare the survey data
+      final Map<String, dynamic> surveyData = {
         'userId': user.uid,
         'email': user.email,
         'budgetSchedule': budgetSchedule,
         'totalBudget': totalBudget,
-        'wantsValue': wantsValue,
-        'needsValue': needsValue,
-        'savingsValue': savingsValue,
-      });
+      };
+
+      // Include the wants, needs, and savings values only if provided
+      if (wantsValue != null) {
+        surveyData['wantsValue'] = wantsValue;
+      }
+      if (needsValue != null) {
+        surveyData['needsValue'] = needsValue;
+      }
+      if (savingsValue != null) {
+        surveyData['savingsValue'] = savingsValue;
+      }
+
+      // Set the survey data in the Firestore document
+      await surveyRef.set(surveyData);
 
       print('Survey data added to Firestore');
     } else {

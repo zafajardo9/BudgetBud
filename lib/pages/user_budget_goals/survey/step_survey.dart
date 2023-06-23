@@ -6,6 +6,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../misc/txtStyles.dart';
+import '../user_add_budget/add_budget.dart';
 import '../user_budgets.dart';
 
 class StepSurvey extends StatefulWidget {
@@ -35,7 +36,7 @@ class _StepSurveyState extends State<StepSurvey> {
 
   void markSurveyScreenAsShown() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('surveyScreenShown', true);
+    await prefs.setBool('completedSurvey', true);
   }
 
   //end of logic and checking
@@ -377,15 +378,22 @@ class _StepSurveyState extends State<StepSurvey> {
             addSurveyDataToFirestore(
               budgetSchedule: selectedBudgetSched,
               totalBudget: double.parse(_amountController.text),
-              wantsValue: double.parse(firstValue.text),
-              needsValue: double.parse(secondValue.text),
-              savingsValue: double.parse(thirdValue.text),
+              wantsValue: firstValue.text.isNotEmpty
+                  ? double.parse(firstValue.text)
+                  : 0.0, // Use 0.0 if no value is provided for wants
+              needsValue: secondValue.text.isNotEmpty
+                  ? double.parse(secondValue.text)
+                  : 0.0, // Use 0.0 if no value is provided for needs
+              savingsValue: thirdValue.text.isNotEmpty
+                  ? double.parse(thirdValue.text)
+                  : 0.0, // Use 0.0 if no value is provided for savings
             );
             //send to the main screen
+
             markSurveyScreenAsShown(); // Mark survey screen as shown
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => UserBudgetGoals()),
+              MaterialPageRoute(builder: (context) => AddBudget()),
             );
           } else {
             setState(() => currentStep += 1);

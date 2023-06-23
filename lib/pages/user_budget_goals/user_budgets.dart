@@ -1,5 +1,6 @@
 import 'package:budget_bud/misc/colors.dart';
 import 'package:budget_bud/misc/txtStyles.dart';
+import 'package:budget_bud/pages/user_budget_goals/survey/step_survey.dart';
 import 'package:budget_bud/pages/user_budget_goals/user_add_budget/add_budget.dart';
 import 'package:budget_bud/pages/user_budget_goals/user_add_budget/budget_record.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/budget_goal_data.dart';
 import '../../data/budget_record_data.dart';
@@ -200,12 +202,28 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                     child: Padding(
                       padding: EdgeInsets.all(10),
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddBudget()),
+                        onPressed: () async {
+                          final hasCompletedSurvey =
+                              await SharedPreferences.getInstance().then(
+                            (prefs) =>
+                                prefs.getBool('completedSurvey') ?? false,
                           );
+
+                          if (hasCompletedSurvey) {
+                            // The survey has already been completed, navigate to AddBudget directly
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddBudget()),
+                            );
+                          } else {
+                            // The survey hasn't been completed yet, navigate to StepSurvey
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => StepSurvey()),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           shape: CircleBorder(),
