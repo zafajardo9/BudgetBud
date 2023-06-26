@@ -42,18 +42,18 @@ final List<Color> colors = [
   Color(0xFF4E3EC8),
   Color(0xFF634CFD),
   Color(0xFFffbf3A),
-  Color(0xFFf0f1fA),
   Color(0xFFf68059),
   Color(0xFF0D1853),
   Color(0xFFFFBD59),
-  Color(0xFFF4F3FF),
   Color(0xFFB38484),
   Color(0xFF091945),
   Color(0xFF8916FF),
   Color(0xFFFF25C2),
   Color(0xFF25DFFF),
+  Color(0xFFF4F3FF),
   Color(0xFFC6B9B9),
   Color(0xFFF0E5E5),
+  Color(0xFFf0f1fA),
 ];
 
 MaterialColor buildMaterialColor(Color color) {

@@ -12,11 +12,13 @@ class TransactionSummary {
   final double totalIncome;
   final double totalExpense;
   final double balance;
+  final double impulsivePercentage;
 
   TransactionSummary({
     required this.totalIncome,
     required this.totalExpense,
     required this.balance,
+    required this.impulsivePercentage,
   });
 }
 
@@ -76,10 +78,18 @@ Future<TransactionSummary> calculateTransactionSummary(
 
   final balance = totalIncome - totalExpense;
 
+  double impulsivePercentage = 0.0;
+  if (balance < 0) {
+    impulsivePercentage = (totalExpense / totalIncome) * 100;
+    impulsivePercentage = impulsivePercentage.clamp(
+        0, 100); // Clamp the percentage between 0 and 100
+  }
+
   return TransactionSummary(
     totalIncome: totalIncome,
     totalExpense: totalExpense,
     balance: balance,
+    impulsivePercentage: impulsivePercentage,
   );
 }
 
@@ -106,3 +116,68 @@ bool isSameMonth(DateTime date1, DateTime date2) {
 bool isSameYear(DateTime date1, DateTime date2) {
   return date1.year == date2.year;
 }
+
+Future<TransactionSummary> calculateTransactionSummaryByMonth() async {
+  final user = FirebaseAuth.instance.currentUser!;
+  final CollectionReference collection =
+      FirebaseFirestore.instance.collection('Transactions');
+
+  final QuerySnapshot snapshot =
+      await collection.where('UserEmail', isEqualTo: user.email).get();
+  final List<DocumentSnapshot> data = snapshot.docs;
+
+  double totalIncome = 0.0;
+  double totalExpense = 0.0;
+
+  int latestMonth = 0;
+  int latestYear = 0;
+
+  data.forEach((transaction) {
+    final transactionType = transaction['TransactionType'];
+    final transactionAmount = transaction['TransactionAmount'];
+    final transactionDateStr = transaction['TransactionDate'] as String;
+    final transactionDateTime = DateTime.parse(transactionDateStr).toLocal();
+
+    if (transactionType == 'Income') {
+      totalIncome += transactionAmount;
+    } else if (transactionType == 'Expense') {
+      totalExpense += transactionAmount;
+    }
+
+    if (transactionDateTime.year > latestYear) {
+      latestYear = transactionDateTime.year;
+      latestMonth = transactionDateTime.month;
+    } else if (transactionDateTime.year == latestYear &&
+        transactionDateTime.month > latestMonth) {
+      latestMonth = transactionDateTime.month;
+    }
+  });
+
+  final balance = totalIncome - totalExpense;
+
+  double impulsivePercentage = 0.0;
+  if (balance < 0) {
+    impulsivePercentage = (totalExpense / totalIncome) * 100;
+    impulsivePercentage = impulsivePercentage.clamp(
+        0, 100); // Clamp the percentage between 0 and 100
+  }
+
+  return TransactionSummary(
+    totalIncome: totalIncome,
+    totalExpense: totalExpense,
+    balance: balance,
+    impulsivePercentage: impulsivePercentage,
+  );
+}
+
+/*
+* The calculateTransactionSummaryByMonth method calculates
+* the total income, total expense, and balance as before. Additionally,
+* it calculates the impulsivePercentage based on the expense-to-income
+* ratio, but only if the balance is negative (indicating expenses exceeding income).
+* The impulsiveness percentage is clamped between 0 and 100 to ensure it falls
+* within a valid range.
+* Now, when you call await calculateTransactionSummaryByMonth()
+* in your SuggestionPage widget, it will return a TransactionSummary
+* object with the calculated impulsiveness rating.
+* */

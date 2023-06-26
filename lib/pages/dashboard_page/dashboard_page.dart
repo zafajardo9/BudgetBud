@@ -353,12 +353,15 @@ class _DashboardPageState extends State<DashboardPage>
                                         targetPadding: EdgeInsets.all(8),
                                         child: IconButtonCircle(
                                           onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
+                                            if (context != null) {
+                                              Navigator.push(
+                                                context!,
+                                                MaterialPageRoute(
                                                   builder: (context) =>
-                                                      const SuggestionPage()),
-                                            );
+                                                      SuggestionPage(),
+                                                ),
+                                              );
+                                            }
                                           },
                                           icon: Icon(
                                               Icons.lightbulb_outline_rounded),
