@@ -1,15 +1,16 @@
 import 'dart:convert';
 
-import 'package:budget_bud/api_keys_handler.dart';
-import 'package:budget_bud/misc/colors.dart';
-import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:http/http.dart' as http;
 
-import '../../data/suggestion_model.dart';
-import '../../data/transaction_data_summary.dart';
+import '../../api_keys_handler.dart';
+import '../../data/suggestion_other.dart';
+import '../../data/transaction_data_suggestion_fomulate.dart';
+import '../../misc/colors.dart';
+import '../../misc/widgetSize.dart';
 
 class SuggestionPage extends StatefulWidget {
   const SuggestionPage({Key? key}) : super(key: key);
@@ -19,11 +20,12 @@ class SuggestionPage extends StatefulWidget {
 }
 
 class _SuggestionPageState extends State<SuggestionPage> {
-  TransactionSummary? summary;
-  final List<MachineSuggestions> _suggestions = [];
+  TransactionSuggestion? summary;
   String generatedResponse = '';
-
+  String generatedFactors = '';
+  int minimumTransactionCount = 5;
   bool isGeneratingResponse = false;
+  bool isGeneratingFactors = false;
 
   @override
   void initState() {
@@ -31,13 +33,8 @@ class _SuggestionPageState extends State<SuggestionPage> {
     calculateSummary();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<void> calculateSummary() async {
-    final calculatedSummary = await calculateTransactionSummaryByMonth();
+    final calculatedSummary = await summaryForSuggestion(TimePeriod.Monthly);
     setState(() {
       summary = calculatedSummary;
     });
@@ -54,11 +51,9 @@ class _SuggestionPageState extends State<SuggestionPage> {
 
     String? key = APIKeys().suggestionsAPI;
     try {
-      await Future.delayed(Duration(seconds: 2));
+      final Uri uri = Uri.parse("https://api.openai.com/v1/chat/completions");
 
-      Uri uri = Uri.parse("https://api.openai.com/v1/chat/completions");
-
-      Map<String, dynamic> body = {
+      final Map<String, dynamic> body = {
         "model": "gpt-3.5-turbo",
         "messages": [
           {"role": "user", "content": query}
@@ -75,9 +70,9 @@ class _SuggestionPageState extends State<SuggestionPage> {
       );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> parsedReponse = json.decode(response.body);
-        String generatedText =
-            parsedReponse['choices'][0]['message']['content'];
+        final Map<String, dynamic> parsedResponse = json.decode(response.body);
+        final String generatedText =
+            parsedResponse['choices'][0]['message']['content'];
 
         setState(() {
           generatedResponse = generatedText;
@@ -97,7 +92,59 @@ class _SuggestionPageState extends State<SuggestionPage> {
     }
   }
 
-  String percentageMeaning(TransactionSummary? summary) {
+  Future<void> generateFactorsResponse(String query) async {
+    if (isGeneratingFactors) {
+      return; // Do nothing if a response is already being generated
+    }
+
+    setState(() {
+      isGeneratingFactors = true; // Disable the "Generate" button
+    });
+
+    String? key = APIKeys().suggestionsAPI;
+    try {
+      final Uri uri = Uri.parse("https://api.openai.com/v1/chat/completions");
+
+      final Map<String, dynamic> body = {
+        "model": "gpt-3.5-turbo",
+        "messages": [
+          {"role": "user", "content": query}
+        ],
+      };
+
+      final response = await http.post(
+        uri,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $key",
+        },
+        body: json.encode(body),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> parsedResponse = json.decode(response.body);
+        final String generatedText =
+            parsedResponse['choices'][0]['message']['content'];
+
+        setState(() {
+          generatedFactors = generatedText;
+        });
+      } else {
+        // Handle the API response error
+        print('API request failed with status code ${response.statusCode}');
+        print(key);
+      }
+    } catch (e) {
+      // Handle any other errors
+      print('Error occurred: $e');
+    } finally {
+      setState(() {
+        isGeneratingFactors = false; // Re-enable the "Generate" button
+      });
+    }
+  }
+
+  String percentageMeaning(TransactionSuggestion? summary) {
     if (summary == null) {
       return ''; // Return an appropriate default value if summary is null
     }
@@ -110,6 +157,10 @@ class _SuggestionPageState extends State<SuggestionPage> {
       return 'Highly impulsive';
     }
   }
+
+  bool get isButtonDisabled =>
+      isGeneratingResponse ||
+      (summary?.expenseTransactionCount ?? 0) < minimumTransactionCount;
 
   @override
   Widget build(BuildContext context) {
@@ -217,59 +268,53 @@ class _SuggestionPageState extends State<SuggestionPage> {
                           ),
                         ),
                       ),
-                      Stack(
-                        children: [
-                          ElevatedButton(
-                            onPressed: isGeneratingResponse
-                                ? null // Disable the button if a response is being generated
-                                : () {
-                                    generateSuggestionResponse('HELLO FLUTTER');
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              primary: AppColors
-                                  .mainColorTwo, // Change the button color here
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    25), // Adjust the border radius here
-                              ),
-                            ),
-                            child: Text(
-                              'Generate',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.blackBtn),
+                      if (isGeneratingResponse)
+                        LoadingAnimationWidget.beat(
+                          color: AppColors.mainColorFour,
+                          size: 10,
+                        ),
+                      if (!isGeneratingResponse)
+                        ElevatedButton(
+                          onPressed: isButtonDisabled
+                              ? null
+                              : () async {
+                                  final question =
+                                      await getTransactionDataSummaryQuestion();
+                                  print(question);
+                                  generateSuggestionResponse(question);
+                                },
+                          style: ElevatedButton.styleFrom(
+                            primary: AppColors.mainColorTwo,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
                             ),
                           ),
-                          if (isGeneratingResponse)
-                            Positioned.fill(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  color: AppColors.mainColorTwo.withOpacity(.3),
-                                ),
-                                child: Center(
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      AppColors.mainColorTwo,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                          child: Text(
+                            'Generate',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.blackBtn,
                             ),
-                        ],
-                      ),
+                          ),
+                        ),
                     ],
                   ),
                   addVerticalSpace(2),
-                  generatedResponse == null
-                      ? CircularProgressIndicator() // Display a loading indicator while generating the response
-                      : Text(
-                          generatedResponse,
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            color: AppColors.backgroundWhite,
-                          ),
-                        ),
+                  if (isGeneratingResponse)
+                    Center(
+                      child: LoadingAnimationWidget.beat(
+                        color: AppColors.mainColorFour,
+                        size: 20,
+                      ),
+                    )
+                  else
+                    Text(
+                      generatedResponse,
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        color: AppColors.backgroundWhite,
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -281,13 +326,50 @@ class _SuggestionPageState extends State<SuggestionPage> {
               ),
               padding: const EdgeInsets.all(23),
               margin: const EdgeInsets.symmetric(vertical: 16),
-              child: Text(
-                'What we think are the factors',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 19.sp,
-                  color: AppColors.backgroundWhite,
-                ),
+              child: Column(
+                children: [
+                  Text(
+                    'What we think are the factors',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 19.sp,
+                      color: AppColors.backgroundWhite,
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final factorsQuestion = await getFactorsAnswer();
+                      generateFactorsResponse(factorsQuestion);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: AppColors.mainColorTwo,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                    ),
+                    child: Text(
+                      'Generate',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.blackBtn,
+                      ),
+                    ),
+                  ),
+                  addVerticalSpace(2),
+                  if (isGeneratingFactors)
+                    Center(
+                      child: LoadingAnimationWidget.beat(
+                          color: AppColors.mainColorFour, size: 20),
+                    )
+                  else
+                    Text(
+                      generatedFactors,
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        color: AppColors.backgroundWhite,
+                      ),
+                    ),
+                ],
               ),
             ),
           ],

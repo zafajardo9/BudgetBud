@@ -1,30 +1,61 @@
-//get all the data
+import 'package:budget_bud/data/transaction_data_suggestion_fomulate.dart';
 
-//make it to text
+Future<String> getTransactionDataSummaryQuestion() async {
+  final summary = await summaryForSuggestion(TimePeriod.Monthly);
 
-import 'package:budget_bud/data/transaction_data_summary.dart';
+  final totalIncome = summary.totalIncome;
+  final totalExpense = summary.totalExpense;
+  final balance = summary.balance;
+  final impulsivePercentage = summary.impulsivePercentage;
+  final highestCategories = summary.highestCategories;
 
-Future<String> generateTransactionSummaryQuestion() async {
-  // Get the transaction summary by month
-  final transactionSummaryByMonth = await calculateTransactionSummaryByMonth();
+  final categoryList = highestCategories.isNotEmpty
+      ? '- ${highestCategories.join('\n- ')}'
+      : 'No categories found.';
 
-  // Get the transaction summary overall
-  final transactionSummaryOverall =
-      await calculateTransactionSummary(TimePeriod.Overall);
+  final question = '''
+  Pretend as a recommendation system and display answer in short sentences and dont include introduction.
+Transaction summary for the month:
 
-  // Form the sentence based on the transaction summary data
-  String question = "Based on your transactions in the past month:\n";
-  question += "Total income: \$${transactionSummaryByMonth.totalIncome}\n";
-  question += "Total expense: \$${transactionSummaryByMonth.totalExpense}\n";
-  question += "Balance: \$${transactionSummaryByMonth.balance}\n";
-  question +=
-      "Impulsive percentage: ${transactionSummaryByMonth.impulsivePercentage}%\n\n";
-  question += "And overall:\n";
-  question += "Total income: \$${transactionSummaryOverall.totalIncome}\n";
-  question += "Total expense: \$${transactionSummaryOverall.totalExpense}\n";
-  question += "Balance: \$${transactionSummaryOverall.balance}\n";
-  question +=
-      "Impulsive percentage: ${transactionSummaryOverall.impulsivePercentage}%\n";
+- Total Income: \₱${totalIncome.toStringAsFixed(2)}
+- Total Expense: \₱${totalExpense.toStringAsFixed(2)}
+- Balance: \₱${balance.toStringAsFixed(2)}
+- Impulsive Percentage: ${impulsivePercentage.toStringAsFixed(2)}%
+- Highest Expense Categories:
+  $categoryList
+
+Based on your spending habits, would you consider yourself financially disciplined or impulsive? What recommendations can you provide based on my transactions? (Short bullet points)
+''';
+
+  return question;
+}
+
+Future<String> getFactorsAnswer() async {
+  final summary = await summaryForSuggestion(TimePeriod.Monthly);
+
+  final totalIncome = summary.totalIncome;
+  final totalExpense = summary.totalExpense;
+  final balance = summary.balance;
+  final impulsivePercentage = summary.impulsivePercentage;
+  final highestCategories = summary.highestCategories;
+
+  final categoryList = highestCategories.isNotEmpty
+      ? '- ${highestCategories.join('\n- ')}'
+      : 'No categories found.';
+
+  final question = '''
+  Pretend as a recommendation system and display answer in short sentences and dont include introduction.
+Transaction summary for the month:
+
+- Total Income: \₱${totalIncome.toStringAsFixed(2)}
+- Total Expense: \₱${totalExpense.toStringAsFixed(2)}
+- Balance: \₱${balance.toStringAsFixed(2)}
+- Impulsive Percentage: ${impulsivePercentage.toStringAsFixed(2)}%
+- Highest Expense Categories:
+  $categoryList
+
+Based on your spending habits, what are the factors why I spend alot? (Short bullet points)
+''';
 
   return question;
 }
