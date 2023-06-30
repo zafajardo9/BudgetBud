@@ -35,7 +35,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
 //controllers
   final newExpenseNameController = TextEditingController();
   final newExpenseDescriptionController = TextEditingController();
-  late var newExpenseAmountController = TextEditingController();
+  final newExpenseAmountController = TextEditingController();
   String selectedItem = '';
 
   saveExpense() {
