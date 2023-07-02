@@ -8,7 +8,7 @@ class WaveLeft extends CustomClipper<Path> {
 
     // Define your modified wave path here
     path.cubicTo(
-      size.width * 0.0,
+      size.width * 0,
       size.height * 0.8,
       size.width * 0.4,
       size.height * 0.7,
@@ -16,7 +16,7 @@ class WaveLeft extends CustomClipper<Path> {
       size.height * 0.9,
     );
     path.cubicTo(
-      size.width * 0.7,
+      size.width * .8,
       size.height * 0.75,
       size.width * 0.8,
       size.height * 0.9,

@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../misc/const.dart';
+import '../on_working_feature/progress_alert.dart';
 
 class AppSettings extends StatelessWidget {
   Future<Map<String, String>> _getApplicationVersion() async {
@@ -24,6 +28,64 @@ class AppSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> deleteUserData(BuildContext context) async {
+      String collectionName = 'Transactions';
+      final FirebaseAuth auth = FirebaseAuth.instance;
+      final User? user = auth.currentUser;
+      final String? email = user?.email;
+
+      final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      try {
+        final QuerySnapshot snapshot = await firestore
+            .collection(collectionName)
+            .where('UserEmail', isEqualTo: email)
+            .get();
+
+        final List<DocumentSnapshot> documents = snapshot.docs;
+
+        for (DocumentSnapshot document in documents) {
+          await document.reference.delete();
+        }
+        showDialog(
+          context: context,
+          builder: (BuildContext dialogContext) {
+            return AlertDialog(
+              title: Text('Success'),
+              content: Text('Data deleted successfully.'),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(dialogContext).pop();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } catch (error) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Error'),
+              content: Text('An error occurred while deleting data.'),
+              actions: [
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+
     return FutureBuilder<Map<String, String>>(
       future: _getApplicationVersion(),
       builder: (context, snapshot) {
@@ -46,7 +108,7 @@ class AppSettings extends StatelessWidget {
                   title: Text('Notifications'),
                   leading: Icon(Icons.notifications),
                   onTap: () {
-                    // Handle notification settings
+                    WorkInProgressAlert.show(context);
                   },
                 ),
                 Divider(),
@@ -99,6 +161,53 @@ class AppSettings extends StatelessWidget {
                               child: Text('Close'),
                               onPressed: () {
                                 Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  title: Text('Delete my Data'),
+                  leading: Icon(Icons.delete_forever_rounded),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Are you really sure?'),
+                          content: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  'assets/bbLogo.png',
+                                  fit: BoxFit.contain,
+                                ),
+                                Wrap(
+                                  children: [
+                                    Text(
+                                      "There's no turning back after reformatting or deleting your transaction",
+                                      style: TextStyle(fontSize: 15.sp),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            ElevatedButton(
+                              child: Text('No'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Yes'),
+                              onPressed: () {
+                                deleteUserData(context);
                               },
                             ),
                           ],

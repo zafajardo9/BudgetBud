@@ -281,6 +281,7 @@ Widget _getBody(List<TransactionData> transactions) {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    subtitle: Text(transactions[index].category),
                     leading: SvgPicture.asset(
                       'assets/pointer/dark.svg',
                       width: Adaptive.w(5),

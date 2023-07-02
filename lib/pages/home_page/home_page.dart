@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../misc/graphs/pie_graph/pie_graph.dart';
 import '../graph_screen/graph_screen.dart';
+import '../on_working_feature/progress_alert.dart';
 import '../user_budget_goals/survey/step_survey.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,10 +32,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const StepSurvey()),
-                );
+                WorkInProgressAlert.show(context);
               },
               child: Icon(Icons.sort),
             ),

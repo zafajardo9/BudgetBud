@@ -23,6 +23,7 @@ class IncomeTab extends StatefulWidget {
 }
 
 class _IncomeTabState extends State<IncomeTab> {
+  ValueNotifier<String> selectedItemNotifier = ValueNotifier<String>('');
   //userEmail
   final user = FirebaseAuth.instance.currentUser!;
 
@@ -149,6 +150,7 @@ class _IncomeTabState extends State<IncomeTab> {
                           ),
                           onTap: () {
                             setState(() {
+                              selectedItemNotifier.value = item;
                               selectedItem = item;
                             });
                           },
@@ -330,7 +332,15 @@ class _IncomeTabState extends State<IncomeTab> {
                           minimumSize: Size(100.w, 6.h),
                         ),
                         icon: Icon(Icons.category), // Button icon
-                        label: Text('Categories'), // Button label
+                        label: ValueListenableBuilder<String>(
+                          valueListenable: selectedItemNotifier,
+                          builder: (BuildContext context, String value,
+                              Widget? child) {
+                            return Text(
+                              value.isNotEmpty ? value : 'Categories',
+                            );
+                          },
+                        ), // // Button label
                       ),
                       addVerticalSpace(2.5),
                       ElevatedButton(

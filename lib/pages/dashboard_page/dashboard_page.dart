@@ -9,6 +9,7 @@ import 'package:budget_bud/pages/dashboard_page/parts/transaction_dashboard/dash
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:showcaseview/showcaseview.dart';
@@ -188,7 +189,10 @@ class _DashboardPageState extends State<DashboardPage>
                     child: Stack(
                       children: [
                         ClipPath(
-                          clipper: WaveLeft() /*WaveClipperTwo()*/,
+                          clipper: WaveClipperTwo(
+                            flip: true,
+                          ) /*WaveClipperTwo()*/,
+                          /*WaveLeft()*/
                           child: Container(
                             color: AppColors.mainColorOne,
                           ),

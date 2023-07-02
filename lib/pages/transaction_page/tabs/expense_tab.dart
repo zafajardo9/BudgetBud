@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/foundation.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../MLKit/TextRecognition/camera_screen.dart';
@@ -26,6 +26,8 @@ class ExpenseTab extends StatefulWidget {
 }
 
 class _ExpenseTabState extends State<ExpenseTab> {
+  ValueNotifier<String> selectedItemNotifier = ValueNotifier<String>('');
+
   bool textScanning = false;
   XFile? imageFile;
   String scannedText = "";
@@ -155,6 +157,7 @@ class _ExpenseTabState extends State<ExpenseTab> {
                           ),
                           onTap: () {
                             setState(() {
+                              selectedItemNotifier.value = item;
                               selectedItem = item;
                             });
                           },
@@ -374,7 +377,15 @@ class _ExpenseTabState extends State<ExpenseTab> {
                           minimumSize: Size(100.w, 6.h),
                         ),
                         icon: Icon(Icons.category), // Button icon
-                        label: Text('Categories'), // Button label
+                        label: ValueListenableBuilder<String>(
+                          valueListenable: selectedItemNotifier,
+                          builder: (BuildContext context, String value,
+                              Widget? child) {
+                            return Text(
+                              value.isNotEmpty ? value : 'Categories',
+                            );
+                          },
+                        ), // Button label
                       ),
                       addVerticalSpace(2.5),
                       ElevatedButton(
