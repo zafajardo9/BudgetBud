@@ -8,7 +8,6 @@ String incomeToJson(TransactionData data) => json.encode(data.toJson());
 class TransactionData {
   final String documentId;
   final String userEmail;
-  final String transactionName;
   final String transactionType;
   final double amount;
   final String description;
@@ -18,7 +17,6 @@ class TransactionData {
   TransactionData({
     required this.documentId,
     required this.userEmail,
-    required this.transactionName,
     required this.transactionType,
     required this.amount,
     required this.description,
@@ -29,7 +27,6 @@ class TransactionData {
   factory TransactionData.fromJson(Map<String, dynamic> json) =>
       TransactionData(
         userEmail: json["UserEmail"],
-        transactionName: json["TransactionName"],
         transactionType: json["TransactionType"],
         description: json["TransactionDescription"],
         amount: json["TransactionAmount"],
@@ -40,7 +37,6 @@ class TransactionData {
 
   Map<String, dynamic> toJson() => {
         "UserEmail": userEmail,
-        "TransactionName": transactionName,
         "TransactionType": transactionType,
         "TransactionDescription": description,
         "TransactionAmount": amount,

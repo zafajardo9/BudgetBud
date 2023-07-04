@@ -43,7 +43,6 @@ class _DetailScreenState extends State<DetailScreen> {
   DateTime _dateTime = DateTime.now();
   String? totalAmount;
 
-  final newScanExpenseName = TextEditingController();
   final newScanAmount = TextEditingController();
 
   List<Rect> _textRects = [];
@@ -126,15 +125,11 @@ class _DetailScreenState extends State<DetailScreen> {
 
   saveExpense() {
     //getting values
-    var expenseName = newScanExpenseName.text.trim();
     var expenseAmount = double.parse(newScanAmount.text.trim());
 
-    if (selectedItem.isNotEmpty &&
-        expenseName.isNotEmpty &&
-        expenseAmount > 0) {
+    if (selectedItem.isNotEmpty && expenseAmount > 0) {
       var transaction = TransactionData(
         userEmail: user.email!,
-        transactionName: expenseName,
         transactionType: 'Expense',
         description: 'Receipt',
         amount: expenseAmount,
@@ -181,7 +176,6 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   void _clearTextFields() {
-    newScanExpenseName.clear();
     newScanAmount.clear();
     setState(() {
       selectedItem = ''; // Reset the selected item
@@ -360,33 +354,6 @@ class _DetailScreenState extends State<DetailScreen> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           SizedBox(height: 10),
-                                          Text(
-                                            'Expense Name',
-                                            style: ThemeText.paragraph54,
-                                          ),
-                                          TextField(
-                                            style: ThemeText.textfieldInput,
-                                            decoration: InputDecoration(
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                      vertical: 1.w,
-                                                      horizontal: 4.h),
-                                              prefixIcon: Icon(
-                                                FontAwesomeIcons.penToSquare,
-                                                size: 15,
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
-                                                borderSide: BorderSide(
-                                                  color: Colors.grey.shade400,
-                                                  width: 2,
-                                                ),
-                                              ),
-                                            ),
-                                            controller: newScanExpenseName,
-                                          ),
-                                          addVerticalSpace(3),
                                           Text(
                                             'Amount',
                                             style: ThemeText.paragraph54,

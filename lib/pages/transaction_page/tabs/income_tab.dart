@@ -37,14 +37,12 @@ class _IncomeTabState extends State<IncomeTab> {
 //save
   saveIncome() {
     //getting values
-    var incomeName = newIncomeNameController.text.trim();
     var incomeDescription = newIncomeDescriptionController.text.trim();
     var incomeAmount = double.parse(newIncomeAmountController.text.trim());
 
-    if (selectedItem.isNotEmpty && incomeName.isNotEmpty && incomeAmount > 0) {
+    if (selectedItem.isNotEmpty && incomeAmount > 0) {
       var transaction = TransactionData(
         userEmail: user.email!,
-        transactionName: incomeName,
         transactionType: 'Income',
         description: incomeDescription,
         amount: incomeAmount,
@@ -55,6 +53,8 @@ class _IncomeTabState extends State<IncomeTab> {
       FirebaseFirestore.instance
           .collection('Transactions')
           .add(transaction.toJson());
+
+      FocusScope.of(context).unfocus();
 
       messageBar();
       _clearTextFields();
@@ -100,7 +100,6 @@ class _IncomeTabState extends State<IncomeTab> {
   }
 
   void _clearTextFields() {
-    newIncomeNameController.clear();
     newIncomeDescriptionController.clear();
     newIncomeAmountController.clear();
     selectedItem == '';
@@ -210,26 +209,6 @@ class _IncomeTabState extends State<IncomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // gagawa ng categories dito
-                      Text(
-                        'Income Name',
-                        style: ThemeText.paragraph54,
-                      ),
-                      TextField(
-                        controller: newIncomeNameController,
-                        style: ThemeText.textfieldInput,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 1.w, horizontal: 4.h),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(
-                              color: Colors.grey.shade400,
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                      ),
-                      addVerticalSpace(2),
 
                       Text(
                         'Amount',

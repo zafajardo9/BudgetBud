@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -20,10 +22,12 @@ class SuggestionPage extends StatefulWidget {
 }
 
 class _SuggestionPageState extends State<SuggestionPage> {
+  final user = FirebaseAuth.instance.currentUser!;
+
   TransactionSuggestion? summary;
   String generatedResponse = '';
   String generatedFactors = '';
-  int minimumTransactionCount = 5;
+  int minimumTransactionCount = 10;
   bool isGeneratingResponse = false;
   bool isGeneratingFactors = false;
 
@@ -158,9 +162,34 @@ class _SuggestionPageState extends State<SuggestionPage> {
     }
   }
 
-  bool get isButtonDisabled =>
-      isGeneratingResponse ||
-      (summary?.expenseTransactionCount ?? 0) < minimumTransactionCount;
+  void updateExceedsLimit(String userEmail, bool exceedsLimit) {
+    FirebaseFirestore.instance.collection('Users').doc(userEmail).update({
+      'exceedsLimit': exceedsLimit,
+    }).then((value) {
+      print('User data updated successfully');
+    }).catchError((error) {
+      print('Failed to update user data: $error');
+    });
+  }
+
+  Future<int> countTransactions() async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('Transactions')
+        .where('UserEmail', isEqualTo: user.email)
+        .get();
+
+    return querySnapshot.docs.length;
+  }
+
+  // bool get isButtonDisabled =>
+  //     isGeneratingResponse ||
+  //     (countTransactions().then((value) => value ?? 0)) <
+  //         minimumTransactionCount;
+
+  Future<bool> isButtonDisabled() async {
+    final transactionCount = await countTransactions();
+    return transactionCount < minimumTransactionCount;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -274,28 +303,35 @@ class _SuggestionPageState extends State<SuggestionPage> {
                           size: 10,
                         ),
                       if (!isGeneratingResponse)
-                        ElevatedButton(
-                          onPressed: isButtonDisabled
-                              ? null
-                              : () async {
-                                  final question =
-                                      await getTransactionDataSummaryQuestion();
-                                  print(question);
-                                  generateSuggestionResponse(question);
-                                },
-                          style: ElevatedButton.styleFrom(
-                            primary: AppColors.mainColorTwo,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                          ),
-                          child: Text(
-                            'Generate',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.blackBtn,
-                            ),
-                          ),
+                        FutureBuilder<bool>(
+                          future: isButtonDisabled(),
+                          builder: (context, snapshot) {
+                            final bool? isDisabled = snapshot.data;
+                            return ElevatedButton(
+                              onPressed: isDisabled == true
+                                  ? null
+                                  : () async {
+                                      final question =
+                                          await getTransactionDataSummaryQuestion();
+                                      print(question);
+                                      generateSuggestionResponse(question);
+                                      print(await countTransactions());
+                                    },
+                              style: ElevatedButton.styleFrom(
+                                primary: AppColors.mainColorTwo,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                              ),
+                              child: Text(
+                                'Generate',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.blackBtn,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                     ],
                   ),
@@ -336,25 +372,40 @@ class _SuggestionPageState extends State<SuggestionPage> {
                       color: AppColors.backgroundWhite,
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final factorsQuestion = await getFactorsAnswer();
-                      generateFactorsResponse(factorsQuestion);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: AppColors.mainColorTwo,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      ),
+                  if (isGeneratingFactors)
+                    LoadingAnimationWidget.beat(
+                      color: AppColors.mainColorFour,
+                      size: 10,
                     ),
-                    child: Text(
-                      'Generate',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.blackBtn,
-                      ),
+                  if (!isGeneratingFactors)
+                    FutureBuilder<bool>(
+                      future: isButtonDisabled(),
+                      builder: (context, snapshot) {
+                        final bool? isDisabled = snapshot.data;
+                        return ElevatedButton(
+                          onPressed: isDisabled == true
+                              ? null
+                              : () async {
+                                  final factorsQuestion =
+                                      await getFactorsAnswer();
+                                  generateFactorsResponse(factorsQuestion);
+                                },
+                          style: ElevatedButton.styleFrom(
+                            primary: AppColors.mainColorTwo,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                          ),
+                          child: Text(
+                            'Generate',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.blackBtn,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ),
                   addVerticalSpace(2),
                   if (isGeneratingFactors)
                     Center(

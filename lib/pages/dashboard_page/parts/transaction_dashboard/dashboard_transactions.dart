@@ -200,7 +200,6 @@ class _DashboardTransactionsState extends State<DashboardTransactions> {
                               .map(
                                 (e) => TransactionData(
                                   userEmail: e['UserEmail'],
-                                  transactionName: e['TransactionName'],
                                   transactionType: e["TransactionType"],
                                   description: e["TransactionDescription"],
                                   amount: e["TransactionAmount"],
@@ -248,7 +247,7 @@ Widget _getBody(List<TransactionData> transactions) {
                 ? ListTile(
                     contentPadding: EdgeInsets.symmetric(horizontal: 20),
                     title: Text(
-                      transactions[index].transactionName,
+                      transactions[index].category,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -275,7 +274,7 @@ Widget _getBody(List<TransactionData> transactions) {
                 : ListTile(
                     contentPadding: EdgeInsets.symmetric(horizontal: 20),
                     title: Text(
-                      transactions[index].transactionName,
+                      transactions[index].category,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

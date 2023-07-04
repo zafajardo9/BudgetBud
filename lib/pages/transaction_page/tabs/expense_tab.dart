@@ -42,16 +42,12 @@ class _ExpenseTabState extends State<ExpenseTab> {
 
   saveExpense() {
     //getting values
-    var expenseName = newExpenseNameController.text.trim();
     var expenseDescription = newExpenseDescriptionController.text.trim();
     var expenseAmount = double.parse(newExpenseAmountController.text.trim());
 
-    if (selectedItem.isNotEmpty &&
-        expenseName.isNotEmpty &&
-        expenseAmount > 0) {
+    if (selectedItem.isNotEmpty && expenseAmount > 0) {
       var transaction = TransactionData(
         userEmail: user.email!,
-        transactionName: expenseName,
         transactionType: 'Expense',
         description: expenseDescription,
         amount: expenseAmount,
@@ -62,6 +58,8 @@ class _ExpenseTabState extends State<ExpenseTab> {
       FirebaseFirestore.instance
           .collection('Transactions')
           .add(transaction.toJson());
+
+      FocusScope.of(context).unfocus();
 
       messageBar();
       _clearTextFields();
@@ -106,7 +104,6 @@ class _ExpenseTabState extends State<ExpenseTab> {
   }
 
   void _clearTextFields() {
-    newExpenseNameController.clear();
     newExpenseDescriptionController.clear();
     newExpenseAmountController.clear();
     setState(() {
@@ -243,39 +240,6 @@ class _ExpenseTabState extends State<ExpenseTab> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // gagawa ng categories dito
-                      Text(
-                        'Expense Name',
-                        style: ThemeText.paragraph54,
-                      ),
-                      TextField(
-                        controller: newExpenseNameController,
-                        style: ThemeText.textfieldInput,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 1.w, horizontal: 4.h),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(
-                              color: Colors.grey.shade400,
-                              width: 2,
-                            ),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(Icons
-                                .document_scanner_rounded), // Replace with your desired button icon
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CameraScreen()),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      addVerticalSpace(2),
-
                       Text(
                         'Amount',
                         style: ThemeText.paragraph54,
@@ -295,6 +259,17 @@ class _ExpenseTabState extends State<ExpenseTab> {
                               color: Colors.grey.shade400,
                               width: 2,
                             ),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons
+                                .document_scanner_rounded), // Replace with your desired button icon
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CameraScreen()),
+                              );
+                            },
                           ),
                         ),
                         keyboardType:

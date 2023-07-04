@@ -76,7 +76,6 @@ class _DashBoardExpenseState extends State<DashBoardExpense> {
                       (e) => TransactionData(
                         documentId: e.id,
                         userEmail: e['UserEmail'],
-                        transactionName: e['TransactionName'],
                         transactionType: e['TransactionType'],
                         description: e['TransactionDescription'],
                         amount: e['TransactionAmount'],
@@ -122,14 +121,14 @@ class _DashBoardExpenseState extends State<DashBoardExpense> {
                                 ),
                                 child: ListTile(
                                   title: Text(
-                                      transactions[index].transactionName ?? '',
+                                      transactions[index].category ?? '',
                                       style: ThemeText.transactionName),
                                   subtitle: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        transactions[index].category ?? '',
+                                        transactions[index].description ?? '',
                                         style: ThemeText.transactionDetails,
                                       ),
                                       Text(

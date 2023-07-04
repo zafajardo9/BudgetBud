@@ -126,6 +126,11 @@ Future<TransactionSummary> calculateTransactionSummaryByMonth() async {
       await collection.where('UserEmail', isEqualTo: user.email).get();
   final List<DocumentSnapshot> data = snapshot.docs;
 
+  final transactionCount = data.length;
+  int transactionLimit = 10;
+
+  final exceedsLimit = transactionCount >= transactionLimit;
+
   double totalIncome = 0.0;
   double totalExpense = 0.0;
 
