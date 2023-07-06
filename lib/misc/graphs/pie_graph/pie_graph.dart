@@ -11,23 +11,30 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../colors.dart';
 import '../graphs_widget/graph_indicator.dart';
 
-class PieGraphWidget extends StatelessWidget {
+class PieGraphWidget extends StatefulWidget {
   final TransactionType transactionType;
 
   const PieGraphWidget({Key? key, required this.transactionType})
       : super(key: key);
 
   @override
+  State<PieGraphWidget> createState() => _PieGraphWidgetState();
+}
+
+class _PieGraphWidgetState extends State<PieGraphWidget> {
+  @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser!;
     late Query<Map<String, dynamic>> query;
 
-    if (transactionType != TransactionType.all) {
+    int touchedIndex = -1;
+
+    if (widget.transactionType != TransactionType.all) {
       query = FirebaseFirestore.instance
           .collection('Transactions')
           .where('UserEmail', isEqualTo: user.email)
           .where('TransactionType',
-              isEqualTo: transactionTypeToString(transactionType));
+              isEqualTo: transactionTypeToString(widget.transactionType));
     } else {
       query = FirebaseFirestore.instance
           .collection('Transactions')
@@ -86,18 +93,19 @@ class PieGraphWidget extends StatelessWidget {
         final List<PieChartSectionData> pieChartSections =
             categoryPercentages.entries.map((entry) {
           final percentage = entry.value;
+          final category = entry.key;
 
           return PieChartSectionData(
             value: percentage,
-            title:
-                '${percentage.toStringAsFixed(1)}%', // Display the percentage
+            title: '${percentage.toStringAsFixed(1)}%',
             color: colors[categoryPercentages.keys.toList().indexOf(entry.key) %
                 colors.length],
             radius: 40,
+            titlePositionPercentageOffset: 1.8,
             titleStyle: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Colors.black54,
             ),
           );
         }).toList();
@@ -132,12 +140,27 @@ class PieGraphWidget extends StatelessWidget {
                 child: PieChart(
                   PieChartData(
                     sections: pieChartSections,
-                    centerSpaceRadius: 50,
-                    startDegreeOffset: -90,
+                    centerSpaceRadius: 40,
+                    startDegreeOffset: -80,
                     borderData: FlBorderData(show: false),
-                    sectionsSpace: 0,
+                    sectionsSpace: 2,
+
                     //pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {}),
                     // You can customize other properties of the pie chart here
+                    // pieTouchData: PieTouchData(
+                    //   touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                    //     setState(() {
+                    //       if (!event.isInterestedForInteractions ||
+                    //           pieTouchResponse == null ||
+                    //           pieTouchResponse.touchedSection == null) {
+                    //         touchedIndex = -1;
+                    //         return;
+                    //       }
+                    //       touchedIndex = pieTouchResponse
+                    //           .touchedSection!.touchedSectionIndex;
+                    //     });
+                    //   },
+                    //),
                   ),
                 ),
               ),

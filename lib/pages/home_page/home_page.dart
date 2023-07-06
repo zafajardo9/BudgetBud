@@ -3,7 +3,9 @@ import 'package:budget_bud/misc/txtStyles.dart';
 import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../data/transaction_data_summary.dart';
 import '../../misc/graphs/pie_graph/pie_graph.dart';
 import '../graph_screen/graph_screen.dart';
 import '../on_working_feature/progress_alert.dart';
@@ -42,6 +44,105 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: FutureBuilder<TransactionSummary>(
+                future: calculateTransactionSummary(TimePeriod.Overall),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // While waiting for the data, you can display a loading indicator
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    // If there's an error in fetching the data, display an error message
+                    return Text('Error: ${snapshot.error}');
+                  } else if (!snapshot.hasData) {
+                    // If no data is available, display an empty container or a placeholder
+                    return Container();
+                  }
+
+                  final summary = snapshot.data!;
+
+                  return Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              width: Adaptive.w(15),
+                              height: Adaptive.h(15),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.mainColorTwo,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: SvgPicture.asset(
+                                  'assets/pointer/1.svg',
+                                  fit: BoxFit.contain,
+                                  semanticsLabel: 'Income',
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'Income',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Text(
+                              '₱${summary.totalIncome.toStringAsFixed(2)}', // Replace with your formatting as needed
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 18.sp),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              width: Adaptive.w(15),
+                              height: Adaptive.h(15),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.mainColorFour,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: SvgPicture.asset(
+                                  'assets/pointer/2.svg',
+                                  fit: BoxFit.contain,
+                                  semanticsLabel: 'Expense',
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'Expense',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Text(
+                              '₱${summary.totalExpense.toStringAsFixed(2)}', // Replace with your formatting as needed
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 18.sp),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
             Padding(
               padding: EdgeInsets.all(20),
               child: Container(

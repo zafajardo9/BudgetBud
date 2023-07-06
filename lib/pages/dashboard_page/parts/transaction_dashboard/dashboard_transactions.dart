@@ -254,14 +254,11 @@ Widget _getBody(List<TransactionData> transactions) {
                       ),
                     ),
                     subtitle: Text(transactions[index].category),
-                    leading: RotatedBox(
-                      quarterTurns: 3,
-                      child: SvgPicture.asset(
-                        'assets/pointer/dark.svg',
-                        width: Adaptive.w(5),
-                        height: Adaptive.h(5),
-                        semanticsLabel: 'Income',
-                      ),
+                    leading: SvgPicture.asset(
+                      'assets/pointer/1.svg',
+                      width: Adaptive.w(5),
+                      height: Adaptive.h(5),
+                      semanticsLabel: 'Income',
                     ),
                     trailing: Text(
                       '\₱${transactions[index].amount.toString()}',
@@ -282,7 +279,7 @@ Widget _getBody(List<TransactionData> transactions) {
                     ),
                     subtitle: Text(transactions[index].category),
                     leading: SvgPicture.asset(
-                      'assets/pointer/dark.svg',
+                      'assets/pointer/2.svg',
                       width: Adaptive.w(5),
                       height: Adaptive.h(5),
                       semanticsLabel: 'Expense',
