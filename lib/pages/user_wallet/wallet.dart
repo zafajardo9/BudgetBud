@@ -3,7 +3,9 @@ import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../data/transaction_data_summary.dart';
 import '../../misc/colors.dart';
+import 'graphMonthSpend.dart';
 
 class UserWallet extends StatefulWidget {
   const UserWallet({Key? key}) : super(key: key);
@@ -28,7 +30,7 @@ class _UserWalletState extends State<UserWallet> {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               width: double.infinity,
-              height: Adaptive.h(10),
+              height: Adaptive.h(25),
               decoration: BoxDecoration(
                 color: AppColors.backgroundWhite,
                 borderRadius: BorderRadius.circular(20),
@@ -43,40 +45,41 @@ class _UserWalletState extends State<UserWallet> {
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
                   ),
+                  Text('Monthly Budget'),
+                  Text(
+                    '1,000',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.sp),
+                  ),
                 ],
               ),
             ),
           ),
-          SizedBox(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(30),
-                decoration: BoxDecoration(
-                  color: AppColors.backgroundWhite,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Monthly Budget'),
-                        Text(
-                          '1,000',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20.sp),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your Transactions',
+                    style: ThemeText.transactionAmount,
+                    //style
+                  ),
+                  Text(
+                    'Know difference of your spendings',
+                    style: ThemeText.paragraph54,
+                  ),
+                ],
               ),
             ),
           ),
-          addVerticalSpace(Adaptive.h(2.5)),
+          addVerticalSpace(3),
           Expanded(
             child: Container(
               width: double.infinity,
@@ -88,7 +91,7 @@ class _UserWalletState extends State<UserWallet> {
                   )),
               child: Stack(
                 children: [
-                  Text('Your Wallet'),
+                  Text('Your Budget'),
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: GridView(

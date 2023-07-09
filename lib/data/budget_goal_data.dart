@@ -17,6 +17,7 @@ class BudgetGoal {
   final DateTime endDate;
   final String userEmail;
   final double amountToSave;
+  bool accomplished;
 
   BudgetGoal({
     required this.amountToSave,
@@ -28,6 +29,7 @@ class BudgetGoal {
     required this.startDate,
     required this.endDate,
     required this.userEmail,
+    this.accomplished = false,
   });
 
   factory BudgetGoal.fromJson(Map<String, dynamic> json) => BudgetGoal(

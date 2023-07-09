@@ -155,6 +155,7 @@ class _DashboardPageState extends State<DashboardPage>
       );
     } else {
       return ShowCaseWidget(
+        disableBarrierInteraction: false,
         builder: Builder(
           builder: (context) => Scaffold(
               appBar: AppBar(
@@ -397,7 +398,7 @@ class _DashboardPageState extends State<DashboardPage>
                                       Showcase(
                                         key: transactions,
                                         description:
-                                            'Now your Transactions History more!',
+                                            'Know your Transactions History more!',
                                         targetShapeBorder: const CircleBorder(),
                                         targetPadding: EdgeInsets.all(8),
                                         child: IconButtonCircle(

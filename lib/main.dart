@@ -19,6 +19,7 @@ import 'firebase_options.dart';
 import 'misc/colors.dart';
 import 'auth/auth_page.dart';
 import 'notification_api/forground_local_notification.dart';
+import 'notifications/notifications.dart';
 import 'pages/onBoarding_page/onBoarding_screen.dart';
 
 late SharedPreferences prefs;
@@ -45,6 +46,8 @@ Future<void> main() async {
       )
     ],
   );
+  //another package for notifications
+  await initNotifications();
 
   // Check for internet connectivity before running the app
   WidgetsFlutterBinding.ensureInitialized();

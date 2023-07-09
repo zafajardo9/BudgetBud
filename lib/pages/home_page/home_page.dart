@@ -4,6 +4,7 @@ import 'package:budget_bud/misc/widgetSize.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../data/transaction_data_summary.dart';
 import '../../misc/graphs/pie_graph/pie_graph.dart';
@@ -98,9 +99,11 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Text(
-                              '₱${summary.totalIncome.toStringAsFixed(2)}', // Replace with your formatting as needed
+                              '₱${NumberFormat('#,##0.00').format(summary.totalIncome)}',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w700, fontSize: 18.sp),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18.sp,
+                              ),
                             ),
                           ],
                         ),
@@ -131,9 +134,11 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Text(
-                              '₱${summary.totalExpense.toStringAsFixed(2)}', // Replace with your formatting as needed
+                              '₱${NumberFormat('#,##0.00').format(summary.totalExpense)}',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w700, fontSize: 18.sp),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18.sp,
+                              ),
                             ),
                           ],
                         ),

@@ -165,6 +165,11 @@ class _UserBudgetGoalsState extends State<UserBudgetGoals> {
                     decoration: BoxDecoration(
                       color: AppColors.mainColorOne,
                       borderRadius: BorderRadius.circular(25),
+                      image: DecorationImage(
+                        image: AssetImage('assets/3dBudget/4.png'),
+                        opacity: .8,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,

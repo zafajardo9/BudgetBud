@@ -74,7 +74,6 @@ class BarGraphWidget extends StatelessWidget {
             }
           }
         }
-        print(totalExpensePerDay);
 
         final List<BarChartGroupData> barChartData = List.generate(
           7,
