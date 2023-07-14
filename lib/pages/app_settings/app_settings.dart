@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../../misc/const.dart';
 import '../on_working_feature/progress_alert.dart';
@@ -25,6 +27,33 @@ class AppSettings extends StatelessWidget {
   }
 
   const AppSettings({Key? key});
+
+  Future<int> sendEmail() async {
+    final user = FirebaseAuth.instance.currentUser!;
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    const serviceId = 'service_yldc4gd';
+    const templateId = 'template_3xbvfyl';
+    const userId = 'tlZKejJBjNv2mYWrC';
+    const private = 'oDLXhmWZ1rX1C0mOe-gQj';
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'accessToken': private,
+        'template_params': {
+          'name': user.email,
+          'message': 'Hello, this is a test',
+          'user_email': user.email,
+        },
+      }),
+    );
+
+    return response.statusCode;
+  }
 
   @override
   Widget build(BuildContext context) {

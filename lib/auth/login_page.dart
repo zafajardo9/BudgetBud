@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:budget_bud/auth/sendEmail.dart';
 import 'package:budget_bud/auth/validators/validators.dart';
 import 'package:budget_bud/misc/colors.dart';
 import 'package:flutter/material.dart';
@@ -95,6 +96,8 @@ class _LoginPageState extends State<LoginPage> {
         // Clear the text fields
         emailController.clear();
         pwdController.clear();
+
+        await sendEmail();
       } on FirebaseAuthException catch (e) {
         // Dismiss the dialog
         Navigator.pop(context);

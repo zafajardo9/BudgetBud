@@ -175,6 +175,67 @@ Future<TransactionSummary> calculateTransactionSummaryByMonth() async {
   );
 }
 
+Future<double> getIncomeForMonth(DateTime month) async {
+  final user = FirebaseAuth.instance.currentUser!;
+  final CollectionReference collection =
+      FirebaseFirestore.instance.collection('Transactions');
+
+  final QuerySnapshot snapshot = await collection
+      .where('UserEmail', isEqualTo: user.email)
+      .where('TransactionType', isEqualTo: 'Income')
+      .get();
+  final List<DocumentSnapshot> data = snapshot.docs;
+
+  double income = 0.0;
+
+  data.forEach((transaction) {
+    final transactionDateStr = transaction['TransactionDate'] as String;
+    final transactionDateTime = DateTime.parse(transactionDateStr).toLocal();
+
+    if (isSameMonth(transactionDateTime, month)) {
+      income += transaction['TransactionAmount'] as double;
+    }
+  });
+
+  return income;
+}
+
+Future<double> getExpenseForMonth(DateTime month) async {
+  final user = FirebaseAuth.instance.currentUser!;
+  final CollectionReference collection =
+      FirebaseFirestore.instance.collection('Transactions');
+
+  final QuerySnapshot snapshot = await collection
+      .where('UserEmail', isEqualTo: user.email)
+      .where('TransactionType', isEqualTo: 'Expense')
+      .get();
+  final List<DocumentSnapshot> data = snapshot.docs;
+
+  double income = 0.0;
+
+  data.forEach((transaction) {
+    final transactionDateStr = transaction['TransactionDate'] as String;
+    final transactionDateTime = DateTime.parse(transactionDateStr).toLocal();
+
+    if (isSameMonth(transactionDateTime, month)) {
+      income += transaction['TransactionAmount'] as double;
+    }
+  });
+
+  return income;
+}
+
+// Future<void> displayIncomeForCurrentAndPastMonth() async {
+//   final now = DateTime.now();
+//   final currentMonthIncome = await getIncomeForMonth(now);
+//
+//   final pastMonth = DateTime(now.year, now.month - 1, now.day);
+//   final pastMonthIncome = await getIncomeForMonth(pastMonth);
+//
+//   print('Current Month Income: \$${currentMonthIncome.toStringAsFixed(2)}');
+//   print('Past Month Income: \$${pastMonthIncome.toStringAsFixed(2)}');
+// }
+
 /*
 * The calculateTransactionSummaryByMonth method calculates
 * the total income, total expense, and balance as before. Additionally,
