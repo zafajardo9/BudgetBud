@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:budget_bud/pages/suggestions/webviewTips.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -203,9 +204,12 @@ class _SuggestionPageState extends State<SuggestionPage> {
         actions: [
           IconButton(
             onPressed: () {
-              // Refresh button pressed
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => WebViewTips()),
+              );
             },
-            icon: const Icon(Icons.refresh_rounded),
+            icon: const Icon(Icons.tips_and_updates),
           ),
         ],
       ),

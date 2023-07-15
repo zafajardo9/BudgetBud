@@ -12,6 +12,8 @@ class AppColors {
   static final Color mainColorFive = Color(0xFFC6B9B9);
   static final Color mainColorSix = Color(0xFFF0E5E5);
 
+  static final Color theWebsiteBlue = Color(0xFF0D1853);
+
   //version 1
   static final Color one = Color(0xFF0D1853);
   static final Color one2 = Color(0xFFFFBD59);
