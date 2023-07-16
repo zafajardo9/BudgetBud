@@ -26,7 +26,7 @@ class _WebViewTipsState extends State<WebViewTips> {
         children: [
           InAppWebView(
             initialUrlRequest: URLRequest(
-              url: Uri.parse("https://budgetbud.netlify.app"),
+              url: Uri.parse("https://budgetbud.netlify.app/other/tips.html"),
             ),
             onWebViewCreated: (InAppWebViewController controller) {
               webView = controller;

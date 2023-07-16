@@ -126,6 +126,9 @@ class _RegisterPageState extends State<RegisterPage> {
       }
       // Pop loading circle
       Navigator.pop(context);
+      emailController.clear();
+      pwdController.clear();
+      confirmPwdController.clear();
     } catch (e) {
       Navigator.pop(context);
       String errorMessage = 'An error occurred';
