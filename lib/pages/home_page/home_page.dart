@@ -30,17 +30,17 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         elevation: 0,
         title: Text('Analytics'),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                WorkInProgressAlert.show(context);
-              },
-              child: Icon(Icons.sort),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 20.0),
+        //     child: GestureDetector(
+        //       onTap: () {
+        //         WorkInProgressAlert.show(context);
+        //       },
+        //       child: Icon(Icons.sort),
+        //     ),
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         child: Column(

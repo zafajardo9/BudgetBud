@@ -32,6 +32,8 @@ class _SuggestionPageState extends State<SuggestionPage> {
   bool isGeneratingResponse = false;
   bool isGeneratingFactors = false;
 
+  double impulsivePercentage = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -250,7 +252,7 @@ class _SuggestionPageState extends State<SuggestionPage> {
                       children: [
                         Text(
                           summary?.impulsivePercentage != null
-                              ? '${summary!.impulsivePercentage}%'
+                              ? '${summary!.impulsivePercentage.toStringAsFixed(2)}%'
                               : '',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,

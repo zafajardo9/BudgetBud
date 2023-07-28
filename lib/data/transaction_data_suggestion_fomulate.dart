@@ -90,10 +90,10 @@ Future<TransactionSuggestion> summaryForSuggestion(TimePeriod period) async {
   final balance = totalIncome - totalExpense;
 
   double impulsivePercentage = 0.0;
-  if (balance < 0) {
-    impulsivePercentage = (totalExpense / totalIncome) * 100;
-    impulsivePercentage = impulsivePercentage.clamp(0, 100);
-  }
+
+  impulsivePercentage = (balance / totalIncome) - 1;
+
+  impulsivePercentage = (impulsivePercentage.abs() * 100).clamp(0, 100);
 
   final highestCategories = findHighestCategories(categoryAmounts);
 

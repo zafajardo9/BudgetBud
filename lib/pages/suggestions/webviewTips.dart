@@ -1,3 +1,4 @@
+import 'package:budget_bud/api_keys_handler.dart';
 import 'package:budget_bud/misc/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -14,6 +15,7 @@ class _WebViewTipsState extends State<WebViewTips> {
   late InAppWebViewController webView;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final String? tipsURI = APIKeys().tipsURI;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +28,7 @@ class _WebViewTipsState extends State<WebViewTips> {
         children: [
           InAppWebView(
             initialUrlRequest: URLRequest(
-              url: Uri.parse("https://budgetbud.netlify.app/other/tips.html"),
+              url: Uri.parse(tipsURI!),
             ),
             onWebViewCreated: (InAppWebViewController controller) {
               webView = controller;
